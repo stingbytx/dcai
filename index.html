@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dotcomAI — Free AI Service Platform with 50+ AI Models | Made in Sri Lanka</title>
+<meta name="description" content="dotcomAI is a Sri Lankan AI platform providing accessible AI-powered services with 50+ AI Models through modern LLM technology. Built by Manuja Damsara under DotcomOne">
+<meta name="keywords" content="dotcomAI, dotcom AI, AI Sri Lanka, artificial intelligence Sri Lanka, free AI, free AI tools, AI assistant, AI platform, LLM platform, AI chatbot, Sri Lankan AI platform, AI tools Sri Lanka, AI software Sri Lanka, Manuja Damsara, DotcomOne, UniPOS">
+<link rel="icon" type="image/png" href="favicon.png">
+<style>
+/* ============ MY AI — ChatGPT-style theme ============ */
+:root{--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif;--serif:Georgia,"Times New Roman","Iowan Old Style",serif;--mono:ui-monospace,SFMono-Regular,Consolas,Menlo,monospace}
+html[data-theme="dark"]{
+  --bg:#1f1f1e; --bg-side:#1a1a19; --bg-hover:#262625; --bg-input:#282827;
+  --panel:#1a1a19; --panel2:#242422;
+  --border:#33332f; --border2:#44443f;
+  --text:#f3f4f6; --text2:#a8a8a3; --text3:#747470;
+  --accent:#22c55e; --accent2:#16a34a; --accent-bg:rgba(34,197,94,.14);
+  --btn-bg:#f3f4f6; --btn-fg:#111;
+  --green:#22c55e; --red:#ef4444; --amber:#eab308;
+  --shadow:0 2px 20px rgba(0,0,0,.45);
+  --code-bg:#161616; --code-head:#1f1f1e;
+}
+html[data-theme="light"]{
+  --bg:#ffffff; --bg-side:#f6f6f5; --bg-hover:#ececea; --bg-input:#f3f3f2;
+  --panel:#f6f6f5; --panel2:#ffffff;
+  --border:#e3e3e0; --border2:#d0d0cc;
+  --text:#1a1a19; --text2:#565653; --text3:#90908c;
+  --accent:#16a34a; --accent2:#15803d; --accent-bg:rgba(22,163,74,.1);
+  --btn-bg:#1a1a19; --btn-fg:#ffffff;
+  --shadow:0 2px 14px rgba(0,0,0,.09);
+  --code-bg:#f5f5f4; --code:#262626;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
+input,select,textarea{font-family:inherit;color:inherit;outline:none}
+a{color:var(--accent)}
+*{scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+*::-webkit-scrollbar{width:8px;height:8px}
+*::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px}
+::focus-visible{outline:2px solid var(--text3);outline-offset:1px}
+svg{width:1em;height:1em;vertical-align:-0.125em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+svg.filled{fill:currentColor;stroke:none}
+
+/* ============ LAYOUT ============ */
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:272px;min-width:272px;background:var(--bg-side);border-right:1px solid var(--border);display:flex;flex-direction:column;transition:transform .2s ease;z-index:50}
+.main{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg)}
+
+/* ============ SIDEBAR ============ */
+.sb-head{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 6px}
+.sb-close{color:var(--text3);padding:6px;border-radius:7px;line-height:0;display:inline-flex;align-items:center;justify-content:center}
+.sb-close svg{width:17px;height:17px}
+.sb-close:hover{background:var(--bg-hover);color:var(--text)}
+body.sb-collapsed .sidebar{display:none}
+.sb-brand{display:flex;align-items:center;gap:6px;font-family:var(--serif);font-weight:600;font-size:24px;letter-spacing:.2px;padding:12px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-brand .brand-logo{width:32px;height:32px;object-fit:contain;flex-shrink:0;border-radius:8px}
+.sb-brand .logo{width:26px;height:26px;border-radius:7px;background:var(--accent);color:#111;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.new-btn{display:flex;align-items:center;gap:8px;width:calc(100% - 20px);margin:12px 10px 8px;padding:9px 12px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);color:var(--text);font-size:13px;font-weight:500;transition:background .12s}
+.new-btn:hover{background:var(--bg-hover)}
+.new-btn svg{width:15px;height:15px}
+.sb-search{position:relative;padding:4px 10px 6px}
+.sb-search .icon{position:absolute;left:20px;top:13px;color:var(--text3);width:15px;height:15px}
+.sb-search input{width:100%;padding:9px 12px 9px 30px;border-radius:8px;border:1px solid var(--border);background:var(--bg-input);font-size:13px;transition:border-color .12s}
+.sb-search input:focus{border-color:var(--text3)}
+.sb-list{flex:1;overflow-y:auto;padding:0 6px 12px}
+.sb-group{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);padding:14px 10px 4px;font-weight:600}
+.sb-item{display:flex;align-items:center;gap:6px;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--text2);border:1px solid transparent;margin-bottom:1px;font-size:13px;position:relative;transition:background .1s}
+.sb-item:hover{background:var(--bg-hover);color:var(--text)}
+.sb-item.active{background:var(--bg-hover);color:var(--text);border-color:var(--border)}
+.sb-item .title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-item .menu-btn{opacity:0;color:var(--text3);padding:3px;border-radius:5px;width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.sb-item:hover .menu-btn{opacity:1}
+.sb-item .menu-btn:hover{background:var(--border);color:var(--text)}
+.sb-item-actions{position:absolute;right:6px;top:calc(100% + 2px);background:var(--panel2);border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow);z-index:60;padding:4px;min-width:150px}
+.sb-item-actions button{display:flex;width:100%;align-items:center;gap:8px;color:var(--text);padding:7px 10px;border-radius:6px;font-size:13px;text-align:left}
+.sb-item-actions button:hover{background:var(--bg-hover)}
+.sb-item-actions button.danger{color:var(--red)}
+.sb-item-actions button.danger:hover{background:rgba(240,107,114,.1)}
+.sb-foot{padding:10px 14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sb-links{display:flex;gap:2px;flex-wrap:wrap;align-items:center;padding:9px 12px;border-top:1px solid var(--border);font-size:11px;color:var(--text3)}
+.sb-links button{background:none;border:none;color:var(--text3);font-size:11px;cursor:pointer;padding:2px 4px;transition:color .12s}
+.sb-links button:hover{color:var(--text)}
+.sb-links .sep{opacity:.5}
+.readonly{display:block;background:var(--bg-input);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-size:13px;color:var(--text3);font-family:monospace;letter-spacing:1px}
+.offline-dot{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3)}
+.offline-dot .dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.offline-dot.offline .dot{background:var(--amber)}
+.offline-dot.offline{color:var(--amber)}
+.icon-btn{color:var(--text2);padding:6px;border-radius:7px;line-height:0;display:inline-flex;align-items:center;justify-content:center}
+.icon-btn:hover{background:var(--bg-hover);color:var(--text)}
+.icon-btn svg{width:17px;height:17px}
+
+/* ============ TOPBAR ============ */
+.topbar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg)}
+.hamburger{display:flex;color:var(--text);padding:6px;border-radius:7px;line-height:0}
+.hamburger svg{width:20px;height:20px}
+.hamburger:hover{background:var(--bg-hover)}
+.model-picker{display:flex;gap:8px;flex-wrap:wrap}
+.picker{position:relative}
+.picker-btn{display:flex;align-items:center;gap:7px;padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:12px;max-width:230px;text-align:left}
+.picker-btn:hover{border-color:var(--text3)}
+.picker-btn .caret{color:var(--text3);font-size:10px;line-height:1}
+.picker-btn .pk-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;display:block}
+.picker-btn .pk-val{font-weight:500;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px;font-size:13px}
+.picker-dropdown{position:absolute;top:calc(100% + 6px);left:0;background:var(--panel2);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);z-index:100;min-width:320px;max-width:420px;overflow:hidden}
+.picker-search{padding:10px;border-bottom:1px solid var(--border)}
+.picker-search input{width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:var(--bg-input);font-size:13px}
+.picker-search input:focus{border-color:var(--text3)}
+.picker-list{max-height:380px;overflow-y:auto;padding:4px}
+.picker-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:13px}
+.picker-item:hover{background:var(--bg-hover)}
+.picker-item.selected{background:var(--accent-bg)}
+.picker-item .star{color:var(--text3);padding:0 2px;line-height:1;display:inline-flex}
+.picker-item .star.on{color:var(--amber)}
+.picker-item .star svg{width:15px;height:15px}
+.picker-item .mname{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.picker-item .mctx{font-size:11px;color:var(--text3);white-space:nowrap}
+.picker-empty{padding:20px;text-align:center;color:var(--text3);font-size:13px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:4px}
+.provider-status{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2);margin-right:6px}
+.provider-status .pdot{width:8px;height:8px;border-radius:50%;background:var(--text3)}
+.provider-status.ok .pdot{background:var(--green)}
+.provider-status.err .pdot{background:var(--red)}
+.provider-status.unconf .pdot{background:var(--amber)}
+
+/* ============ DEMO BANNER ============ */
+.demo-banner{display:none;align-items:center;gap:8px;background:var(--accent-bg);border:1px solid var(--border);color:var(--text2);padding:8px 14px;font-size:12px;border-radius:8px;margin:10px 16px 0}
+.demo-banner.show{display:flex}
+.demo-banner svg{width:16px;height:16px;color:var(--amber)}
+
+/* ============ CHAT ============ */
+.chat-wrap{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.chat-inner{max-width:760px;width:100%;margin:0 auto;padding:28px 24px 16px;flex:1}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%;text-align:center;padding:36px 20px}
+.hero{padding-bottom:12px}
+.hero .hero-logo{display:flex;align-items:center;justify-content:center;gap:12px;font-family:var(--serif);font-size:54px;font-weight:700;letter-spacing:-1px;color:var(--text);margin-bottom:6px}
+.hero .hero-logo img.hero-brand{width:44px;height:44px;object-fit:contain}
+.hero .hero-tag{font-family:var(--serif);font-size:30px;color:var(--text);line-height:1.3}
+.hero .hero-hl{font-style:italic;background:var(--accent);color:#0a0f0a;padding:1px 10px;border-radius:6px;font-weight:700}
+.hero .hero-sub{color:var(--text2);margin-top:16px;font-size:14px}
+.start-title{font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin:6px 0 12px;text-align:left;width:100%;max-width:820px}
+.start-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:820px;padding-bottom:4px}
+.start-card{display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;background:var(--bg-input);border:1px solid var(--border);border-radius:10px;padding:16px;transition:border-color .12s,background .12s;cursor:pointer}
+.start-card:hover{border-color:var(--text3);background:var(--bg-hover)}
+.start-card .sc-icon{width:34px;height:34px;border-radius:8px;background:var(--accent-bg);color:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.start-card .sc-icon svg{width:19px;height:19px}
+.start-card .sc-title{font-weight:600;font-size:14px;color:var(--text)}
+.start-card .sc-desc{font-size:12px;color:var(--text2)}
+@media (max-width:760px){.start-grid{grid-template-columns:repeat(2,1fr)}.hero .hero-logo{font-size:40px;gap:8px}.hero .hero-logo img.hero-brand{width:32px;height:32px}.hero .hero-tag{font-size:24px}}
+.msg{display:flex;gap:12px;padding:16px 0}
+.msg-body{flex:1;min-width:0}
+.msg-meta{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.msg-role{font-weight:600;font-size:13px}
+.msg-time{font-size:11px;color:var(--text3)}
+.msg-model{font-size:11px;color:var(--text3)}
+.msg-content{color:var(--text);overflow-wrap:break-word}
+.msg-avatar{width:28px;height:28px;min-width:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;background:var(--text3);flex-shrink:0}
+.msg-avatar svg{width:16px;height:16px;stroke:#fff}
+.msg.user .msg-avatar{background:#d0d0d0;color:#555}
+.msg.user .msg-avatar svg{stroke:#555}
+.msg.assistant .msg-avatar{background:var(--btn-bg);color:var(--btn-fg)}
+.msg.assistant .msg-avatar svg{stroke:var(--btn-fg)}
+.msg.system .msg-avatar{background:var(--text3)}
+.msg-actions{display:flex;gap:4px;margin-top:8px;opacity:0;transition:opacity .12s}
+.msg:hover .msg-actions{opacity:1}
+.msg-actions button{display:inline-flex;align-items:center;gap:5px;color:var(--text2);padding:4px 9px;border-radius:6px;font-size:12px}
+.msg-actions button:hover{background:var(--bg-hover);color:var(--text)}
+.msg-actions button svg{width:14px;height:14px}
+.error-box{background:rgba(224,107,93,.06);border:1px solid rgba(224,107,93,.3);border-radius:8px;padding:12px;font-size:13px;color:var(--red)}
+.error-box .eb-title{font-weight:600;margin-bottom:6px}
+.error-box .eb-detail{display:none;margin-top:8px}
+.error-box .eb-detail.show{display:block}
+.error-box pre{background:var(--code-bg);padding:10px;border-radius:8px;font-family:var(--mono);font-size:12px;white-space:pre-wrap;color:var(--text2);margin:0}
+.error-actions{display:flex;gap:8px;margin-top:10px}
+.error-actions button{padding:6px 12px;border-radius:7px;border:1px solid var(--border);background:var(--panel2);color:var(--text);font-size:12px}
+.error-actions button:hover{background:var(--bg-hover)}
+.thinking{display:inline-flex;align-items:center;gap:8px;color:var(--text2)}
+.thinking .spinner{width:13px;height:13px;border:2px solid var(--border2);border-top-color:var(--text);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cursor-blink::after{content:"▋";color:var(--text);animation:blink 1s step-end infinite;margin-left:2px}
+@keyframes blink{50%{opacity:0}}
+
+/* ============ MARKDOWN ============ */
+.md h1,.md h2,.md h3,.md h4{margin:16px 0 8px;line-height:1.35;font-weight:600}
+.md h1{font-size:1.4em}.md h2{font-size:1.25em}.md h3{font-size:1.12em}.md h4{font-size:1.05em}
+.md p{margin:8px 0}
+.md ul,.md ol{margin:8px 0;padding-left:22px}
+.md li{margin:2px 0}
+.md blockquote{border-left:3px solid var(--border2);padding:4px 12px;color:var(--text2);margin:10px 0}
+.md blockquote p{margin:0}
+.md a{text-decoration:underline;text-underline-offset:2px}
+.md code.inline{background:var(--code-bg);padding:2px 6px;border-radius:5px;font-family:var(--mono);font-size:.9em;color:var(--code)}
+.md table{border-collapse:collapse;margin:12px 0;width:100%;font-size:13px}
+.md th,.md td{border:1px solid var(--border);padding:6px 10px;text-align:left}
+.md th{background:var(--bg-hover);font-weight:600}
+.md hr{border:none;border-top:1px solid var(--border);margin:16px 0}
+.md img{max-width:100%;border-radius:8px}
+.codeblock{margin:12px 0;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--code-bg)}
+.codeblock-head{display:flex;align-items:center;justify-content:space-between;padding:5px 10px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text3)}
+.codeblock-head .lang{font-family:var(--mono);text-transform:lowercase}
+.codeblock-head button{display:inline-flex;align-items:center;gap:5px;color:var(--text2);padding:3px 8px;border-radius:5px;font-size:12px}
+.codeblock-head button:hover{background:var(--bg-hover);color:var(--text)}
+.codeblock pre{padding:12px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.55;margin:0;color:var(--text)}
+.codeblock code{font-family:var(--mono)}
+
+/* ============ COMPOSER ============ */
+.composer{padding:10px 16px 18px;background:var(--bg)}
+.composer-inner{max-width:760px;margin:0 auto}
+.attach-list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.attach-chip{display:flex;align-items:center;gap:6px;background:var(--bg-hover);border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:12px;color:var(--text2)}
+.attach-chip .x{color:var(--text3);font-size:14px;line-height:1;padding:0 2px}
+.attach-chip .x:hover{color:var(--red)}
+.attach-chip svg{width:14px;height:14px}
+.input-row{display:flex;align-items:flex-end;gap:6px;background:var(--panel2);border:1px solid var(--border);border-radius:18px;padding:8px 10px;transition:border-color .12s}
+.input-row:focus-within{border-color:var(--text3)}
+textarea{flex:1;border:none;background:none;resize:none;outline:none;font-size:14px;max-height:180px;min-height:26px;padding:2px 4px}
+.attach-btn,.send-btn{color:var(--text2);padding:6px;border-radius:8px;line-height:0;display:inline-flex;align-items:center;justify-content:center}
+.attach-btn{display:inline-flex;align-items:center;gap:6px;color:var(--text2);padding:7px 12px;border-radius:999px;border:1px solid var(--border);background:var(--bg);line-height:1;font-size:13px}
+.attach-btn svg{width:15px;height:15px}
+.attach-btn:hover{color:var(--text);border-color:var(--text3);background:var(--bg-hover)}
+.send-btn{width:34px;height:34px;border-radius:50%;background:var(--btn-bg);color:var(--btn-fg);flex-shrink:0;transition:opacity .12s}
+.send-btn svg{width:16px;height:16px;stroke:var(--btn-fg)}
+.send-btn:hover{opacity:.85}
+.send-btn.stop{background:var(--red);color:#fff}
+.send-btn.stop svg{stroke:#fff}
+.send-btn:disabled{opacity:.4;cursor:not-allowed}
+.composer-hint{font-size:11px;color:var(--text3);margin-top:8px;text-align:center;display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap}
+.composer-hint .flag{width:18px;height:11px;border-radius:2px;flex-shrink:0}
+.composer-hint .flag *{stroke:none}
+
+/* ============ MODAL / SETTINGS ============ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
+.modal{background:var(--bg);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);width:100%;max-width:560px;max-height:90vh;display:flex;flex-direction:column}
+.modal.lg{max-width:720px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border)}
+.modal-head h2{font-size:16px;font-weight:600}
+.modal-close{color:var(--text3);font-size:20px;line-height:1;padding:2px 6px;border-radius:6px}
+.modal-close:hover{background:var(--bg-hover);color:var(--text)}
+.modal-body{padding:20px;overflow-y:auto}
+.modal-foot{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
+.settings-nav{display:flex;gap:2px;border-bottom:1px solid var(--border);margin-bottom:18px;flex-wrap:wrap}
+.settings-nav button{color:var(--text2);padding:8px 14px;border-radius:6px 6px 0 0;font-size:13px;font-weight:500}
+.settings-nav button:hover{color:var(--text)}
+.settings-nav button.active{color:var(--text);border-bottom:2px solid var(--accent)}
+.setting-group{margin-bottom:22px}
+.setting-group h3{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;color:var(--text2);margin-bottom:6px;font-weight:500}
+.field input[type=text],.field input[type=password],.field input[type=number],.field select,.field textarea{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:9px;background:var(--bg-input);font-size:13px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--text3)}
+.field textarea{resize:vertical;min-height:70px}
+.field-row{display:flex;gap:8px;align-items:center}
+.field-row input{flex:1}
+.field .hint{font-size:11px;color:var(--text3);margin-top:5px}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:9px;border:1px solid var(--border);background:var(--bg-hover);color:var(--text);font-size:13px;font-weight:500;transition:background .12s}
+.btn:hover{background:var(--border)}
+.btn.primary{background:var(--btn-bg);border-color:var(--btn-bg);color:var(--btn-fg)}
+.btn.primary:hover{opacity:.85}
+.btn.danger{background:transparent;border-color:rgba(224,107,93,.5);color:var(--red)}
+.btn.danger:hover{background:rgba(224,107,93,.1)}
+.btn.small{padding:5px 10px;font-size:12px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.switch{position:relative;display:inline-block;width:40px;height:22px}
+.switch input{opacity:0;width:0;height:0}
+.switch .slider{position:absolute;cursor:pointer;inset:0;background:var(--border2);border-radius:22px;transition:.15s}
+.switch .slider:before{content:"";position:absolute;height:16px;width:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.15s}
+.switch input:checked+.slider{background:var(--accent)}
+.switch input:checked+.slider:before{transform:translateX(18px)}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0}
+.toggle-row .lbl{font-size:13px}
+.toggle-row .sub{font-size:11px;color:var(--text3);margin-top:2px}
+.setting-stat{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.stat-card{flex:1;min-width:120px;background:var(--bg-hover);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center}
+.stat-card .num{font-size:22px;font-weight:600;color:var(--text)}
+.stat-card .lbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.4px;margin-top:4px}
+.log-table{width:100%;border-collapse:collapse;font-size:12px}
+.log-table th,.log-table td{padding:7px 9px;border-bottom:1px solid var(--border);text-align:left;color:var(--text2)}
+.log-table th{color:var(--text3);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.3px}
+.status-badge{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:500}
+.status-badge .sd{width:7px;height:7px;border-radius:50%;background:currentColor}
+.status-badge.ok{background:rgba(78,201,106,.14);color:var(--green)}
+.status-badge.err{background:rgba(240,107,114,.14);color:var(--red)}
+.status-badge.warn{background:rgba(240,201,116,.16);color:var(--amber)}
+.secret-note{font-size:12px;color:var(--text2);background:var(--accent-bg);border:1px solid rgba(13,91,215,.2);padding:10px 12px;border-radius:9px;margin-bottom:16px;line-height:1.5}
+.provider-card{border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;background:var(--panel2)}
+.provider-card .pc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.provider-card .pc-title{font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px}
+.provider-card .pc-status{font-size:12px}
+.usage-list{font-size:13px}
+.usage-list .urow{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)}
+.usage-list .urow:last-child{border-bottom:none}
+.usage-list .urow .key{color:var(--text2)}
+.usage-list .urow .val{font-weight:500}
+.info-box{font-size:13px;color:var(--text2);background:var(--bg-hover);border:1px solid var(--border);padding:12px;border-radius:9px;line-height:1.6}
+.model-mgr-group{margin-bottom:16px}
+.model-mgr-group h4{margin-bottom:8px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.model-mgr-row{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;background:var(--bg-input);gap:8px}
+.model-mgr-row .mm-info{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.model-mgr-row .star{color:var(--text3);padding:0 2px;line-height:1;display:inline-flex}
+.model-mgr-row .star.on{color:var(--amber)}
+.model-mgr-row .star svg{width:15px;height:15px}
+.model-mgr-row .mname{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+.model-mgr-row .mid{font-size:11px;color:var(--text3);font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.model-mgr-row .info-btn{color:var(--text3);padding:2px 4px;line-height:0;display:inline-flex}
+.model-mgr-row .info-btn:hover{color:var(--text)}
+.model-mgr-row .info-btn svg{width:15px;height:15px}
+.model-mgr-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);cursor:pointer}
+
+/* ============ TOAST ============ */
+.toast-container{position:fixed;bottom:20px;right:20px;z-index:400;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--panel2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;box-shadow:var(--shadow);font-size:13px;display:flex;align-items:center;gap:9px;animation:slideIn .18s ease;max-width:340px}
+.toast .ticon{display:inline-flex}
+.toast .ticon svg{width:16px;height:16px}
+.toast.success .ticon{color:var(--green)}
+.toast.error .ticon{color:var(--red)}
+.toast.info .ticon{color:var(--accent)}
+@keyframes slideIn{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* ============ LEGAL ============ */
+.legal-body{padding:24px;color:var(--text2);font-size:14px;line-height:1.65}
+.legal-body h1{font-size:22px;color:var(--text);margin:0 0 12px;font-family:var(--serif)}
+.legal-body h2{font-size:16px;color:var(--text);margin:24px 0 8px;font-family:var(--serif)}
+.legal-body h3{font-size:14px;color:var(--text);margin:18px 0 6px}
+.legal-body p{margin:8px 0}
+.legal-body ul,.legal-body ol{margin:8px 0 10px 22px;padding:0}
+.legal-body li{margin:3px 0}
+.legal-body strong{color:var(--text)}
+
+/* ============ CONFIRM ============ */
+.confirm-modal{max-width:420px}
+.confirm-body{padding:20px;font-size:14px}
+.confirm-body .warn-icon{font-size:20px;margin-bottom:10px;color:var(--amber)}
+.confirm-foot{display:flex;justify-content:flex-end;gap:10px;padding:14px 20px;border-top:1px solid var(--border)}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:820px){
+  .sidebar{position:fixed;top:0;left:0;bottom:0;transform:translateX(-100%);box-shadow:var(--shadow);width:280px}
+  .sidebar.open{transform:translateX(0)}
+  .hamburger{display:block}
+  .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40}
+  .overlay.show{display:block}
+  .picker-btn{max-width:120px}
+  .topbar{gap:6px;padding:10px}
+  .model-picker{gap:6px}
+  .picker-dropdown{position:fixed;left:12px;right:12px;top:64px}
+  .provider-status{display:none}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar" aria-label="Conversations">
+    <div class="sb-head">
+      <div class="sb-brand"><img class="brand-logo" src="logo.png?v=3" alt="dotcomAI"> dotcomAI</div>
+      <button class="sb-close" id="btnSidebarClose" aria-label="Close sidebar" title="Close sidebar">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <button class="new-btn" id="btnNewChat" aria-label="New chat">
+      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New chat
+    </button>
+    <div class="sb-search">
+      <span class="icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></span>
+      <input type="text" id="sbSearch" placeholder="Search conversations..." aria-label="Search conversations">
+    </div>
+    <div class="sb-list" id="convList"></div>
+    <div class="sb-links">
+      <button onclick="showLegal('terms')">Terms of Use</button><span class="sep">·</span>
+      <button onclick="showLegal('privacy')">Privacy Policy</button><span class="sep">·</span>
+      <button onclick="showLegal('about')">About Us</button>
+    </div>
+    <div class="sb-foot">
+      <div class="offline-dot" id="offlineDot"><span class="dot"></span><span id="offlineLabel">Online</span></div>
+      <button class="icon-btn" id="btnTheme" title="Toggle theme" aria-label="Toggle theme">
+        <svg viewBox="0 0 24 24" class="filled"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </aside>
+  <div class="overlay" id="sbOverlay"></div>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="hamburger" id="btnHamburger" aria-label="Open menu">
+        <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="model-picker">
+        <div class="picker" id="providerPicker">
+          <button class="picker-btn" id="providerPickerBtn" aria-haspopup="listbox" aria-expanded="false">
+            <span><span class="pk-label">Provider</span><span class="pk-val" id="providerBtnLabel">Select</span></span>
+            <span class="caret">▾</span>
+          </button>
+          <div class="picker-dropdown" id="providerDropdown" style="display:none"></div>
+        </div>
+        <div class="picker" id="modelPicker">
+          <button class="picker-btn" id="modelPickerBtn" aria-haspopup="listbox" aria-expanded="false">
+            <span><span class="pk-label">Model</span><span class="pk-val" id="modelBtnLabel">Select</span></span>
+            <span class="caret">▾</span>
+          </button>
+          <div class="picker-dropdown" id="modelDropdown" style="display:none">
+            <div class="picker-search"><input type="text" id="modelSearch" placeholder="Search models..." aria-label="Search models"></div>
+            <div class="picker-list" id="modelList"></div>
+          </div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="provider-status unconf" id="providerStatus"><span class="pdot"></span><span id="providerStatusLabel">No provider</span></div>
+        <button class="icon-btn" id="btnSettings2" title="Settings" aria-label="Settings">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="demo-banner" id="demoBanner">
+      <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span><b>Demo mode</b> — responses are simulated locally and are not real AI output.</span>
+    </div>
+
+    <div class="chat-wrap" id="chatWrap"><div class="chat-inner" id="chatInner"></div></div>
+
+    <div class="composer">
+      <div class="composer-inner">
+        <div class="attach-list" id="attachList"></div>
+        <div class="input-row">
+          <button class="attach-btn" id="btnAttach" title="Attach file" aria-label="Attach file">
+            <svg viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            <span>Add files</span>
+          </button>
+          <textarea id="composerInput" rows="1" placeholder="Send a message..." aria-label="Message"></textarea>
+          <button class="send-btn" id="btnSend" title="Send" aria-label="Send">
+            <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+        <div class="composer-hint" id="composerHint">All Rights Reserved. Proudly made in Sri Lanka 🇱🇰</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast-container" id="toastContainer"></div>
+<input type="file" id="fileInput" style="display:none" multiple>
+
+
+<script>
+"use strict";
+/* ============ CONFIGURATION ============ */
+const STORAGE_KEY="my_ai_platform_v1", STORAGE_VERSION=1;
+/* Default providers are hidden and locked for visitors. Paste the owner's keys here — they can never be seen or edited in the UI. */
+const DEFAULT_PROVIDER_KEYS={seekai:"sk-seXDAgaEdGlcn6n3z81jmneOZaxOzEyi3D3VZmBkTn9urAKX",openrouter:"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"};
+const DEFAULT_SETTINGS={theme:"dark",streaming:true,enterToSend:true,showTimestamps:true,temperature:0.7,maxTokens:2048,topP:1,systemPrompt:"You are my personal AI assistant. Be clear, concise, and helpful.",maxFileSizeMB:5,debugMode:false,demoMode:false};
+const FILE_EXTENSIONS=["txt","md","json","csv","js","ts","jsx","tsx","py","html","css"];
+const QUICK_PROMPTS=["Explain something","Write code","Analyze text","Brainstorm ideas"];
+const START_PROMPTS=[
+ {svg:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',title:'Edit an image',desc:'Upload an image and edit it with AI',p:'Help me edit an image with AI.'},
+ {svg:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>',title:'Create a landing page',desc:'Create a sleek, modern landing page',p:'Create a sleek, modern landing page for my project.'},
+ {svg:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',title:'Build a dashboard',desc:'Turn data into interactive charts',p:'Help me build an interactive dashboard.'},
+ {svg:'<svg viewBox="0 0 24 24"><line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/><line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.98 3.6c-.22.25-.02.5-.02.75 0 5.05 1 7.65 3.5 7.65 1.9 0 2.9-1.4 4.5-1.4s2.6 1.4 4.5 1.4c2.5 0 3.5-2.6 3.5-7.65 0-.25 0-.5-.02-.75A4 4 0 0 0 17.32 5z"/></svg>',title:'Make a game',desc:'Build a playable browser game',p:'Help me build a playable browser game.'},
+ {svg:'<svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',title:'Design to Code',desc:'Upload an image and have AI build it',p:'Help me convert a design into working code.'},
+ {svg:'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>',title:'Build a fullstack app',desc:'Create a templated full-stack app',p:'Help me build a full-stack app.'}];
+const $=s=>document.querySelector(s);
+const I={
+  ai:'<svg viewBox="0 0 24 24" class="filled"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15.5l-1.9-4.6L5.5 9l4.6-1.4L12 3zM18.5 14l.9 2.2 2.2.9-2.2.9-.9 2.2-.9-2.2-2.2-.9 2.2-.9.9-2.2z"/></svg>',
+  user:'<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+  gear:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+  search:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>',
+  paperclip:'<svg viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>',
+  send:'<svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>',
+  stop:'<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>',
+  x:'<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+  info:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+  star:'<svg viewBox="0 0 24 24" class="filled"><path d="M12 2l2.9 6.26 6.86.6-5.2 4.5 1.55 6.7L12 16.9l-6.11 3.16 1.55-6.7-5.2-4.5 6.86-.6L12 2z"/></svg>',
+  starOutline:'<svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.26 6.86.6-5.2 4.5 1.55 6.7L12 16.9l-6.11 3.16 1.55-6.7-5.2-4.5 6.86-.6L12 2z"/></svg>',
+  eye:'<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+  eyeOff:'<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
+  dots:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>',
+  pencil:'<svg viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>',
+  export:'<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+  trash:'<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+  alert:'<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+};
+function favGlyph(pid,mid){return isFav(pid,mid)?I.star:I.starOutline;}
+
+
+/* ============ STATE ============ */
+const state={providers:[],models:{},modelsMeta:{},conversations:[],currentConversationId:null,selectedProvider:null,selectedModel:null,settings:Object.assign({},DEFAULT_SETTINGS),favorites:[],disabledModels:[],logs:[],attachments:[],lastRefresh:{},generating:false,abortController:null};
+
+/* ============ STORAGE ============ */
+function storageOK(){try{localStorage.setItem("__t","1");localStorage.removeItem("__t");return true}catch(e){return false}}
+function saveAll(){if(!storageOK()){notify("Unable to save local data. Export your conversations before continuing.","error");return}try{localStorage.setItem(STORAGE_KEY,JSON.stringify({version:STORAGE_VERSION,providers:state.providers,models:state.models,modelsMeta:state.modelsMeta,conversations:state.conversations,settings:state.settings,favorites:state.favorites,disabledModels:state.disabledModels,logs:state.logs,lastRefresh:state.lastRefresh,selectedProvider:state.selectedProvider,selectedModel:state.selectedModel}));}catch(e){notify("Unable to save local data. Export your conversations before continuing.","error")}}
+function loadAll(){if(!storageOK())return;try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(!d||typeof d!=="object")return;if(d.providers)state.providers=d.providers;if(d.models)state.models=d.models;if(d.modelsMeta)state.modelsMeta=d.modelsMeta;if(Array.isArray(d.conversations))state.conversations=d.conversations;if(d.settings)state.settings=Object.assign({},DEFAULT_SETTINGS,d.settings);if(Array.isArray(d.favorites))state.favorites=d.favorites;if(Array.isArray(d.disabledModels))state.disabledModels=d.disabledModels;if(Array.isArray(d.logs))state.logs=d.logs;if(d.lastRefresh)state.lastRefresh=d.lastRefresh;if(d.selectedProvider)state.selectedProvider=d.selectedProvider;if(d.selectedModel)state.selectedModel=d.selectedModel}catch(e){console.error("load failed",e)}}
+
+/* ============ PROVIDER SYSTEM ============ */
+const DEFAULT_ORDER=["openrouter","seekai"];
+function isDefault(p){return p.id==="openrouter"||p.id==="seekai"}
+function providerLabel(p){return isDefault(p)?(p.id==="openrouter"?"Default 1":"Default 2"):(p&&p.name||"Custom")}
+function defaultProviders(){return[{id:"seekai",name:"SeekAI",baseURL:"https://seekai.cc/v1",apiKey:DEFAULT_PROVIDER_KEYS.seekai,enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter",name:"OpenRouter",baseURL:"https://openrouter.ai/api/v1",apiKey:DEFAULT_PROVIDER_KEYS.openrouter,enabled:true,status:"notconf",lastTested:null,locked:true}]}
+function ensureProviders(){for(const def of defaultProviders()){const ex=state.providers.find(p=>p.id===def.id);if(ex){ex.locked=true;ex.baseURL=def.baseURL;if(DEFAULT_PROVIDER_KEYS[def.id])ex.apiKey=DEFAULT_PROVIDER_KEYS[def.id]}else state.providers.push(def)}}
+function addCustomProvider(){const id="custom-"+Date.now();const p={id,name:"My Provider",baseURL:"",apiKey:"",enabled:true,status:"notconf",lastTested:null,custom:true};state.providers.push(p);saveAll();renderSettingsBody();renderProvider();notify("Added a custom provider. Configure it below.","info");}
+function removeCustomProvider(id){const p=getProvider(id);if(!p||isDefault(p))return;confirmModal("Remove this provider?","This will delete the custom provider '"+p.name+"' and its key from local storage.","Remove",()=>{if(state.selectedProvider===id){state.selectedProvider=null;state.selectedModel=null}state.providers=state.providers.filter(x=>x.id!==id);delete state.models[id];saveAll();renderSettings();renderProvider();updateProviderStatus();notify("Provider removed.","success")})}
+const getProvider=id=>state.providers.find(p=>p.id===id);
+
+/* ============ API HELPERS ============ */
+function authHeaders(p){return{"Authorization":"Bearer "+p.apiKey,"Accept":"application/json"}}
+function buildChatBody(model,messages,opts,stream){const body={model,messages,stream};if(typeof opts.temperature==="number"&&opts.temperature>=0&&opts.temperature<=2)body.temperature=opts.temperature;if(opts.maxTokens&&opts.maxTokens>0)body.max_tokens=opts.maxTokens;if(typeof opts.topP==="number"&&opts.topP>0&&opts.topP<=1)body.top_p=opts.topP;if(opts.systemPrompt&&opts.systemPrompt.trim())body.messages=[{role:"system",content:opts.systemPrompt},...messages];return body}
+function httpMessage(st){const map={400:"Bad request.",401:"Authentication failed. Check your API key.",403:"Access forbidden. The API key may lack permission.",404:"Not found. The endpoint or model does not exist.",408:"Request timed out.",409:"Conflict.",429:"Rate limit reached. Try again later or switch provider/model.",500:"Provider server error (500).",502:"Bad gateway (502).",503:"Provider unavailable (503). Try again later.",504:"Provider gateway timeout (504)."};return map[st]||("Request failed (HTTP "+st+").")}
+function buildHttpError(res,data){const err=new Error(httpMessage(res.status));err.status=res.status;err.technical=JSON.stringify(data||{},null,2);return err}
+function classifyError(err){if(err&&err.name==="AbortError")return{type:"abort",message:"Generation stopped.",technical:null};if(!err.status){const m=(err&&err.message)||"Request failed.";if(/fetch|failed|network|load|CORS|preflight|blocked/i.test(m)||err instanceof TypeError){return{type:"cors",message:"The browser blocked this request. This usually means the provider does not allow direct browser requests from this origin or file. A server-side proxy would be required for that provider.",technical:m}}return{type:"network",message:m,technical:null}}if(err.status===401)return{type:"auth",message:"Authentication failed. Check your API key in Settings → Providers.",technical:err.technical};if(err.status===429)return{type:"rate",message:"Rate limit reached. Try again later or switch to another configured provider or model.",technical:err.technical};if(err.status===403)return{type:"forbidden",message:"Access forbidden (403). The API key may lack permission.",technical:err.technical};if(err.status===408||err.status===504)return{type:"timeout",message:"Request timed out. The provider did not respond in time.",technical:err.technical};return{type:"http",message:err.message,technical:err.technical||null}}
+function normalizeResponse(json){const c=json&&json.choices&&json.choices[0];return{content:c?(c.message?c.message.content:(c.text||"")):"",model:(json&&json.model)||"unknown",usage:(json&&json.usage)||null,finishReason:c?c.finish_reason:null}}
+
+/* ============ PROVIDER ADAPTERS ============ */
+const adapters={
+  seekai:{
+    async getModels(p){const res=await fetch(p.baseURL+"/models",{headers:authHeaders(p)});const data=await res.json().catch(()=>({}));if(!res.ok)throw buildHttpError(res,data);return((data.data&&Array.isArray(data.data))?data.data:[]).map(m=>({id:m.id||m.name||"unknown",name:m.name||m.id||"unknown",context:m.context_length||m.context||null,capabilities:m.capabilities||null,pricing:m.pricing||null}))},
+    async chat(p,model,messages,opts,signal){const res=await fetch(p.baseURL+"/chat/completions",{method:"POST",headers:Object.assign(authHeaders(p),{"Content-Type":"application/json"}),body:JSON.stringify(buildChatBody(model,messages,opts,false)),signal});if(!res.ok)throw buildHttpError(res,await res.json().catch(()=>null));return res.json()},
+    async stream(p,model,messages,opts,signal){const res=await fetch(p.baseURL+"/chat/completions",{method:"POST",headers:Object.assign(authHeaders(p),{"Content-Type":"application/json","Accept":"text/event-stream"}),body:JSON.stringify(buildChatBody(model,messages,opts,true)),signal});if(!res.ok)throw buildHttpError(res,await res.json().catch(()=>null));if(!res.body)throw new Error("no-stream");return res.body.getReader()}
+  },
+  openrouter:{
+    async getModels(p){const res=await fetch(p.baseURL+"/models",{headers:authHeaders(p)});const data=await res.json().catch(()=>({}));if(!res.ok)throw buildHttpError(res,data);return(data.data||[]).map(m=>({id:m.id||"unknown",name:m.name||m.id||"unknown",context:m.context_length||null,capabilities:(m.architecture&&m.architecture.modality)||null,pricing:m.pricing||null}))},
+    async chat(p,model,messages,opts,signal){const res=await fetch(p.baseURL+"/chat/completions",{method:"POST",headers:Object.assign(authHeaders(p),{"Content-Type":"application/json"}),body:JSON.stringify(buildChatBody(model,messages,opts,false)),signal});if(!res.ok)throw buildHttpError(res,await res.json().catch(()=>null));return res.json()},
+    async stream(p,model,messages,opts,signal){const res=await fetch(p.baseURL+"/chat/completions",{method:"POST",headers:Object.assign(authHeaders(p),{"Content-Type":"application/json","Accept":"text/event-stream"}),body:JSON.stringify(buildChatBody(model,messages,opts,true)),signal});if(!res.ok)throw buildHttpError(res,await res.json().catch(()=>null));if(!res.body)throw new Error("no-stream");return res.body.getReader()}
+  },
+  custom:{
+    async getModels(p){const res=await fetch(p.baseURL+"/models",{headers:authHeaders(p)});const data=await res.json().catch(()=>({}));if(!res.ok)throw buildHttpError(res,data);return((data.data&&Array.isArray(data.data))?data.data:[]).map(m=>({id:m.id||m.name||"unknown",name:m.name||m.id||"unknown",context:m.context_length||m.context||null}))},
+    async chat(p,model,messages,opts,signal){const res=await fetch(p.baseURL+"/chat/completions",{method:"POST",headers:Object.assign(authHeaders(p),{"Content-Type":"application/json"}),body:JSON.stringify(buildChatBody(model,messages,opts,false)),signal});if(!res.ok)throw buildHttpError(res,await res.json().catch(()=>null));return res.json()},
+    async stream(p,model,messages,opts,signal){const res=await fetch(p.baseURL+"/chat/completions",{method:"POST",headers:Object.assign(authHeaders(p),{"Content-Type":"application/json","Accept":"text/event-stream"}),body:JSON.stringify(buildChatBody(model,messages,opts,true)),signal});if(!res.ok)throw buildHttpError(res,await res.json().catch(()=>null));if(!res.body)throw new Error("no-stream");return res.body.getReader()}
+  }
+};
+
+/* ============ API REQUESTS (dispatch) ============ */
+async function getModels(providerId){const p=getProvider(providerId);if(!p)throw new Error("Unknown provider.");if(!p.baseURL)throw new Error("No base URL configured for "+p.name+". Set it in Settings → Providers.");if(!p.apiKey)throw new Error("No API key configured for "+p.name+". Add it in Settings → Providers.");return(adapters[providerId]||adapters.custom).getModels(p)}
+async function sendChat(providerId,modelId,messages,opts,signal){const p=getProvider(providerId);const ad=adapters[providerId]||adapters.custom;if(!p.apiKey)throw new Error("No API key configured for "+p.name+".");if(opts.stream&&ad.stream){const reader=await ad.stream(p,modelId,messages,opts,signal);return{stream:true,reader}}const json=await ad.chat(p,modelId,messages,opts,signal);return{stream:false,json}}
+
+/* ============ STREAMING (SSE) ============ */
+function readStream(reader,onDelta){return new Promise((resolve,reject)=>{let buffer="";const pump=()=>{reader.read().then(({done,value})=>{if(done){resolve();return}buffer+=new TextDecoder().decode(value,{stream:true});let idx;while((idx=buffer.indexOf("\n"))!==-1){const line=buffer.slice(0,idx).replace(/\r$/,"");buffer=buffer.slice(idx+1);if(line.startsWith("data:")){const payload=line.slice(5).trim();if(payload==="[DONE]")continue;try{onDelta(JSON.parse(payload))}catch(e){}}}pump()}).catch(reject)};pump()})}
+
+/* ============ MARKDOWN ============ */
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+function sanitizeUrl(u){const s=(u||"").trim().replace(/^[\u0000-\u0020]+/,"");return(/^(javascript|vbscript|data):/i.test(s))?"#":s}
+function renderInline(text){text=esc(text);text=text.replace(/`([^`]+)`/g,'<code class="inline">$1</code>');text=text.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>");text=text.replace(/__([^_]+)__/g,"<strong>$1</strong>");text=text.replace(/(^|[^*])\*([^*\n]+)\*/g,"$1<em>$2</em>");text=text.replace(/(^|[^_])_([^_\n]+)_/g,"$1<em>$2</em>");text=text.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g,(m,t,u)=>{const url=sanitizeUrl(u);return'<a href="'+url+'" target="_blank" rel="noopener noreferrer">'+t+"</a>"});return text}
+function renderMarkdown(src){if(!src)return"";const lines=src.replace(/\r\n/g,"\n").split("\n");let html="",listType=null,inCode=false,codeLang="",codeLines=[];const closeList=()=>{if(listType){html+=listType==="ul"?"</ul>":"</ol>";listType=null}};const closeCode=()=>{if(inCode){html+='<div class="codeblock"><div class="codeblock-head"><span class="lang">'+(codeLang||"code")+'</span><button onclick="copyCode(this)" title="Copy code">Copy</button></div><pre><code>'+codeLines.join("\n")+"</code></pre></div>";inCode=false;codeLines=[];codeLang=""}};for(let i=0;i<lines.length;i++){const line=lines[i];if(inCode){if(/^```/.test(line)){closeCode();continue}codeLines.push(line);continue}const fence=line.match(/^```([\w+-]*)\s*$/);if(fence){closeList();inCode=true;codeLang=fence[1];continue}if(line.trim()===""){closeList();continue}const h=line.match(/^(#{1,4})\s+(.*)/);if(h){closeList();html+="<h"+h[1].length+">"+renderInline(h[2])+"</h"+h[1].length+">";continue}if(/^\s*([-*_])\1{2,}\s*$/.test(line)){closeList();html+="<hr>";continue}if(/^\s*\|.+\|/.test(line)){const cells=line.replace(/^\s*\|/,"").replace(/\|\s*$/,"").split("|").map(c=>renderInline(c.trim()));if(/^[: -]+$/.test(cells.join("")))continue;html+="<table><tr>"+cells.map(c=>"<td>"+c+"</td>").join("")+"</tr></table>";continue}const ul=line.match(/^\s*[-*+]\s+(.*)/);const ol=line.match(/^\s*\d+[.)]\s+(.*)/);if(ul){if(listType!=="ul"){closeList();html+="<ul>";listType="ul"}html+="<li>"+renderInline(ul[1])+"</li>";continue}if(ol){if(listType!=="ol"){closeList();html+="<ol>";listType="ol"}html+="<li>"+renderInline(ol[1])+"</li>";continue}closeList();const bq=line.match(/^\s*>\s?(.*)/);if(bq){html+="<blockquote>"+renderInline(bq[1])+"</blockquote>";continue}html+="<p>"+renderInline(line)+"</p>"}closeCode();closeList();return html}
+function renderInline(t){return inlineRenderer(t)}
+function inlineRenderer(t){return renderInlineText(t)}
+function renderInlineText(t){let text=esc(t);text=text.replace(/`([^`]+)`/g,'<code class="inline">$1</code>');text=text.replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>");text=text.replace(/__([^_]+)__/g,"<strong>$1</strong>");text=text.replace(/(^|[^*])\*([^*\n]+)\*/g,"$1<em>$2</em>");text=text.replace(/(^|[^_])_([^_\n]+)_/g,"$1<em>$2</em>");text=text.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g,(m,t,u)=>{const url=sanitizeUrl(u);return'<a href="'+url+'" target="_blank" rel="noopener noreferrer">'+t+"</a>"});return text}
+
+/* ============ TOASTS ============ */
+function notify(msg,type){type=type||"info";const icon=type==="success"?I.check:type==="error"?I.x:I.info;const el=document.createElement("div");el.className="toast "+type;el.innerHTML='<span class="ticon">'+icon+'</span><span>'+esc(msg)+"</span>";document.getElementById("toastContainer").appendChild(el);setTimeout(()=>{el.style.opacity="0";el.style.transition="opacity .3s";setTimeout(()=>el.remove(),300)},3200)}
+function notifyErr(m){notify(m,"error")}
+
+/* ============ FAVORITES / ENABLED ============ */
+function isFav(pid,mid){return state.favorites.some(f=>f.providerId===pid&&f.modelId===mid)}
+function toggleFav(pid,mid){const i=state.favorites.findIndex(f=>f.providerId===pid&&f.modelId===mid);if(i>=0)state.favorites.splice(i,1);else state.favorites.push({providerId:pid,modelId:mid});saveAll();renderProviderPicker();if($("#settingsModal"))renderSettings();}
+function isDisabled(pid,mid){return state.disabledModels.includes(pid+"|"+mid)}
+function toggleEnabled(pid,mid){const k=pid+"|"+mid;const i=state.disabledModels.indexOf(k);if(i>=0)state.disabledModels.splice(i,1);else state.disabledModels.push(k);saveAll();renderProvider();if(state.selectedProvider===pid&&isDisabled(pid,mid)){state.selectedModel=null;renderProvider();}}
+
+/* ============ MODEL CACHE / REFRESH ============ */
+async function refreshModels(pid){const p=getProvider(pid);if(!p||!p.apiKey){notify("Add an API key for "+p.name+" before refreshing models.","error");return}const btn=document.getElementById("refreshModels-"+pid);if(btn){btn.disabled=true;btn.textContent="Refreshing..."}try{const list=await getModels(pid);state.models[pid]=list;state.lastRefresh[pid]=new Date().toISOString();saveAll();notify(pid+": "+list.length+" models found","success");}catch(err){const c=classifyError(err);notify(pid+": "+c.message,"error");}finally{if(btn){btn.disabled=false;btn.textContent="↻ Refresh Models"}renderProvider();if($("#settingsModal"))renderSettings();}}
+async function testProvider(pid){const p=getProvider(pid);const btn=document.getElementById("testConn-"+pid);if(btn){btn.disabled=true;btn.textContent="Testing..."}try{const list=await getModels(pid);p.status="connected";p.lastTested=new Date().toISOString();saveAll();notify(p.name+": connection successful ("+list.length+" models).","success");}catch(err){const c=classifyError(err);p.status="error";saveAll();let m;if(c.type==="cors")m="Request blocked by browser/CORS — "+p.name+" likely does not allow direct browser requests.";else if(c.type==="auth")m="Authentication failed. Check the "+p.name+" API key.";else if(c.type==="network"||c.type==="http"||c.type==="timeout")m="Provider unavailable: "+c.message;else m=c.message;notify(p.name+": "+m,"error");}finally{if(btn){btn.disabled=false;btn.textContent="Test Connection"}renderProvider();if($("#settingsModal"))renderSettings();}}
+
+/* ============ UI: PROVIDER/MODEL PICKERS ============ */
+function enabledProviders(){return state.providers.filter(p=>p.enabled)}
+function visibleModels(pid){const all=state.models[pid]||[];return all.filter(m=>!isDisabled(pid,m.id))}
+function getModel(pid,mid){return (state.models[pid]||[]).find(x=>x.id===mid)||null}
+function modelName(pid,mid){const m=getModel(pid,mid);return m?m.name:mid}
+function formatContext(n){if(!n)return"";if(n>=1000000)return Math.round(n/1000000)+"M";if(n>=1000)return Math.round(n/1000)+"K";return String(n)}
+function fmtCtx(n){return n?(" · "+formatContext(n)+" ctx"):""}
+
+function closeAllDropdowns(){const p=document.getElementById("providerDropdown"),m=document.getElementById("modelDropdown");if(p)p.style.display="none";if(m)m.style.display="none";document.getElementById("providerPickerBtn").setAttribute("aria-expanded","false");document.getElementById("modelPickerBtn").setAttribute("aria-expanded","false");}
+
+function renderProviderPicker(){
+  const list=document.getElementById("providerList")||document.createElement("div");
+  const container=document.getElementById("providerDropdown");
+  const provs=enabledProviders().slice().sort((a,b)=>{const ai=DEFAULT_ORDER.indexOf(a.id),bi=DEFAULT_ORDER.indexOf(b.id);if(ai!==-1&&bi!==-1)return ai-bi;if(ai!==-1)return -1;if(bi!==-1)return 1;return (a.name||"").localeCompare(b.name||"")});
+  let html=provs.length?provs.map(p=>'<div class="picker-item'+(state.selectedProvider===p.id?" selected":"")+'" data-pid="'+p.id+'" onclick="selectProvider(\''+p.id+'\')"><span class="mname">'+esc(providerLabel(p))+'</span><span class="mctx">'+(isDefault(p)?"Locked":(p.apiKey?"configured":"no key"))+'</span></div>').join(""):'<div class="picker-empty">No providers enabled. Open Settings.</div>';
+  container.innerHTML='<div class="picker-list">'+html+'</div>';
+  const lbl=document.getElementById("providerBtnLabel");const pid=state.selectedProvider;if(pid&&getProvider(pid)){lbl.textContent=providerLabel(getProvider(pid));lbl.style.color="";}else{lbl.textContent="Select";}
+  renderModelList();
+}
+function selectProvider(pid){state.selectedProvider=pid;const p=getProvider(pid);const models=visibleModels(pid);if(!models.some(m=>m.id===state.selectedModel))state.selectedModel=models.length?models[0].id:null;state.currentConversationId=null;saveAll();closeAllDropdowns();renderProvider();renderChat();}
+function renderModelList(){const container=document.getElementById("modelList");const search=(document.getElementById("modelSearch")||{}).value||"";const pid=state.selectedProvider;const listEl=document.getElementById("modelList");const lbl=document.getElementById("modelBtnLabel");if(!pid){listEl.innerHTML='<div class="picker-empty">Select a provider first.</div>';lbl.textContent="Select";return}const p=getProvider(pid);if(!p.apiKey){listEl.innerHTML='<div class="picker-empty">Add an API key and refresh models for '+esc(p.name)+'.</div>';lbl.textContent="No key";return}const models=visibleModels(pid);if(!models.length){listEl.innerHTML='<div class="picker-empty">No models loaded. Refresh models for '+esc(p.name)+'.</div>';lbl.textContent="No models";return}const q=search.toLowerCase();const favs=models.filter(m=>isFav(pid,m.id)&&m.name.toLowerCase().includes(q));const rest=models.filter(m=>!isFav(pid,m.id)&&m.name.toLowerCase().includes(q));const shown=[...favs,...rest];listEl.innerHTML=shown.length?shown.map(m=>'<div class="picker-item'+(state.selectedModel===m.id?" selected":"")+'" onclick="selectModel(\''+m.id+'\')"><button class="star'+(isFav(pid,m.id)?" on":"")+'" onclick="event.stopPropagation();toggleFav(\''+pid+'\',\''+m.id+'\')" title="Favorite">'+favGlyph(pid,m.id)+'</button><span class="mname">'+esc(m.name)+'</span><span class="mctx">'+fmtCtx(m.context)+'</span></div>').join(""):'<div class="picker-empty">No models match.</div>';
+  lbl.textContent=modelName(pid,state.selectedModel)||"Select";}
+function selectModel(mid){state.selectedModel=mid;saveAll();closeAllDropdowns();renderModelList();updateProviderStatus();}
+function renderModelList(){
+  const listEl=document.getElementById("modelList");
+  const lbl=document.getElementById("modelBtnLabel");
+  const search=(document.getElementById("modelSearch")||{}).value||"";
+  const q=search.toLowerCase();
+  let items=[];
+  for(const p of enabledProviders()){
+    if(!p.apiKey)continue;
+    for(const m of visibleModels(p.id))items.push({pid:p.id,name:p.name,m});
+  }
+  if(!items.length){listEl.innerHTML='<div class="picker-empty">No models available. Add an API key and refresh models in Settings.</div>';lbl.textContent="Select";return}
+  const shown=items.filter(it=>it.m.name.toLowerCase().includes(q));
+  const sorted=[...shown].sort((a,b)=>(isFav(b.pid,b.m.id)?1:0)-(isFav(a.pid,a.m.id)?1:0));
+  listEl.innerHTML=sorted.length?sorted.map(it=>{
+    const selected=state.selectedProvider===it.pid&&state.selectedModel===it.m.id;
+    return '<div class="picker-item'+(selected?" selected":"")+'" onclick="selectModel(\''+it.pid+'\',\''+it.m.id+'\')"><button class="star'+(isFav(it.pid,it.m.id)?" on":"")+'" onclick="event.stopPropagation();toggleFav(\''+it.pid+'\',\''+it.m.id+'\')" title="Favorite">'+favGlyph(it.pid,it.m.id)+'</button><span class="mname">'+esc(it.m.name)+'</span><span class="mctx">'+esc(providerLabel(getProvider(it.pid)))+' · '+fmtCtx(it.m.context)+'</span></div>';
+  }).join(""):'<div class="picker-empty">No models match.</div>';
+  lbl.textContent=modelName(state.selectedProvider,state.selectedModel)||"Select";
+}
+function selectModel(pid,mid){state.selectedProvider=pid;state.selectedModel=mid;saveAll();closeAllDropdowns();renderModelList();updateProviderStatus();}
+const LEGAL={
+  terms:{title:"Terms of Use",body:`# Terms & Conditions
+
+**Last Updated: August 29, 2026**
+
+Welcome to **dotcomAI**.
+
+These Terms & Conditions ("Terms") govern your access to and use of the dotcomAI website, applications, software, AI services, features, and related products (collectively, the "Service").
+
+The Service is operated under **DotcomONE / UniPOS** and was developed by **Manuja Damsara** in Sri Lanka.
+
+By accessing or using dotcomAI, you agree to these Terms. If you do not agree with these Terms, you should not use the Service.
+
+## 1. About dotcomAI
+
+dotcomAI is an artificial intelligence platform that provides users with access to AI-powered functionality through integrations with Large Language Models (LLMs), artificial intelligence APIs, software services, and other third-party technologies.
+
+Some or all AI functionality may depend on third-party service providers.
+
+dotcomAI may add, remove, modify, replace, or discontinue AI models, features, services, or providers at any time.
+
+## 2. Eligibility
+
+You must be legally permitted to use the Service under the laws applicable to you.
+
+If you are under the legal age required to enter into contracts in your jurisdiction, you should use the Service only with appropriate parental or guardian involvement where legally required.
+
+By using dotcomAI, you represent that the information you provide is accurate to the best of your knowledge.
+
+## 3. Your Account
+
+Certain features may require you to create an account.
+
+You are responsible for:
+
+* Providing accurate information;
+* Maintaining the security of your account;
+* Keeping your login credentials confidential;
+* All activity occurring through your account;
+* Informing us if you believe your account has been compromised.
+
+You must not share, sell, transfer, or otherwise misuse your account unless expressly permitted by dotcomAI.
+
+## 4. Free Services
+
+dotcomAI may offer certain services free of charge.
+
+Free services may be subject to:
+
+* Daily or monthly usage limits;
+* Rate limits;
+* Token or request limits;
+* Model availability;
+* Fair-use restrictions;
+* Service availability;
+* Technical limitations.
+
+Free services may be modified, restricted, suspended, or discontinued at any time.
+
+We do not guarantee that any particular free feature will remain available indefinitely.
+
+## 5. AI-Generated Content
+
+AI-generated responses are produced using artificial intelligence systems and may contain errors, inaccuracies, outdated information, incomplete information, or inappropriate responses.
+
+AI-generated content should not automatically be considered accurate, professional, legal, medical, financial, technical, or otherwise authoritative advice.
+
+You are responsible for reviewing and verifying AI-generated content before relying on it.
+
+You should not rely solely on dotcomAI for decisions involving significant legal, medical, financial, safety, employment, educational, or business consequences.
+
+## 6. No Guarantee of Accuracy
+
+dotcomAI does not guarantee that AI-generated responses will be:
+
+* Accurate;
+* Complete;
+* Current;
+* Reliable;
+* Original;
+* Unbiased;
+* Suitable for a particular purpose;
+* Free from errors.
+
+AI systems can produce incorrect or misleading information.
+
+You acknowledge and accept these limitations when using the Service.
+
+## 7. Third-Party AI Providers
+
+dotcomAI may use third-party APIs, AI models, cloud infrastructure, software libraries, hosting providers, analytics services, authentication services, and other technology providers.
+
+The availability and performance of dotcomAI may therefore depend on external services.
+
+Third-party services may experience:
+
+* Downtime;
+* Rate limits;
+* API changes;
+* Pricing changes;
+* Service interruptions;
+* Model changes;
+* Technical failures;
+* Security incidents.
+
+dotcomAI is not responsible for failures caused solely by third-party services beyond our reasonable control.
+
+## 8. Acceptable Use
+
+You agree not to use dotcomAI to:
+
+* Violate applicable laws or regulations;
+* Commit fraud or facilitate illegal activity;
+* Attempt unauthorized access to systems or accounts;
+* Interfere with or disrupt the Service;
+* Circumvent usage limits or security mechanisms;
+* Reverse engineer or abuse the platform;
+* Scrape the Service in an abusive manner;
+* Generate or distribute malicious software;
+* Conduct unauthorized security attacks;
+* Impersonate another person or organization;
+* Harass, threaten, or abuse others;
+* Upload content that you do not have the right to use;
+* Abuse third-party AI APIs through the Service;
+* Attempt to overload or damage the infrastructure.
+
+dotcomAI reserves the right to restrict or terminate access where reasonably necessary to protect the platform, its users, third-party providers, or the public.
+
+## 9. User Content
+
+You may provide prompts, text, files, images, or other content to the Service ("User Content").
+
+You retain ownership of your User Content to the extent that you legally own it.
+
+You grant dotcomAI the limited rights reasonably necessary to process your User Content to provide the requested Service.
+
+You are responsible for ensuring that you have the necessary rights and permissions to submit your User Content.
+
+Do not submit confidential, sensitive, proprietary, or personal information unless you understand and accept the applicable processing described in our Privacy Policy.
+
+## 10. Intellectual Property
+
+The dotcomAI name, branding, logo, website design, software, user interface, original content, graphics, and other platform materials may be protected by applicable intellectual property laws.
+
+Unless otherwise stated, these materials belong to or are licensed to the respective rights holder.
+
+You may not reproduce, redistribute, sell, modify, or commercially exploit dotcomAI's proprietary materials without appropriate authorization.
+
+## 11. AI Output and Intellectual Property
+
+AI-generated output may not always be unique and may be similar to content generated for other users.
+
+You are responsible for determining whether AI-generated content is suitable for your intended use and whether additional intellectual-property permissions are required.
+
+dotcomAI does not guarantee that AI-generated output is free from third-party intellectual-property claims.
+
+## 12. Prohibited Automated Use
+
+Unless expressly authorized, you may not use bots, automated scripts, scraping systems, crawlers, or other automated methods to excessively access or abuse dotcomAI.
+
+We may implement technical measures to prevent abuse, excessive requests, unauthorized automation, or circumvention of service limitations.
+
+## 13. Service Availability
+
+We aim to provide a reliable service, but we do not guarantee uninterrupted availability.
+
+The Service may occasionally be unavailable because of:
+
+* Maintenance;
+* Updates;
+* Server problems;
+* Network failures;
+* Security incidents;
+* Third-party API outages;
+* Infrastructure problems;
+* Force majeure events;
+* Other circumstances beyond our reasonable control.
+
+## 14. Changes to the Service
+
+We may modify, update, suspend, or discontinue any part of dotcomAI at any time.
+
+This may include changing available models, features, limits, interfaces, providers, or functionality.
+
+## 15. Account Suspension or Termination
+
+We may suspend or terminate an account where we reasonably believe that the user:
+
+* Violated these Terms;
+* Abused the Service;
+* Attempted to compromise the platform;
+* Circumvented restrictions;
+* Used the Service unlawfully;
+* Created a security or operational risk.
+
+Where reasonably practical, we may provide notice before termination, except where immediate action is necessary.
+
+## 16. Disclaimer
+
+To the maximum extent permitted by applicable law, dotcomAI is provided on an "as is" and "as available" basis.
+
+We make no warranties that the Service will always be uninterrupted, secure, accurate, reliable, or error-free.
+
+Nothing in these Terms excludes rights or protections that cannot legally be excluded under applicable law.
+
+## 17. Limitation of Liability
+
+To the maximum extent permitted by applicable law, dotcomAI, DotcomONE, UniPOS, and their respective personnel shall not be liable for indirect, incidental, consequential, special, or unforeseeable losses arising from your use of the Service.
+
+This includes, where legally permitted, losses resulting from reliance on AI-generated information, service interruptions, third-party API failures, data loss, or unauthorized access.
+
+Nothing in these Terms is intended to exclude liability that cannot legally be excluded under applicable law.
+
+## 18. Third-Party Services and Links
+
+dotcomAI may contain integrations or links to third-party services.
+
+Third-party services are governed by their own terms and privacy policies.
+
+We are not responsible for the policies, availability, security, content, or practices of independent third-party services.
+
+## 19. Privacy
+
+Your use of dotcomAI is also governed by our Privacy Policy.
+
+The Privacy Policy explains how personal information and other data may be collected, used, stored, processed, and protected.
+
+## 20. Security
+
+We take reasonable measures intended to protect the Service and user information.
+
+However, no internet-based system can be guaranteed to be completely secure.
+
+You acknowledge that transmission of information over the internet carries inherent risks.
+
+## 21. Governing Law
+
+These Terms shall be interpreted in accordance with the laws of the **Democratic Socialist Republic of Sri Lanka**, subject to any mandatory rights or protections that apply to you under applicable law.
+
+Any disputes shall be handled in accordance with applicable Sri Lankan law and the jurisdiction of the competent courts of Sri Lanka, unless otherwise required by applicable law.
+
+## 22. Changes to These Terms
+
+We may update these Terms from time to time.
+
+When material changes are made, we may provide reasonable notice through the website, application, email, or other appropriate means.
+
+Your continued use of dotcomAI after the updated Terms become effective constitutes acceptance of the revised Terms, to the extent permitted by law.
+
+## 23. Contact
+
+For questions regarding these Terms, please contact the dotcomAI team through the official contact channels provided on the website.
+
+### Service
+
+**dotcomAI**
+
+Made in Sri Lanka.
+
+Developed by **Manuja Damsara**
+
+Under **DotcomONE / UniPOS**`},
+  privacy:{title:"Privacy Policy",body:`# Privacy Policy
+
+**Last Updated: August 29, 2026**
+
+This Privacy Policy explains how **dotcomAI**, operated under **DotcomONE / UniPOS** and developed by **Manuja Damsara**, collects, uses, processes, stores, and protects information when you use our website, applications, and AI services.
+
+dotcomAI is developed and operated from Sri Lanka.
+
+We respect your privacy and aim to handle personal information responsibly and transparently.
+
+## 1. Information We May Collect
+
+Depending on how you use dotcomAI, we may collect or receive different types of information.
+
+### Account Information
+
+If you create an account, we may collect information such as:
+
+* Name;
+* Email address;
+* Username;
+* Account identifiers;
+* Authentication information;
+* Profile information you choose to provide.
+
+### AI Prompts and Inputs
+
+When you use an AI feature, you may provide information such as:
+
+* Text prompts;
+* Questions;
+* Instructions;
+* Uploaded documents;
+* Images;
+* Code;
+* Other content submitted to the Service.
+
+The information contained in your prompts may potentially include personal information.
+
+You are responsible for avoiding the submission of sensitive or confidential information unless it is necessary and you understand how it may be processed.
+
+### Technical Information
+
+We may automatically receive certain technical information, such as:
+
+* IP address;
+* Browser type;
+* Device type;
+* Operating system;
+* Approximate location derived from technical information;
+* Access times;
+* Pages or features accessed;
+* Error logs;
+* Usage information.
+
+### Cookies and Similar Technologies
+
+We may use cookies, local storage, session technologies, or similar technologies to:
+
+* Maintain sessions;
+* Remember preferences;
+* Improve functionality;
+* Understand service usage;
+* Improve security;
+* Analyze website performance.
+
+You may be able to control cookies through your browser settings.
+
+## 2. How We Use Information
+
+We may use information to:
+
+* Provide and operate dotcomAI;
+* Process AI requests;
+* Authenticate users;
+* Maintain accounts;
+* Provide customer support;
+* Improve platform performance;
+* Monitor system security;
+* Detect abuse and fraudulent activity;
+* Enforce our Terms;
+* Troubleshoot technical problems;
+* Communicate important service information;
+* Understand how users interact with the platform;
+* Improve our products and services;
+* Comply with applicable legal obligations.
+
+## 3. Processing of AI Prompts
+
+When you submit a prompt or other content to an AI feature, the content may be transmitted to the third-party AI or infrastructure provider required to process your request.
+
+For example, depending on the model or feature you select, your request may be processed through an external LLM API.
+
+The exact providers used by dotcomAI may change over time.
+
+We encourage users not to submit passwords, payment-card information, highly confidential business information, government identification numbers, or other sensitive information unless the relevant feature specifically requires it and appropriate safeguards are in place.
+
+## 4. Third-Party Service Providers
+
+dotcomAI may use third-party providers for services such as:
+
+* Artificial intelligence and LLM APIs;
+* Cloud hosting;
+* Databases;
+* Authentication;
+* Analytics;
+* Email delivery;
+* Security;
+* Error monitoring;
+* Infrastructure.
+
+These providers may process information as necessary to provide their services.
+
+Where appropriate, we seek to use providers and arrangements that provide reasonable safeguards for personal information.
+
+## 5. Legal Basis and Purpose
+
+Where applicable, personal information may be processed based on one or more legally recognized grounds, including:
+
+* Your consent;
+* Performance of a service requested by you;
+* Compliance with legal obligations;
+* Legitimate interests where permitted by applicable law;
+* Protection of rights, security, or property.
+
+The applicable legal basis may depend on the nature and purpose of the processing.
+
+## 6. Data Retention
+
+We retain information only for as long as reasonably necessary for the purposes described in this Privacy Policy, unless a longer retention period is required or permitted by law.
+
+Retention periods may vary depending on:
+
+* The type of information;
+* The purpose for which it was collected;
+* Legal requirements;
+* Security requirements;
+* Account status;
+* Operational requirements.
+
+We may delete or anonymize information when it is no longer reasonably necessary.
+
+## 7. Account Deletion
+
+Where account deletion functionality is available, you may request deletion of your account.
+
+You may also contact us to request deletion or appropriate handling of personal information, subject to applicable legal and operational requirements.
+
+Certain information may need to be retained where required by law, for security, fraud prevention, dispute resolution, or legitimate operational purposes.
+
+## 8. Data Security
+
+We take reasonable technical and organizational measures to protect personal information against unauthorized access, alteration, disclosure, loss, or destruction.
+
+However, no internet service can guarantee absolute security.
+
+Users acknowledge that information transmitted through the internet may carry inherent risks.
+
+## 9. International Data Transfers
+
+Because dotcomAI may use cloud infrastructure and third-party AI providers located in different countries, information may potentially be processed outside Sri Lanka.
+
+Where applicable, we aim to use appropriate safeguards for cross-border processing in accordance with applicable data-protection requirements.
+
+## 10. Your Privacy Rights
+
+Subject to applicable law, you may have rights relating to your personal information, which may include rights to:
+
+* Request access to personal information;
+* Request correction of inaccurate information;
+* Request deletion or erasure where applicable;
+* Object to or restrict certain processing;
+* Withdraw consent where processing is based on consent;
+* Request information about processing;
+* Exercise other rights provided by applicable data-protection law.
+
+The availability and scope of these rights may depend on applicable law and the circumstances of the processing.
+
+## 11. Children's Privacy
+
+dotcomAI is not intended to encourage children to provide personal information without appropriate supervision.
+
+Where applicable law requires parental or guardian consent for the collection or processing of children's personal information, we will seek to comply with those requirements.
+
+If you believe that a child has provided personal information in circumstances where this was not appropriate, please contact us.
+
+## 12. Third-Party Websites
+
+dotcomAI may contain links or integrations to third-party websites and services.
+
+We are not responsible for the privacy practices of independent third parties.
+
+We encourage users to review the privacy policies of third-party services before providing information to them.
+
+## 13. Analytics
+
+We may use analytics or similar technologies to understand website usage, performance, and user interactions.
+
+The specific analytics providers used by the platform may change over time.
+
+## 14. Changes to This Privacy Policy
+
+We may update this Privacy Policy periodically.
+
+When significant changes are made, we may provide appropriate notice through the Service or other reasonable channels.
+
+The "Last Updated" date at the beginning of this policy indicates when the policy was most recently revised.
+
+## 15. Contact
+
+If you have a privacy question, request, concern, or complaint regarding the processing of your personal information, please contact dotcomAI through the official contact information provided on the website.
+
+### Privacy Contact
+
+**dotcomAI**
+
+Developed by **Manuja Damsara**
+
+Under **DotcomONE / UniPOS**
+
+**Sri Lanka**`},
+  about:{title:"About dotcomAI",body:`# About dotcomAI
+
+## AI Made in Sri Lanka. Built for Everyone.
+
+**dotcomAI** is a Sri Lankan artificial intelligence platform designed to make modern AI technology more accessible, useful, and affordable for everyone.
+
+Built under **DotcomONE** and **UniPOS**, dotcomAI provides users with access to AI-powered services through integrations with leading Large Language Model (LLM) and artificial intelligence technologies.
+
+Our goal is simple: **make powerful AI tools easier for people to access and use.**
+
+Whether you are a student, developer, business owner, designer, content creator, researcher, professional, or simply someone exploring artificial intelligence, dotcomAI is designed to provide practical AI capabilities through a simple and user-friendly platform.
+
+## Built in Sri Lanka
+
+**dotcomAI is proudly made in Sri Lanka.**
+
+The platform was created by **Manuja Damsara**, a Sri Lankan technology professional and the founder/developer behind the platform.
+
+Manuja Damsara works across multiple areas of technology, including:
+
+* Web Development
+* Software Engineering
+* IT Consulting
+* UI/UX Design
+* Artificial Intelligence
+* Digital Product Development
+* Software Solutions
+
+Through **DotcomONE** and **UniPOS**, the vision is to build practical technology products that help individuals and organizations use modern digital technologies more effectively.
+
+## Our Mission
+
+Our mission is to make artificial intelligence more accessible.
+
+AI technology is developing rapidly, but access to powerful AI tools can sometimes be complicated, expensive, or technically difficult.
+
+dotcomAI aims to simplify that experience by bringing AI-powered services together through one easy-to-use platform.
+
+We believe that access to useful technology should not be limited only to large companies or experienced developers.
+
+## What is dotcomAI?
+
+dotcomAI is an AI platform that connects users with artificial intelligence services powered by Large Language Models and related AI technologies.
+
+Depending on the services available on the platform, users may be able to use AI for tasks such as:
+
+* Writing and content generation
+* Question answering
+* Programming and coding assistance
+* Text analysis
+* Summarization
+* Brainstorming
+* Productivity
+* Learning and education
+* Creative work
+* Business tasks
+* Other AI-powered applications
+
+The exact features and models available through dotcomAI may change over time as the platform develops.
+
+## Free AI Services
+
+dotcomAI may provide certain AI services to users free of charge.
+
+Free access may be subject to usage limits, availability restrictions, rate limits, model availability, technical limitations, or other conditions determined by dotcomAI.
+
+Our aim is to continue developing useful AI services while keeping the platform accessible to as many people as possible.
+
+## Our Technology
+
+dotcomAI may use third-party artificial intelligence and Large Language Model APIs to provide certain features.
+
+This means that some AI responses may be generated by external AI models or infrastructure operated by third-party technology providers.
+
+dotcomAI does not necessarily operate or own every AI model used by the platform.
+
+We continuously work to improve the platform, its reliability, user experience, performance, and available AI capabilities.
+
+## Our Vision
+
+We envision a future where powerful artificial intelligence is accessible to individuals, students, developers, businesses, and organizations regardless of their technical background.
+
+**dotcomAI is our step toward that future.**
+
+### dotcomAI
+
+**AI platform made in Sri Lanka.**
+**Built for the world.**`}
+};
+function showLegal(key){const d=LEGAL[key]||LEGAL.about;const ov=document.createElement("div");ov.className="modal-overlay";ov.innerHTML='<div class="modal"><div class="modal-head"><h2>'+esc(d.title)+'</h2><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">×</button></div><div class="modal-body legal-body">'+renderMarkdown(d.body)+'</div></div>';ov.addEventListener("click",e=>{if(e.target===ov)ov.remove()});document.body.appendChild(ov);}
+function fmtCtx(n){return n?(" · "+formatContext(n)):""}
+function updateProviderStatus(){
+  const el=document.getElementById("providerStatus"),lbl=document.getElementById("providerStatusLabel");
+  const pid=state.selectedProvider,p=getProvider(pid);
+  if(!p){el.className="provider-status unconf";lbl.textContent="No provider";return}
+  if(p.status==="connected"){el.className="provider-status ok";lbl.textContent=p.name+" · Connected"}
+  else if(p.status==="error"){el.className="provider-status err";lbl.textContent=p.name+" · Error"}
+  else{el.className="provider-status unconf";lbl.textContent=p.name+(p.apiKey?"":" (no key)")}
+}
+
+/* ============ CONVERSATIONS ============ */
+function newConversation(){const id="c"+Date.now()+Math.random().toString(36).slice(2,6);const c={id,title:"Untitled Chat",createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),provider:state.selectedProvider,model:state.selectedModel,messages:[]};state.conversations.unshift(c);state.currentConversationId=id;state.attachments=[];renderAttach();renderSidebar();renderChat();saveAll();closeSidebar();focusInput();return c;}
+function getConv(id){return state.conversations.find(c=>c.id===id)}
+function currentConv(){return getConv(state.currentConversationId)}
+function makeTitle(text){let t=text.replace(/\s+/g," ").trim();t=t.replace(/^(build|create|make|write|give|show|explain|design)\s+(me\s+)?/i,"");t=t.replace(/[^\w\s-]/g,"").replace(/\s+/g," ").trim();if(t.length>42)t=t.slice(0,42).replace(/\s+\S*$/,"");if(!t)t="Untitled Chat";return t.charAt(0).toUpperCase()+t.slice(1)}
+function convGroup(ts){const d=new Date(ts);const now=new Date();const s=((now-d)/86400000);if(s<1&&d.getDate()===now.getDate())return"TODAY";if(s<2)return"YESTERDAY";if(s<7)return"PREVIOUS 7 DAYS";if(d.getFullYear()===now.getFullYear())return d.toLocaleString(undefined,{month:"long"});return String(d.getFullYear())}
+function renderSidebar(){
+  const box=document.getElementById("convList");const q=($("#sbSearch").value||"").toLowerCase();
+  let list=state.conversations.slice().sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt));
+  if(q)list=list.filter(c=>c.title.toLowerCase().includes(q)||c.messages.some(m=>String(m.content||"").toLowerCase().includes(q)));
+  if(!list.length){box.innerHTML=q?'<div class="picker-empty">No conversations match.</div>':'<div class="picker-empty">No conversations yet.<br>Click ＋ New Chat to start.</div>';return}
+  let html="",curGroup=null;
+  for(const c of list){const g=convGroup(c.updatedAt);if(g!==curGroup){html+='<div class="sb-group">'+g+"</div>";curGroup=g}
+  html+='<div class="sb-item'+(c.id===state.currentConversationId?" active":"")+'" data-id="'+c.id+'" onclick="openConv(\''+c.id+'\')"><span class="title">'+esc(c.title)+'</span><button class="menu-btn" onclick="event.stopPropagation();toggleConvMenu(event,\''+c.id+'\')" aria-label="Menu">'+I.dots+'</button></div>'}
+  box.innerHTML=html;}
+function toggleConvMenu(ev,id){ev.stopPropagation();closeConvMenus();const el=ev.currentTarget;const existing=el.parentElement.querySelector(".sb-item-actions");if(existing){existing.remove();return}const menu=document.createElement("div");menu.className="sb-item-actions";menu.innerHTML='<button onclick="event.stopPropagation();renameConv(\''+id+'\')">'+I.pencil+' Rename</button><button onclick="event.stopPropagation();openConv(\''+id+'\');exportConv(\''+id+'\')">'+I.export+' Export</button><button class="danger" onclick="event.stopPropagation();deleteConv(\''+id+'\')">'+I.trash+' Delete</button>';el.parentElement.appendChild(menu);}
+function closeConvMenus(){document.querySelectorAll(".sb-item-actions").forEach(m=>m.remove())}
+function openConv(id){state.currentConversationId=id;const c=getConv(id);if(c){state.selectedProvider=c.provider||state.selectedProvider;state.selectedModel=c.model||state.selectedModel}saveAll();closeSidebar();renderSidebar();renderProvider();renderChat();}
+function renameConv(id){const c=getConv(id);if(!c)return;const name=prompt("Rename conversation:",c.title);if(name===null)return;c.title=name.trim()||"Untitled Chat";c.updatedAt=new Date().toISOString();saveAll();renderSidebar();}
+function deleteConv(id){confirmModal("Delete this conversation?","This cannot be undone.","danger","Delete",()=>{state.conversations=state.conversations.filter(c=>c.id!==id);if(state.currentConversationId===id)state.currentConversationId=null;saveAll();renderSidebar();renderChat();})}
+
+/* ============ CHAT RENDERING ============ */
+function renderChat(){
+  const inner=document.getElementById("chatInner");
+  const conv=currentConv();
+  const pid=state.selectedProvider,p=getProvider(pid);
+  if(!conv||!conv.messages.length){
+    inner.innerHTML=heroHTML();return}
+  inner.innerHTML=conv.messages.map((m,i)=>renderMsg(m,i)).join("");
+  scrollBottom();}
+function renderMsg(m,i,conv){
+  const t=m.timestamp?new Date(m.timestamp):new Date();
+  const timeStr=state.settings.showTimestamps?('<span class="msg-time">'+t.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+"</span>"):"";
+  const modelTag=state.settings.showTimestamps&&m.model?('<span class="msg-model">'+esc(m.model)+"</span>"):"";
+  if(m.role==="error"){
+    const err=m;
+    const ebTitle=esc(err.title||err.message||"Request failed");
+    return '<div class="msg" data-idx="'+i+'"><div class="msg-avatar">!</div><div class="msg-body"><div class="msg-meta"><span class="msg-role">Error</span>'+timeStr+'</div><div class="error-box"><div class="eb-title">'+ebTitle+'</div><div>'+esc(err.message||"")+'</div><button class="toggle-detail" onclick="this.nextElementSibling.classList.toggle(\'show\')">Technical details</button><div class="eb-detail"><pre>'+esc(err.technical||"")+'</pre></div></div><div class="error-actions"><button onclick="retryMessage()">Retry</button><button onclick="switchModel()">Switch Model</button></div></div></div>';
+  }
+  const avatar=m.role==="user"?I.user:m.role==="system"?I.gear:I.ai;
+      return'<div class="msg '+m.role+'" data-idx="'+i+'"><div class="msg-avatar">'+avatar+"</div><div class=\"msg-body\"><div class=\"msg-meta\"><span class=\"msg-role\">"+(m.role==="user"?"You":m.role==="system"?"System":"dotcomAI")+"</span>"+timeStr+modelTag+(m.model?'<span class="msg-model">'+esc(m.model)+"</span>":"")+'</div><div class="msg-content md">'+renderMarkdown(String(m.content||""))+'</div><div class="msg-actions">'+(m.role==="assistant"?actionsForMsg(m):"")+"</div></div></div>";
+}
+function actionsForMsg(m){return'<button onclick="copyText(this,\''+esc(m.content)+'\')">Copy</button><button onclick="regenerate()">Regenerate</button>'}
+function scrollDown(smooth){const w=document.getElementById("chatWrap");w.scrollTo({top:w.scrollHeight,behavior:smooth?"smooth":"auto"})}
+function scrollBottom(){scrollDown(true);}
+function usePrompt(btn){const input=$("#composerInput");input.value=btn.textContent;input.focus();}
+function heroHTML(){
+  const cards=START_PROMPTS.map(p=>'<button class="start-card" onclick="fillPrompt(this)" data-p="'+esc(p.p)+'"><span class="sc-icon">'+p.svg+'</span><span class="sc-title">'+esc(p.title)+'</span><span class="sc-desc">'+esc(p.desc)+'</span></button>').join("");
+  return '<div class="empty-state"><div class="hero"><div class="hero-logo">dotcomAI</div><div class="hero-tag">Experience the <span class="hero-hl">frontier</span></div><p class="hero-sub">Select a model above to start chatting.</p></div><div class="start-title">Get started</div><div class="start-grid">'+cards+'</div></div>';
+}
+function fillPrompt(btn){const i=$("#composerInput");i.value=btn.getAttribute("data-p");i.focus();autoResize();}
+
+/* ============ SEND / STREAM ============ */
+function currentMessages(){const conv=currentConv();return conv?conv.messages.filter(m=>m.role!=="error").map(m=>({role:m.role,content:m.content})):[]}
+async function sendMessage(){
+  if(state.generating)return;
+  const input=$("#composerInput");let text=input.value.trim();
+  const conv=currentConv();
+  if(!text&&!state.attachments.length){return}
+  if(!state.selectedProvider||!getProvider(state.selectedProvider)){notify("Select a provider first.","error");return}
+  const p=getProvider(state.selectedProvider);
+  if(!state.settings.demoMode&&!p.apiKey){notify("Add an API key for "+p.name+" in Settings → Providers.","error");return}
+  if(!state.selectedModel){const models=visibleModels(state.selectedProvider);if(models.length)state.selectedModel=models[0].id;else{notify("No model selected. Refresh models first.","error");return}}
+  // ensure conversation exists
+  let c=conv;
+  if(!c){c=newConversation();}
+  c.provider=state.selectedProvider;c.model=state.selectedModel;
+  if(c.title==="Untitled Chat")c.title=makeTitle(text);
+  const userMsg={role:"user",content:text,timestamp:new Date().toISOString(),model:state.selectedModel};
+  // attach file content
+  if(state.attachments.length){const parts=state.attachments.map(a=>"### Attached file: "+a.name+"\n```"+a.suffix+"\n"+a.content+"\n```");userMsg.content=text+"\n\n"+parts.join("\n\n");}
+  c.messages.push(userMsg);c.updatedAt=new Date().toISOString();
+  state.attachments=[];renderAttach();input.value="";
+  renderChat();renderSidebar();saveAll();
+  if(state.settings.demoMode){demoResponse(c);return}
+  await requestAssistant(c);
+}
+async function requestAssistant(c){
+  const assistantMsg={role:"assistant",content:"",timestamp:new Date().toISOString(),model:state.selectedModel};
+  c.messages.push(assistantMsg);renderChat();renderSidebar();
+  const startTime=Date.now();
+  const ac=new AbortController();state.abortController=ac;state.generating=true;setSendButton(true);
+  const opts={stream:state.settings.streaming,temperature:state.settings.temperature,maxTokens:state.settings.maxTokens,topP:state.settings.topP,systemPrompt:state.settings.systemPrompt};
+  // timeout
+  const timeoutTimer=setTimeout(()=>ac.abort(),180000);
+  try{
+    const msgs=currentMessages().slice(0,-1);
+    const result=await sendChat(state.selectedProvider,state.selectedModel,msgs,opts,ac.signal);
+    let usage=null,finish=null,model=state.selectedModel;
+    if(result.stream){
+      const reader=result.reader;
+      const contentEl=document.querySelector('#chatInner .msg:last-child .msg-content');
+      if(contentEl)contentEl.innerHTML='<span class="thinking"><span class="spinner"></span>Thinking...</span>';
+      let acc="";
+      await readStream(reader,(delta)=>{
+        const d=delta.choices&&delta.choices[0]&&delta.choices[0].delta;
+        const piece=d&&d.content||"";
+        if(piece){acc+=piece;assistantMsg.content=acc;}
+        const el=document.querySelector('#chatInner .msg:last-child .msg-content');
+        if(el){el.innerHTML=renderMarkdown(acc);el.classList.add("cursor-blink");}
+        scrollDown();
+      });
+      if(!acc){acc="(Empty response)";assistantMsg.content=acc;}
+    }else{
+      const norm=normalizeResponse(result.json);assistantMsg.content=norm.content||"(Empty response)";usage=norm.usage;model=norm.model;finish=norm.finishReason;
+    }
+    assistantMsg.model=model;
+    log(state.selectedProvider,state.selectedModel,"success",Date.now()-startTime,usage);
+    c.updatedAt=new Date().toISOString();
+    renderChat();renderSidebar();saveAll();
+  }catch(err){
+    const cls=classifyError(err);
+    if(cls.type!=="abort"){
+      assistantMsg.content="";
+      const errMsg={role:"error",message:cls.message,technical:cls.technical,timestamp:new Date().toISOString()};
+      // replace assistant msg with error
+      const idx=c.messages.length-1;c.messages[idx]=errMsg;
+      log(state.selectedProvider,state.selectedModel,"error",Date.now()-startTime,null);
+    }else{
+      // stopped - keep partial
+      log(state.selectedProvider,state.selectedModel,"aborted",Date.now()-startTime,null);
+    }
+    c.updatedAt=new Date().toISOString();
+    renderChat();renderSidebar();saveAll();
+  }finally{
+    clearTimeout(timeoutTimer);state.generating=false;state.abortController=null;setSendButton(false);renderChat();renderSidebar();saveAll();
+  }
+}
+function setSendButton(generating){const b=$("#btnSend");if(generating){b.className="send-btn stop";b.innerHTML=I.stop;b.title="Stop"}else{b.className="send-btn";b.innerHTML=I.send;b.title="Send"}}
+function stopGeneration(){if(state.abortController)state.abortController.abort();}
+function switchModel(){openSettings("models");}
+function retryMessage(){const c=currentConv();if(!c)return;c.messages=c.messages.filter(m=>m.role!=="error");renderChat();renderSidebar();saveAll();requestAssistant(c);}
+function regenerate(){const c=currentConv();if(!c||state.generating)return;while(c.messages.length&&(c.messages[c.messages.length-1].role==="assistant"||c.messages[c.messages.length-1].role==="error"))c.messages.pop();renderChat();renderSidebar();saveAll();requestAssistant(c);}
+
+/* ============ DEMO MODE ============ */
+function demoResponse(c){setTimeout(()=>{c.messages.push({role:"assistant",content:"**Demo mode** — this response is simulated locally and is NOT real AI output.\n\nConnect a real provider with an API key (SeekAI or OpenRouter) in **Settings → Providers**, then refresh models to chat with a real model.",timestamp:new Date().toISOString(),model:"demo-mode"});c.updatedAt=new Date().toISOString();renderChat();renderSidebar();saveAll();},350);}
+
+/* ============ USAGE / LOGS ============ */
+function log(provider,model,status,duration,usage){const entry={time:new Date().toISOString(),provider,model,status,duration:(duration!=null?Math.round(duration):null),usage:usage||null};state.logs.unshift(entry);if(state.logs.length>500)state.logs=state.logs.slice(0,500);saveAll();}
+
+/* ============ EXPORT / IMPORT ============ */
+function download(filename,content,type){const blob=new Blob([content],{type:type||"text/plain"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function exportConv(id){const c=getConv(id);if(!c){notify("No conversation to export.","error");return}const who=m=>m.role==="user"?"You":m.role==="assistant"?"dotcomAI":"System";const content=c.messages.filter(m=>m.role!=="error").map(m=>"## "+who(m)+"\n\n"+m.content).join("\n\n---\n\n");download(slug(c.title)+".md",content,"text/markdown");notify("Conversation exported.","success");}
+function exportAs(format){
+  const c=currentConv();if(!c){notify("No conversation to export.","error");return}
+  const title=c.title;const lines=c.messages.filter(m=>m.role!=="error").map(m=>{
+    const who=m.role==="user"?"You":m.role==="assistant"?"dotcomAI":"System";
+    if(format==="json")return{m:who,t:m.timestamp,c:m.content};
+    if(format==="md")return"## "+who+"\n\n"+m.content;
+    return who+":\n"+m.content;
+  });
+  let content,name,type;
+  if(format==="json"){name=slug(title)+".json";content=JSON.stringify({title,createdAt:c.createdAt,provider:c.provider,model:c.model,messages:c.messages},null,2);type="application/json"}
+  else if(format==="md"){name=slug(title)+".md";content=lines.join("\n\n---\n\n");type="text/markdown"}
+  else{name=slug(title)+".txt";content=lines.join("\n\n---\n\n");type="text/plain"}
+  download(name,content,type);notify("Conversation exported as "+format.toUpperCase(),"success");}
+function slug(s){return s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,40)||"conversation"}
+function download(name,content,type){const blob=new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+
+/* ============ CONFIRM MODAL ============ */
+function confirmModal(title,msg,confirmLabel,onConfirm){const ov=document.createElement("div");ov.className="modal-overlay";ov.innerHTML='<div class="modal confirm-modal"><div class="modal-head"><h2>'+esc(title)+'</h2><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">×</button></div><div class="confirm-body"><div class="warn-icon">'+I.alert+'</div><div>'+esc(msg)+'</div></div><div class="confirm-foot"><button class="btn" onclick="this.closest(\'.modal-overlay\').remove()">Cancel</button><button class="btn danger" id="cfmOk">'+esc(confirmLabel)+'</button></div></div>';document.body.appendChild(ov);ov.querySelector("#cfmOk").onclick=()=>{onConfirm();ov.remove()};}
+
+/* ============ SETTINGS MODAL ============ */
+let settingsTab="providers";
+function openSettings(tab){settingsTab=tab||"providers";renderSettingsModal();}
+
+/* ============ ATTACHMENTS ============ */
+function renderAttach(){const box=$("#attachList");box.innerHTML=state.attachments.map((a,i)=>'<span class="attach-chip">'+I.paperclip+' '+esc(a.name)+' ('+a.size+' KB)<button class="x" onclick="removeAttach('+i+')">×</button></span>').join("")}
+function removeAttach(i){state.attachments.splice(i,1);renderAttach();}
+function handleFiles(files){
+  const maxMB=state.settings.maxFileSizeMB||5;
+  for(const f of files){
+    if(f.size>maxMB*1024*1024){notify(f.name+" is larger than "+maxMB+" MB and was rejected.","error");continue}
+    const dot=f.name.lastIndexOf(".");const suffix=dot>=0?f.name.slice(dot+1).toLowerCase():"";
+    if(!FILE_EXTENSIONS.includes(suffix)){notify("Unsupported file type: ."+(suffix||"?")+" Supported: "+FILE_EXTENSIONS.join(", "),"error");continue}
+    const reader=new FileReader();
+    reader.onload=()=>{state.attachments.push({name:f.name,suffix:suffix||"txt",size:Math.round(f.size/1024),content:String(reader.result)});renderAttach()};
+    reader.onerror=()=>notify("Could not read "+f.name+".","error");
+    reader.readAsText(f);
+  }
+}
+
+/* ============ SIDEBAR MOBILE ============ */
+function closeSidebar(){document.body.classList.add("sb-collapsed");$("#sidebar").classList.remove("open");$("#sbOverlay").classList.remove("show")}
+function openSidebar(){document.body.classList.remove("sb-collapsed");$("#sidebar").classList.add("open");$("#sbOverlay").classList.add("show")}
+
+/* ============ THEME ============ */
+function applyTheme(){const t=state.settings.theme;const resolved=t==="system"?(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"):t;document.documentElement.setAttribute("data-theme",resolved);}
+function cycleTheme(){const order=["dark","light","system"];const i=order.indexOf(state.settings.theme);state.settings.theme=order[(i+1)%3];applyTheme();saveAll();notify("Theme: "+state.settings.theme,"info");}
+function updateOffline(){const off=!navigator.onLine;const d=$("#offlineDot");d.classList.toggle("offline",off);$("#offlineLabel").textContent=off?"Offline":"Online";}
+
+/* ============ COPY ============ */
+async function copyText(txt){try{await navigator.clipboard.writeText(txt);notify("Copied!","success")}catch(e){const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");notify("Copied!","success")}catch(e2){notify("Copy failed.","error")}ta.remove()}}
+function copyCode(btn){const code=btn.closest(".codeblock").querySelector("pre").innerText;copyText(code);}
+
+/* ============ EVENT HANDLERS ============ */
+function wireEvents(){
+  $("#btnNewChat").onclick=newConversation;
+  $("#btnSettings2").onclick=()=>openSettings("providers");
+  $("#btnTheme").onclick=cycleTheme;
+  $("#btnHamburger").onclick=openSidebar;
+  $("#btnSidebarClose").onclick=closeSidebar;
+  $("#sbOverlay").onclick=closeSidebar;
+  $("#btnAttach").onclick=()=>$("#fileInput").click();
+  $("#fileInput").onchange=e=>{handleFiles([...e.target.files]);e.target.value=""};
+  $("#btnSend").onclick=()=>{state.generating?stopGeneration():sendMessage()};
+  const input=$("#composerInput");
+  input.addEventListener("keydown",e=>{
+    if(e.key==="Enter"&&!e.shiftKey&&state.settings.enterToSend){e.preventDefault();sendMessage()}
+    autoResize();
+  });
+  input.addEventListener("input",autoResize);
+  $("#sbSearch").oninput=renderSidebar;
+  $("#modelSearch").oninput=renderModelList;
+  $("#providerPickerBtn").onclick=e=>{e.stopPropagation();const d=$("#providerDropdown");closeAllDropdowns();d.style.display=d.style.display==="none"?"block":"none";$("#providerPickerBtn").setAttribute("aria-expanded",d.style.display!=="none")};
+  $("#modelPickerBtn").onclick=e=>{e.stopPropagation();const d=$("#modelDropdown");closeAllDropdowns();d.style.display=d.style.display==="none"?"block":"none";$("#modelPickerBtn").setAttribute("aria-expanded",d.style.display!=="none")};
+  document.addEventListener("click",e=>{if(!e.target.closest(".picker"))closeAllDropdowns();if(!e.target.closest(".sb-item"))closeConvMenus()});
+  document.addEventListener("keydown",e=>{
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();$("#sbSearch").focus();$("#sbSearch").select()}
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="n"){e.preventDefault();newConversation()}
+    if(e.key==="Escape"){closeSidebar();closeAllDropdowns();const ov=document.querySelector(".modal-overlay");if(ov)ov.remove()}
+  });
+  window.addEventListener("offline",updateOffline);
+  window.addEventListener("online",updateOffline);
+  window.addEventListener("resize",()=>{if(window.innerWidth>900)closeSidebar()});
+}
+function stopGeneration(){if(state.abortController)state.abortController.abort()}
+function autoResize(){const input=$("#composerInput");input.style.height="auto";input.style.height=Math.min(input.scrollHeight,200)+"px";}
+function renderAll(){renderSidebar();renderProvider();updateProviderStatus();renderChat();}
+function renderProvider(){renderProviderPicker();renderModelList();updateProviderStatus();}
+function renderSettings(){if(document.getElementById("settingsBody"))renderSettingsBody();}
+function toggleModel(pid,mid){toggleEnabled(pid,mid);}
+function refreshAllModels(){
+  const targets=state.providers.filter(p=>p.apiKey);
+  if(!targets.length){notify("Add an API key for at least one provider first.","error");return}
+  Promise.all(targets.map(p=>refreshModels(p.id).catch(()=>{})));
+}
+function showModelInfo(pid,mid){
+  const p=getProvider(pid);const m=getModel(pid,mid);if(!p||!m){notify("Model not found.","error");return}
+  const cap=(m.capabilities&&(Array.isArray(m.capabilities)?m.capabilities.join(", "):typeof m.capabilities==="string"?m.capabilities:""))||"Unknown";
+  const price=m.pricing?JSON.stringify(m.pricing):"Unknown";
+  const ov=document.createElement("div");ov.className="modal-overlay";
+  ov.innerHTML='<div class="modal"><div class="modal-head"><h2>Model Info</h2><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">×</button></div><div class="modal-body"><div class="usage-list"><div class="urow"><span class="key">Model</span><span class="val">'+esc(m.name)+'</span></div><div class="urow"><span class="key">Provider</span><span class="val">'+esc(p.name)+'</span></div><div class="urow"><span class="key">Context</span><span class="val">'+(m.context?formatCount(m.context)+" tokens":"Unknown")+'</span></div><div class="urow"><span class="key">Capabilities</span><span class="val">'+esc(cap)+'</span></div><div class="urow"><span class="key">Pricing</span><span class="val">'+esc(price)+'</span></div><div class="urow"><span class="key">Model ID</span><span class="val"><code>'+esc(m.id)+'</code> <button class="btn small" data-mid="'+esc(m.id)+'" onclick="copyModelId(this)">Copy</button></span></div></div></div></div>';
+  document.body.appendChild(ov);
+}
+function copyModelId(el){copyText(el.getAttribute("data-mid"));}
+function formatCount(n){if(n>=1000000)return Math.round(n/1000000)+"M";if(n>=1000)return Math.round(n/1000)+"K";return String(n)}
+function modelsTabHTML(){
+  let html='';
+  for(const p of state.providers){
+    const models=state.models[p.id]||[];
+    html+='<div class="model-mgr-group"><h4>'+esc(p.name)+' <span style="color:var(--text3);font-weight:400">('+models.length+' models)</span></h4>';
+    if(!models.length){html+='<div class="info-box">No models loaded. Use Refresh Models in the Providers tab.</div>'}
+    else{for(const m of models){html+='<div class="model-mgr-row"><input type="checkbox" '+(isDisabled(p.id,m.id)?"":"checked")+' onchange="toggleModel(\''+p.id+'\',\''+m.id+'\')" title="Enable/disable"><div class="mm-info"><button class="star'+(isFav(p.id,m.id)?" on":"")+'" onclick="toggleFav(\''+p.id+'\',\''+m.id+'\')">'+favGlyph(p.id,m.id)+'</button><span class="mname">'+esc(m.name)+'</span><span class="mid">'+esc(m.id)+'</span></div><button class="info-btn" onclick="showModelInfo(\''+p.id+'\',\''+m.id+'\')" title="Model info">'+I.info+'</button></div>'}}
+    html+='</div>';
+  }
+  html+='<div class="btn-row" style="margin-top:8px"><button class="btn" onclick="refreshAllModels()">↻ Refresh All Models</button></div>';
+  return html;
+}
+
+/* ============ SETTINGS RENDER ============ */
+function renderSettingsModal(){
+  const ov=document.createElement("div");ov.className="modal-overlay";ov.id="settingsModal";
+  const tabs=["providers","models","chat","generation","usage","logs","system","data"];
+  const labels={providers:"Providers",models:"Models",chat:"Chat",generation:"Generation",usage:"Usage",logs:"Logs",system:"System",data:"Data"};
+  ov.innerHTML='<div class="modal lg"><div class="modal-head"><h2>Settings</h2><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">×</button></div><div class="settings-nav">'+tabs.map(t=>'<button class="'+(settingsTab===t?"active":"")+'" onclick="switchTab(\''+t+'\')">'+labels[t]+"</button>").join("")+'</div><div class="modal-body" id="settingsBody"></div></div>';
+  document.body.appendChild(ov);
+  renderSettingsBody();
+}
+function switchTab(tab){settingsTab=tab;document.querySelectorAll(".settings-nav button").forEach(b=>b.classList.toggle("active",b.textContent===({providers:"Providers",models:"Models",chat:"Chat",generation:"Generation",usage:"Usage",logs:"Logs",system:"System",data:"Data"})[tab]));renderSettingsBody();}
+function settingsTabBody(){
+  if(settingsTab==="providers")return providersTabHTML();
+  if(settingsTab==="models")return modelsTabHTML();
+  if(settingsTab==="chat")return chatTabHTML();
+  if(settingsTab==="generation")return generationTabHTML();
+  if(settingsTab==="usage")return usageTabHTML();
+  if(settingsTab==="logs")return logsTabHTML();
+  if(settingsTab==="system")return systemTabHTML();
+  return dataTabHTML();
+}
+function renderSettingsBody(){const b=$("#settingsBody");b.innerHTML=settingsTabBody();b.scrollTop=0;}
+function statusBadge(p){return p.status==="connected"?'<span class="status-badge ok"><span class="sd"></span>Connected</span>':p.status==="error"?'<span class="status-badge err"><span class="sd"></span>Error</span>':(p.apiKey?'<span class="status-badge warn"><span class="sd"></span>Not tested</span>':'<span class="status-badge warn"><span class="sd"></span>Not configured</span>')}
+function providersTabHTML(){
+  return '<div class="secret-note">The two default providers (OpenRouter &amp; SeekAI) are pre-configured and locked — visitors cannot see or change them. You can add and manage your own custom provider below.</div>'+
+  state.providers.map(p=>isDefault(p)?providerLockedCard(p):providerCustomCard(p)).join("")+
+  '<div class="btn-row"><button class="btn" onclick="addCustomProvider()">Add Custom Provider</button></div>'+
+  '<div class="btn-row"><button class="btn small" onclick="exportConfig()">Export config (no keys)</button><button class="btn small" onclick="importConfig()">Import config</button></div>';
+}
+function providerLockedCard(p){
+  return '<div class="provider-card"><div class="pc-head"><div class="pc-title">'+esc(providerLabel(p))+'</div><div class="pc-status">'+statusBadge(p)+'</div></div>'+
+  '<div class="toggle-row"><span class="lbl">Enabled</span><label class="switch"><input type="checkbox" '+(p.enabled?"checked":"")+' onchange="setProviderEnabled(\''+p.id+'\',this.checked)"><span class="slider"></span></label></div>'+
+  '<div class="field"><label>Base URL</label><div class="readonly">'+("*".repeat(16))+'</div></div>'+
+  '<div class="field"><label>API Key</label><div class="readonly">'+("*".repeat(16))+'</div></div>'+
+  '<div class="btn-row"><button class="btn" id="testConn-'+p.id+'" onclick="testProvider(\''+p.id+'\')">Test Connection</button><button class="btn" id="refreshModels-'+p.id+'" onclick="refreshModels(\''+p.id+'\')">↻ Refresh Models</button></div>'+
+  '<div class="hint" style="margin-top:8px">Last refreshed: '+(state.lastRefresh[p.id]?new Date(state.lastRefresh[p.id]).toLocaleString():"Never")+'</div></div>';
+}
+function providerCustomCard(p){
+  return '<div class="provider-card"><div class="pc-head"><div class="pc-title">'+esc(p.name||"My Provider")+'</div><div class="pc-status">'+statusBadge(p)+'</div></div>'+
+  '<div class="field"><label>Name</label><div class="field-row"><input type="text" id="pname-'+p.id+'" value="'+esc(p.name||"")+'" placeholder="My Provider"><button class="btn small" onclick="saveProviderName(\''+p.id+'\')">Save</button></div></div>'+
+  '<div class="toggle-row"><span class="lbl">Enabled</span><label class="switch"><input type="checkbox" '+(p.enabled?"checked":"")+' onchange="setProviderEnabled(\''+p.id+'\',this.checked)"><span class="slider"></span></label></div>'+
+  '<div class="field"><label>Base URL</label><div class="field-row"><input type="text" id="baseURL-'+p.id+'" value="'+esc(p.baseURL)+'" placeholder="https://example.com/v1"><button class="btn small" onclick="saveBaseURL(\''+p.id+'\')">Save</button></div></div>'+
+  '<div class="field"><label>API Key</label><div class="field-row"><input type="password" id="apikey-'+p.id+'" value="'+(p.apiKey||"")+'" placeholder="sk-..."><button class="btn small" onclick="toggleKeyVis(\''+p.id+'\')" id="keyVis-'+p.id+'">'+I.eye+'</button><button class="btn small primary" onclick="saveKey(\''+p.id+'\')">Save Key</button></div><div class="hint">'+esc(maskedKey(p.apiKey))+'</div></div>'+
+  '<div class="btn-row"><button class="btn" id="testConn-'+p.id+'" onclick="testProvider(\''+p.id+'\')">Test Connection</button><button class="btn" id="refreshModels-'+p.id+'" onclick="refreshModels(\''+p.id+'\')">↻ Refresh Models</button><button class="btn danger" onclick="removeCustomProvider(\''+p.id+'\')">Remove Provider</button></div>'+
+  '<div class="hint" style="margin-top:8px">Last refreshed: '+(state.lastRefresh[p.id]?new Date(state.lastRefresh[p.id]).toLocaleString():"Never")+'</div></div>';
+}
+function saveProviderName(id){const p=getProvider(id);if(!p)return;const v=$("#pname-"+id).value.trim();if(v)p.name=v;saveAll();renderSettings();renderProvider();notify("Provider name saved.","success");}
+function maskedKey(k){return k?("••••••••••••"+k.slice(-4)):"Not saved"}
+function setProviderEnabled(id,val){const p=getProvider(id);p.enabled=val;saveAll();renderSettingsBody();renderProvider();}
+function saveBaseURL(id){const p=getProvider(id);p.baseURL=$("#baseURL-"+id).value.trim().replace(/\/+$/,"");p.status=p.apiKey?"notconf":"notconf";saveAll();renderSettingsBody();renderProvider();notify("Base URL saved.","success");}
+function saveKey(id){const p=getProvider(id);p.apiKey=$("#apikey-"+id).value.trim();if(!p.apiKey){notify("Key empty.","error");return}p.status="notconf";saveAll();renderSettingsBody();renderProvider();notify(p.name+" API key saved locally.","success");}
+function toggleKeyVis(id){const el=$("#apikey-"+id);el.type=el.type==="password"?"text":"password";$("#keyVis-"+id).innerHTML=el.type==="password"?I.eye:I.eyeOff;}
+function removeKey(id){const p=getProvider(id);confirmModal("Remove this provider's API key?","This will delete '"+p.name+"'s key from local storage and clear its connection status.","Remove",()=>{p.apiKey="";p.status="notconf";p.lastTested=null;saveAll();renderSettingsBody();renderProvider();updateProviderStatus();notify(p.name+" key removed.","success")})}
+function maskedKey(k){return k?("••••••••••••"+k.slice(-4)):""}
+function setProviderEnabled(id,enabled){const p=getProvider(id);p.enabled=enabled;saveAll();renderProvider();notify(p.name+(enabled?" enabled":" disabled"),"info");}
+function exportConfig(){const data={app:"MY_AI",version:STORAGE_VERSION,exportedAt:new Date().toISOString(),providers:state.providers.map(({id,name,baseURL,enabled})=>({id,name,baseURL,enabled})),settings:state.settings,favorites:state.favorites,disabledModels:state.disabledModels};download("myai-config.json",JSON.stringify(data,null,2),"application/json");notify("Config exported (API keys excluded).","success");}
+function importConfig(){const input=document.createElement("input");input.type="file";input.accept=".json";input.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d.app!=="Your AI")throw new Error("Not a valid config file");if(d.settings)state.settings=Object.assign({},DEFAULT_SETTINGS,d.settings);if(Array.isArray(d.favorites))state.favorites=d.favorites;if(Array.isArray(d.disabledModels))state.disabledModels=d.disabledModels;if(Array.isArray(d.providers))for(const prov of d.providers){const p=getProvider(prov.id);if(p){p.baseURL=prov.baseURL||p.baseURL;p.enabled=prov.enabled!==undefined?prov.enabled:p.enabled}}applyTheme();saveAll();renderProvider();renderSettingsBody();notify("Config imported.","success")}catch(err){notify("Import failed: invalid config.","error")}};r.readAsText(f)};input.click();}
+function chatTabHTML(){
+  const s=state.settings;
+  return'<div class="setting-group"><h3>Chat</h3><div class="toggle-row"><div><div class="lbl">Streaming</div><div class="sub">Show responses progressively as they arrive</div></div><label class="switch"><input type="checkbox" '+(s.streaming?"checked":"")+' onchange="setSetting(\'streaming\',this.checked)"><span class="slider"></span></label></div>'+
+  '<div class="toggle-row"><div><div class="lbl">Enter to send</div><div class="sub">Use Shift+Enter for a new line</div></div><label class="switch"><input type="checkbox" '+(s.enterToSend?"checked":"")+' onchange="setSetting(\'enterToSend\',this.checked)"><span class="slider"></span></label></div>'+
+  '<div class="toggle-row"><div><div class="lbl">Show timestamps</div></div><label class="switch"><input type="checkbox" '+(s.showTimestamps?"checked":"")+' onchange="setSetting(\'showTimestamps\',this.checked)"><span class="slider"></span></label></div></div>'+
+  '<div class="setting-group"><h3>Theme</h3><div class="btn-row"><button class="btn '+(s.theme==="dark"?"primary":"")+'" onclick="setTheme(\'dark\')">Dark</button><button class="btn '+(s.theme==="light"?"primary":"")+'" onclick="setTheme(\'light\')">Light</button><button class="btn '+(s.theme==="system"?"primary":"")+'" onclick="setTheme(\'system\')">System</button></div></div>'+
+  '<div class="setting-group"><h3>Attachments</h3><div class="field"><label>Max file size (MB)</label><input type="number" value="'+s.maxFileSizeMB+'" min="1" max="20" onchange="setSetting(\'maxFileSizeMB\',Number(this.value))"></div></div>';}
+function setTheme(t){state.settings.theme=t;applyTheme();saveAll();renderSettingsBody();}
+function setSetting(key,val){state.settings[key]=val;saveAll();if(key==="streaming"){}renderSettingsBody();}
+function generationTabHTML(){const s=state.settings;return'<div class="setting-group"><h3>Generation</h3><div class="field"><label>Temperature (0 – 2)</label><input type="number" step="0.1" min="0" max="2" value="'+s.temperature+'" onchange="setNum(\'temperature\',Number(this.value))"></div><div class="field"><label>Max Tokens</label><input type="number" min="1" value="'+s.maxTokens+'" onchange="setNum(\'maxTokens\',Math.max(1,Number(this.value)))"></div><div class="field"><label>Top P (0 – 1)</label><input type="number" step="0.05" min="0.01" max="1" value="'+s.topP+'" onchange="setNum(\'topP\',Number(this.value))"></div></div>'}
+function setNum(k,v){state.settings[k]=v;saveAll();notify("Generation settings saved.","success");}
+function usageTabHTML(){
+  const logs=state.logs;const total=logs.length;const ok=logs.filter(l=>l.status==="success").length;const fail=logs.length-ok;
+  const byProv={};const byModel={};let durSum=0,durN=0;
+  for(const l of logs){byProv[l.provider]=(byProv[l.provider]||0)+1;if(l.status==="success"){byModel[l.model]=(byModel[l.model]||0)+1;if(l.duration!=null){durSum+=l.duration;durN++}}}
+  const topModel=Object.entries(byModel).sort((a,b)=>b[1]-a[1])[0];
+  const avg=durN?Math.round(durSum/durN)+" ms":"—";
+  const rate=total?((ok/total)*100).toFixed(1)+"%":"—";
+  let provRows="";for(const p of state.providers){const n=byProv[p.id]||0;provRows+='<div class="urow"><span class="key">'+esc(p.name)+'</span><span class="val">'+n+"</span></div>"}
+  return'<div class="setting-stat"><div class="stat-card"><div class="num">'+total+'</div><div class="lbl">Total Requests</div></div><div class="stat-card"><div class="num">'+ok+'</div><div class="lbl">Successful</div></div><div class="stat-card"><div class="num">'+fail+'</div><div class="lbl">Failed</div></div><div class="stat-card"><div class="num">'+rate+'</div><div class="lbl">Success Rate</div></div></div>'+
+  '<div class="setting-group"><h3>By Provider</h3><div class="usage-list">'+provRows+'</div></div>'+
+  '<div class="setting-group"><h3>Summary</h3><div class="usage-list"><div class="urow"><span class="key">Most used model</span><span class="val">'+esc(topModel?topModel[0]:"—")+'</span></div><div class="urow"><span class="key">Average response time (successful)</span><span class="val">'+avg+'</span></div></div></div>'+
+  '<div class="setting-group"><h3>Provider balance</h3><div class="info-box">Provider balance: <b>Unavailable through API</b>.<br>This application does not claim a remaining balance unless a provider\u0027s official API provides it.</div></div>'+
+  '<div class="setting-group"><h3>Recent Requests</h3><div class="usage-list">'+logs.slice(0,10).map(l=>'<div class="urow"><span class="key">'+esc(new Date(l.time).toLocaleString())+'</span><span class="val">'+esc(l.provider)+" · "+esc(l.model||"")+' · '+l.status+(l.usage&&l.usage.total_tokens!=null?" · "+l.usage.total_tokens+" tok":"")+'</span></div>').join("")+'</div></div>';}
+function logsTabHTML(){
+  if(!state.logs.length)return'<div class="info-box">No requests logged yet. Requests are tracked locally in this browser only.</div>';
+  return'<div style="overflow-x:auto"><table class="log-table"><thead><tr><th>Time</th><th>Provider</th><th>Model</th><th>Status</th><th>Duration</th></tr></thead><tbody>'+state.logs.slice(0,100).map(l=>{const st= l.status==="success"?'<span class="status-badge ok">ok</span>':l.status==="aborted"?'<span class="status-badge warn">aborted</span>':'<span class="status-badge err">error</span>';return'<tr><td>'+esc(new Date(l.time).toLocaleString())+'</td><td>'+esc(l.provider)+'</td><td>'+esc(l.model||"—")+'</td><td>'+st+'</td><td>'+(l.duration!=null?l.duration+" ms":"—")+'</td></tr>'}).join("")+'</tbody></table><div style="margin-top:12px"><button class="btn danger" onclick="clearLogs()">Clear Logs</button></div>'}
+function clearLogs(){confirmModal("Clear logs?","This removes the local request log.","Clear",()=>{state.logs=[];saveAll();renderSettingsBody()})}
+function dataTabHTML(){return'<div class="setting-group"><h3>Data</h3><div class="btn-row" style="flex-direction:column;align-items:stretch"><button class="btn" onclick="exportAll()">Export all data (JSON)</button><button class="btn" onclick="importAll()">Import data (JSON)</button><button class="btn danger" onclick="clearConversations()">Clear conversations</button><button class="btn danger" onclick="clearLogsData()">Clear logs</button><button class="btn danger" onclick="resetSettings()">Reset settings</button><button class="btn danger" onclick="resetApp()">Delete all local data</button></div></div>'+
+'<div class="setting-group"><h3>Privacy</h3><div class="info-box">This application runs in your browser. Your API keys and conversations are stored locally unless you intentionally send content to an AI provider.<br><br>This single-file version is intended for private personal use. Do not publish this HTML file with your API keys inside it.</div></div>'}
+function exportAll(){const data={app:"Your AI",version:STORAGE_VERSION,providers:state.providers,models:state.models,conversations:state.conversations,settings:state.settings,favorites:state.favorites,disabledModels:state.disabledModels,logs:state.logs};download("myai-backup.json",JSON.stringify(data,null,2),"application/json");notify("All data exported.","success");}
+function importAll(){const inp=document.createElement("input");inp.type="file";inp.accept=".json";inp.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d.app!=="MYAI")throw new Error("bad");if(d.providers)state.providers=d.providers;if(d.models)state.models=d.models;if(Array.isArray(d.conversations))state.conversations=d.conversations;if(d.settings)state.settings=Object.assign({},DEFAULT_SETTINGS,d.settings);if(Array.isArray(d.favorites))state.favorites=d.favorites;if(Array.isArray(d.disabledModels))state.disabledModels=d.disabledModels;if(Array.isArray(d.logs))state.logs=d.logs;applyTheme();saveAll();renderAll();renderSettingsBody();notify("Data imported.","success")}catch(err){notify("Import failed: invalid data.","error")}};r.readAsText(f)};inp.click();}
+function clearConversations(){confirmModal("Clear conversations?","This deletes all saved conversations. This cannot be undone.","Clear",()=>{state.conversations=[];state.currentConversationId=null;saveAll();renderSidebar();renderChat()})}
+function clearLogsData(){confirmModal("Clear logs?","This removes the local request history.","Clear",()=>{state.logs=[];saveAll();renderSettingsBody()})}
+function resetSettings(){confirmModal("Reset settings?","Settings will return to defaults (theme, chat, generation). Providers/keys and conversations are kept.","Reset",()=>{state.settings=Object.assign({},DEFAULT_SETTINGS);applyTheme();saveAll();renderSettingsBody()})}
+function resetApp(){confirmModal("Delete all local data?","This erases all providers, keys, conversations, models, logs, and settings stored in this browser. It does NOT affect your SeekAI or OpenRouter accounts.","Delete All",()=>{localStorage.removeItem(STORAGE_KEY);location.reload()})}
+function systemTabHTML(){const s=state.settings;return'<div class="setting-group"><h3>System Prompt</h3><div class="field"><label>Global default system prompt</label><textarea onchange="setSystemPrompt(this.value)">'+esc(s.systemPrompt)+'</textarea></div><div class="info-box" style="margin-top:8px">This is sent to the provider as the leading "system" message. Override per-conversation from the chat if desired.</div></div><div class="setting-group"><h3>Developer</h3><div class="toggle-row"><div><div class="lbl">Debug Mode</div><div class="sub">Shows technical details in errors (never API keys)</div></div><label class="switch"><input type="checkbox" '+(s.debugMode?"checked":"")+' onchange="setDebug(this.checked)"><span class="slider"></span></label></div><div class="toggle-row"><div><div class="lbl">Demo Mode</div><div class="sub">Local simulated responses (clearly labeled, not real AI)</div></div><label class="switch"><input type="checkbox" '+(s.demoMode?"checked":"")+' onchange="setDemo(this.checked)"><span class="slider"></span></label></div></div><div class="setting-group"><h3>Storage</h3><div class="info-box">Storage key: <code>'+STORAGE_KEY+'</code> (version '+STORAGE_VERSION+')<br>All data lives in your browser. No analytics, no tracking, no external servers.</div></div>'}
+function saveSystemPrompt(v){state.settings.systemPrompt=v;saveAll();notify("System prompt saved.","success")}
+function setDemo(v){state.settings.demoMode=v;saveAll();renderSettingsBody();$("#demoBanner").classList.toggle("show",v);notify("Demo Mode "+(v?"ON":"OFF"),v?"info":"info")}
+function setDebug(v){state.settings.debugMode=v;saveAll();renderSettingsBody()}
+
+/* ============ INITIALIZATION ============ */
+function init(){
+  loadAll();ensureProviders();applyTheme();
+  // validate selected provider/model still exist
+  if(!getProvider(state.selectedProvider))state.selectedProvider=state.providers.find(p=>p.enabled&&p.apiKey)?.id||null;
+  if(state.selectedProvider){const models=state.models[state.selectedProvider]||[];if(!models.some(m=>m.id===state.selectedModel))state.selectedModel=models.length?models[0].id:null}
+  if(!state.conversations.length){state.currentConversationId=null}else if(!getConv(state.currentConversationId))state.currentConversationId=state.conversations[0]?.id||null;
+  wireEvents();renderSidebar();renderProvider();renderModelList();renderChat();renderAttach();updateOffline();updateProviderStatus();$("#demoBanner").classList.toggle("show",state.settings.demoMode);
+  autoLoadModels();
+  // first-run screen
+  const hasAnyKey=state.providers.some(p=>p.apiKey);
+  if(!hasAnyKey)showWelcome();
+}
+async function autoLoadModels(){for(const p of enabledProviders()){if(!p.apiKey||(state.models[p.id]&&state.models[p.id].length))continue;try{state.models[p.id]=await getModels(p.id);state.lastRefresh[p.id]=new Date().toISOString();p.status="connected";}catch(e){p.status="error"}}saveAll();renderProvider();updateProviderStatus();}
+function showWelcome(){
+  const ov=document.createElement("div");ov.className="modal-overlay";ov.id="welcomeModal";
+  ov.innerHTML='<div class="modal"><div class="modal-head"><h2>dotcomAI</h2><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">×</button></div><div class="modal-body"><div style="text-align:center;margin-bottom:16px"><div style="font-size:28px">'+I.ai+'</div><p style="margin:6px 0 2px;font-weight:600;font-size:16px">Your personal multi-provider AI workspace.</p><p style="color:var(--text2)">Connect a provider to begin. This app runs locally in your browser — keys are stored only on this device.</p></div>'+
+  state.providers.map(p=>'<div class="provider-card"><div class="pc-head"><div class="pc-title">'+esc(p.name)+'</div></div><div class="field"><label>API Key</label><input type="password" id="welcomeKey-'+p.id+'" placeholder="Paste your '+esc(p.name)+' API key" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:9px;background:var(--bg2);color:var(--text)"></div><button class="btn primary" style="width:100%" onclick="welcomeConnect(\''+p.id+'\')">Connect '+esc(p.name)+'</button></div>').join("")+
+  '<div style="text-align:center;margin-top:12px"><button class="btn" style="width:100%" onclick="this.closest(\'.modal-overlay\').remove()">Skip for now</button></div></div></div>';
+  document.body.appendChild(ov);
+}
+function welcomeConnect(id){const v=$("#welcomeKey-"+id).value.trim();if(!v){notify("Enter an API key first.","error");return}const p=getProvider(id);p.apiKey=v;p.status="notconf";saveAll();$("#welcomeModal").remove();notify(p.name+" key saved locally. Use Test Connection and Refresh Models in Settings.","info");renderProvider();updateProviderStatus();}
+function focusInput(){const i=$("#composerInput");if(i)i.focus();}
+init();
+</script>
+</body>
+</html>
