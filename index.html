@@ -56,8 +56,8 @@ svg.filled{fill:currentColor;stroke:none}
 .sb-close svg{width:17px;height:17px}
 .sb-close:hover{background:var(--bg-hover);color:var(--text)}
 body.sb-collapsed .sidebar{display:none}
-.sb-brand{display:flex;align-items:center;gap:6px;font-family:var(--serif);font-weight:600;font-size:24px;letter-spacing:.2px;padding:12px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sb-brand .brand-logo{width:32px;height:32px;object-fit:contain;flex-shrink:0;border-radius:8px}
+.sb-brand{display:flex;align-items:center;gap:7px;font-family:var(--serif);font-weight:600;font-size:21px;letter-spacing:.2px;padding:12px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-brand .brand-logo{width:24px;height:24px;object-fit:contain;flex-shrink:0;border-radius:6px}
 .sb-brand .logo{width:26px;height:26px;border-radius:7px;background:var(--accent);color:#111;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
 .new-btn{display:flex;align-items:center;gap:8px;width:calc(100% - 20px);margin:12px 10px 8px;padding:9px 12px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);color:var(--text);font-size:13px;font-weight:500;transition:background .12s}
 .new-btn:hover{background:var(--bg-hover)}
@@ -462,7 +462,7 @@ textarea{flex:1;border:none;background:none;resize:none;outline:none;font-size:1
       <span>Workspaces</span>
     </button>
     <button class="ws-chip" id="wsChip" onclick="openWorkspacesPanel()" title="Switch workspace">
-      <span class="ws-chip-icon">' + (window.I?I.folder:'<svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>') + '</span>
+      <span class="ws-chip-icon"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span>
       <span class="ws-chip-name" id="wsChipName">General</span>
     </button>
     <div class="sb-search">
