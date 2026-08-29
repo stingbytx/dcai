@@ -1346,7 +1346,7 @@ function toggleConvMenu(ev,id){ev.stopPropagation();closeConvMenus();const el=ev
 function closeConvMenus(){document.querySelectorAll(".sb-item-actions").forEach(m=>m.remove())}
 function openConv(id){state.currentConversationId=id;const c=getConv(id);if(c){state.selectedProvider=c.provider||state.selectedProvider;state.selectedModel=c.model||state.selectedModel}saveAll();closeSidebar();renderSidebar();renderProvider();renderChat();}
 function renameConv(id){const c=getConv(id);if(!c)return;const name=prompt("Rename conversation:",c.title);if(name===null)return;c.title=name.trim()||"Untitled Chat";c.updatedAt=new Date().toISOString();saveAll();renderSidebar();}
-function deleteConv(id){confirmModal("Delete this conversation?","This cannot be undone.","danger","Delete",()=>{state.conversations=state.conversations.filter(c=>c.id!==id);if(state.currentConversationId===id)state.currentConversationId=null;saveAll();renderSidebar();renderChat();})}
+function deleteConv(id){confirmModal("Delete this conversation?","This cannot be undone.","Delete",()=>{state.conversations=state.conversations.filter(c=>c.id!==id);if(state.currentConversationId===id)state.currentConversationId=null;saveAll();renderSidebar();renderChat();})}
 
 /* ============ CHAT RENDERING ============ */
 function renderChat(){
