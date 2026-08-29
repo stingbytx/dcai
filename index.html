@@ -467,7 +467,7 @@ textarea{flex:1;border:none;background:none;resize:none;outline:none;font-size:1
     </button>
     <div class="sb-search">
       <span class="icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></span>
-      <input type="text" id="sbSearch" placeholder="Search conversations..." aria-label="Search conversations">
+      <input type="text" id="sbSearch" name="search-conversations" placeholder="Search conversations..." aria-label="Search conversations" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
     </div>
     <div class="sb-list" id="convList"></div>
     <div class="sb-links">
@@ -1756,6 +1756,9 @@ function init(){
   wireEvents();renderSidebar();renderProvider();renderModelList();renderChat();renderAttach();updateOffline();updateProviderStatus();$("#demoBanner").classList.toggle("show",state.settings.demoMode);
   updateUsageBadge();
   autoLoadModels();
+  // keep the chat-search box empty on load (prevents browser autofill from injecting the saved email)
+  const _clearSearch=()=>{const s=$("#sbSearch");if(s)s.value="";};
+  _clearSearch();setTimeout(_clearSearch,250);setTimeout(_clearSearch,1200);
   // first-run screen
   const hasAnyKey=state.providers.some(p=>p.apiKey);
   if(!hasAnyKey)showWelcome();
