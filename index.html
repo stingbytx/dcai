@@ -7,6 +7,7 @@
 <meta name="description" content="dotcomAI is a Sri Lankan AI platform providing accessible AI-powered services with 50+ AI Models through modern LLM technology. Built by Manuja Damsara under DotcomOne">
 <meta name="keywords" content="dotcomAI, dotcom AI, AI Sri Lanka, artificial intelligence Sri Lanka, free AI, free AI tools, AI assistant, AI platform, LLM platform, AI chatbot, Sri Lankan AI platform, AI tools Sri Lanka, AI software Sri Lanka, Manuja Damsara, DotcomOne, UniPOS">
 <link rel="icon" type="image/png" href="favicon.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 /* ============ MY AI — ChatGPT-style theme ============ */
 :root{--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif;--serif:Georgia,"Times New Roman","Iowan Old Style",serif;--mono:ui-monospace,SFMono-Regular,Consolas,Menlo,monospace}
@@ -61,6 +62,30 @@ body.sb-collapsed .sidebar{display:none}
 .new-btn{display:flex;align-items:center;gap:8px;width:calc(100% - 20px);margin:12px 10px 8px;padding:9px 12px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);color:var(--text);font-size:13px;font-weight:500;transition:background .12s}
 .new-btn:hover{background:var(--bg-hover)}
 .new-btn svg{width:15px;height:15px}
+.ws-btn{font-size:13px}
+.ws-chip{display:flex;align-items:center;gap:7px;width:calc(100% - 20px);margin:2px 10px 6px;padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);color:var(--text2);font-size:12px;font-weight:500;cursor:pointer;transition:background .12s,border-color .12s}
+.ws-chip:hover{background:var(--bg-hover);color:var(--text);border-color:var(--text3)}
+.ws-chip-icon{width:15px;height:15px;color:var(--accent);display:flex;align-items:center;flex-shrink:0}
+.ws-chip-icon svg{width:15px;height:15px}
+.ws-chip-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;text-align:left}
+.ws-list{display:flex;flex-direction:column;gap:6px;max-height:340px;overflow-y:auto}
+.ws-row{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid var(--border);border-radius:8px;padding:8px 10px;background:var(--bg-input)}
+.ws-row.active{border-color:var(--accent);background:var(--accent-bg)}
+.ws-row-main{display:flex;align-items:center;gap:9px;flex:1;min-width:0;cursor:pointer}
+.ws-row-icon{width:16px;height:16px;color:var(--accent);flex-shrink:0}
+.ws-row-icon svg{width:16px;height:16px}
+.ws-row-name{font-weight:600;font-size:13px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ws-row-count{font-size:11px;color:var(--text3);white-space:nowrap}
+.ws-row-actions{display:flex;gap:4px;flex-shrink:0}
+.start-title-row{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:820px;margin:6px 0 12px}
+.start-title-row .start-title{margin:0}
+.start-hide{display:flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid var(--border);border-radius:6px;background:var(--bg-input);color:var(--text3);cursor:pointer;transition:color .12s,border-color .12s}
+.start-hide:hover{color:var(--text);border-color:var(--text3)}
+.start-hide svg{width:15px;height:15px}
+.start-hidden{display:flex;align-items:center;gap:8px;margin-top:6px;color:var(--text3);font-size:13px}
+.start-hide-btn{display:flex;align-items:center;gap:8px;border:1px solid var(--border);background:var(--bg-input);color:var(--text2);font-size:13px;font-weight:500;padding:9px 14px;border-radius:8px;cursor:pointer;transition:border-color .12s,color .12s,background .12s}
+.start-hide-btn:hover{border-color:var(--text3);color:var(--text);background:var(--bg-hover)}
+.start-hide-btn svg{width:15px;height:15px;color:var(--accent)}
 .sb-search{position:relative;padding:4px 10px 6px}
 .sb-search .icon{position:absolute;left:20px;top:13px;color:var(--text3);width:15px;height:15px}
 .sb-search input{width:100%;padding:9px 12px 9px 30px;border-radius:8px;border:1px solid var(--border);background:var(--bg-input);font-size:13px;transition:border-color .12s}
@@ -361,6 +386,56 @@ textarea{flex:1;border:none;background:none;resize:none;outline:none;font-size:1
   .provider-status{display:none}
 }
 
+/* ============ AUTH SCREEN ============ */
+.authScreen{position:fixed;inset:0;z-index:1000;display:flex;align-items:stretch;font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif}
+.authScreen.hidden{display:none}
+.auth-wrap{display:flex;width:100%;min-height:100vh;background:#fff}
+.auth-left{flex:1;background:#fff;display:flex;align-items:center;justify-content:center;padding:40px 24px}
+.auth-form{width:100%;max-width:400px;display:flex;flex-direction:column}
+.auth-title{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Roboto,Helvetica,Arial,sans-serif;font-size:28px;font-weight:700;color:#0c0d0e;margin:0 0 24px;text-align:center;white-space:nowrap}
+.auth-title .ac{font-family:Georgia,'Times New Roman',serif;font-weight:700;color:#16a34a}
+.auth-google{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:11px 14px;border:1px solid #d9d9d9;border-radius:8px;background:#fff;color:#0c0d0e;font-size:14px;font-weight:500;cursor:pointer;transition:background .12s,border-color .12s}
+.auth-google:hover{background:#f7f7f7}
+.auth-or{display:flex;align-items:center;gap:12px;margin:20px 0;color:#8a8a8a;font-size:12px;text-transform:uppercase;letter-spacing:.6px}
+.auth-or::before,.auth-or::after{content:"";flex:1;height:1px;background:#e5e5e5}
+.auth-form .field{margin-bottom:14px}
+.auth-form .field label{display:block;font-size:13px;font-weight:600;color:#0c0d0e;margin-bottom:6px}
+.auth-form .field input{width:100%;padding:11px 13px;border:1px solid #d9d9d9;border-radius:8px;font-size:14px;color:#0c0d0e;background:#fff;box-sizing:border-box}
+.auth-form .field input:focus{outline:none;border-color:#16a34a}
+.pw-wrap{position:relative}
+.pw-wrap input{padding-right:46px}
+.pw-eye{position:absolute;right:5px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:#6b6b6b;padding:6px;display:flex;align-items:center}
+.pw-eye svg{width:18px;height:18px}
+.remember{display:flex;align-items:center;gap:8px;font-size:13px;color:#3c3c3c;margin:2px 0 16px;cursor:pointer}
+.remember input{width:15px;height:15px;accent-color:#16a34a;margin:0}
+.auth-btn{width:100%;padding:12px;border:none;border-radius:8px;background:#16a34a;color:#fff;font-size:15px;font-weight:600;cursor:pointer;transition:background .12s}
+.auth-btn:hover{background:#15803d}
+.auth-btn:disabled{opacity:.6;cursor:default}
+.auth-links{margin-top:16px;text-align:center;font-size:13px;color:#3c3c3c}
+.auth-links p{margin:4px 0}
+.link{background:none;border:none;color:#16a34a;cursor:pointer;font-size:13px;padding:0}
+.link:hover{text-decoration:underline}
+.auth-err{display:none;background:#fdecec;color:#b3261e;border:1px solid #f5c6c0;border-radius:8px;padding:9px 12px;font-size:13px;margin-bottom:14px}
+.auth-ok{background:#e7f6ec;color:#166534;border:1px solid #bbe8c8;border-radius:8px;padding:9px 12px;font-size:13px;margin-bottom:14px}
+.auth-legal{text-align:center;font-size:11px;color:#6b6b6b;margin-top:20px;white-space:nowrap}
+.auth-legal a{color:#6b6b6b;text-decoration:underline;cursor:pointer;background:none;border:none;font-size:12px;padding:0}
+.auth-cookie{margin-top:20px;display:flex;justify-content:center}
+.auth-cookie button{background:none;border:none;cursor:pointer;font-size:12px;color:#6b6b6b;text-decoration:underline}
+.auth-copyright{margin-top:auto;text-align:center;font-size:11px;color:#9a9a9a}
+.auth-right{flex:1;background:#0c0d0e;color:#fff;display:flex;flex-direction:column;padding:34px 40px;position:relative;overflow:hidden}
+.auth-right-top{display:flex;align-items:center;justify-content:flex-end;gap:16px;position:relative;z-index:2}
+.auth-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none}
+.lang{display:flex;align-items:center;gap:6px;font-size:13px;color:#e6e6e6;cursor:pointer}
+.lang svg{width:15px;height:15px;flex-shrink:0}
+.auth-signup-btn{background:#fff;color:#0c0d0e;border:none;border-radius:8px;padding:9px 18px;font-size:14px;font-weight:600;cursor:pointer}
+.auth-right-body{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;position:relative;z-index:2}
+.globe{position:absolute;right:-70px;bottom:-70px;opacity:.55;pointer-events:none;z-index:0}
+.globe svg{width:440px;height:440px;display:block}
+.auth-headline{font-family:Georgia,'Times New Roman',serif;font-size:35px;font-weight:700;color:#fff;line-height:1.12;max-width:420px;position:relative;z-index:2}
+.auth-headline .hl{color:#fff}
+.register-btn{margin-top:24px;display:flex;align-items:center;gap:9px;background:#fff;color:#0c0d0e;border:none;border-radius:8px;padding:12px 20px;font-size:14px;font-weight:600;cursor:pointer}
+.register-btn svg{width:16px;height:16px}
+@media (max-width:860px){.auth-right{display:none}.auth-left{min-height:100vh}}
 </style>
 </head>
 <body>
@@ -375,6 +450,14 @@ textarea{flex:1;border:none;background:none;resize:none;outline:none;font-size:1
     <button class="new-btn" id="btnNewChat" aria-label="New chat">
       <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       New chat
+    </button>
+    <button class="new-btn ws-btn" id="btnWorkspaces" aria-label="Workspaces">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <span>Workspaces</span>
+    </button>
+    <button class="ws-chip" id="wsChip" onclick="openWorkspacesPanel()" title="Switch workspace">
+      <span class="ws-chip-icon">' + (window.I?I.folder:'<svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>') + '</span>
+      <span class="ws-chip-name" id="wsChipName">General</span>
     </button>
     <div class="sb-search">
       <span class="icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg></span>
@@ -454,6 +537,22 @@ textarea{flex:1;border:none;background:none;resize:none;outline:none;font-size:1
 </div>
 
 <div class="toast-container" id="toastContainer"></div>
+<div class="authScreen" id="authScreen">
+  <div class="auth-wrap">
+    <div class="auth-left"><div class="auth-form" id="authForm"></div></div>
+    <div class="auth-right">
+      <img class="auth-bg" src="auth-glow.webp?v=5" alt="dotcomAI">
+      <div class="auth-right-top">
+        <div class="lang"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"/></svg><span>English</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+        <button class="auth-signup-btn" onclick="renderAuthMode('signup')">Sign up</button>
+      </div>
+      <div class="auth-right-body">
+        <h2 class="auth-headline">Where the World Builds with AI.</h2>
+        <button class="register-btn" onclick="renderAuthMode('signup')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg>Register now</button>
+      </div>
+    </div>
+  </div>
+</div>
 <input type="file" id="fileInput" style="display:none" multiple>
 
 
@@ -463,7 +562,7 @@ textarea{flex:1;border:none;background:none;resize:none;outline:none;font-size:1
 const STORAGE_KEY="my_ai_platform_v1", STORAGE_VERSION=1;
 /* Default providers are hidden and locked for visitors. Paste the owner's keys here — they can never be seen or edited in the UI. */
 const DEFAULT_PROVIDER_KEYS={seekai:"sk-seXDAgaEdGlcn6n3z81jmneOZaxOzEyi3D3VZmBkTn9urAKX",openrouter:"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"};
-const DEFAULT_SETTINGS={theme:"dark",streaming:true,enterToSend:true,showTimestamps:true,temperature:0.7,maxTokens:2048,topP:1,systemPrompt:"You are my personal AI assistant. Be clear, concise, and helpful.",maxFileSizeMB:5,debugMode:false,demoMode:false,usageEnabled:true,usageLimit:20,usageWindowMs:21600000};
+const DEFAULT_SETTINGS={theme:"dark",streaming:true,enterToSend:true,showTimestamps:true,temperature:0.7,maxTokens:2048,topP:1,systemPrompt:"You are my personal AI assistant. Be clear, concise, and helpful.",maxFileSizeMB:5,debugMode:false,demoMode:false,usageEnabled:true,usageLimit:20,usageWindowMs:21600000,hideGetStarted:false};
 const FILE_EXTENSIONS=["txt","md","json","csv","js","ts","jsx","tsx","py","html","css"];
 const QUICK_PROMPTS=["Explain something","Write code","Analyze text","Brainstorm ideas"];
 const START_PROMPTS=[
@@ -490,6 +589,7 @@ const I={
   eye:'<svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
   eyeOff:'<svg viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
   dots:'<svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>',
+  folder:'<svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>',
   pencil:'<svg viewBox="0 0 24 24"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>',
   export:'<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
   trash:'<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
@@ -499,12 +599,12 @@ function favGlyph(pid,mid){return isFav(pid,mid)?I.star:I.starOutline;}
 
 
 /* ============ STATE ============ */
-const state={providers:[],models:{},modelsMeta:{},conversations:[],currentConversationId:null,selectedProvider:null,selectedModel:null,settings:Object.assign({},DEFAULT_SETTINGS),favorites:[],disabledModels:[],logs:[],attachments:[],lastRefresh:{},usage:{windowStart:Date.now(),count:0},generating:false,abortController:null};
+const state={providers:[],models:{},modelsMeta:{},conversations:[],currentConversationId:null,workspaces:[],currentWorkspace:null,selectedProvider:null,selectedModel:null,settings:Object.assign({},DEFAULT_SETTINGS),favorites:[],disabledModels:[],logs:[],attachments:[],lastRefresh:{},usage:{windowStart:Date.now(),count:0},generating:false,abortController:null};
 
 /* ============ STORAGE ============ */
 function storageOK(){try{localStorage.setItem("__t","1");localStorage.removeItem("__t");return true}catch(e){return false}}
-function saveAll(){if(!storageOK()){notify("Unable to save local data. Export your conversations before continuing.","error");return}try{localStorage.setItem(STORAGE_KEY,JSON.stringify({version:STORAGE_VERSION,providers:state.providers,models:state.models,modelsMeta:state.modelsMeta,conversations:state.conversations,settings:state.settings,favorites:state.favorites,disabledModels:state.disabledModels,logs:state.logs,lastRefresh:state.lastRefresh,selectedProvider:state.selectedProvider,selectedModel:state.selectedModel,usage:state.usage}));}catch(e){notify("Unable to save local data. Export your conversations before continuing.","error")}}
-function loadAll(){if(!storageOK())return;try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(!d||typeof d!=="object")return;if(d.providers)state.providers=d.providers;if(d.models)state.models=d.models;if(d.modelsMeta)state.modelsMeta=d.modelsMeta;if(Array.isArray(d.conversations))state.conversations=d.conversations;if(d.settings)state.settings=Object.assign({},DEFAULT_SETTINGS,d.settings);if(Array.isArray(d.favorites))state.favorites=d.favorites;if(Array.isArray(d.disabledModels))state.disabledModels=d.disabledModels;if(Array.isArray(d.logs))state.logs=d.logs;if(d.lastRefresh)state.lastRefresh=d.lastRefresh;if(d.usage)state.usage=Object.assign({windowStart:Date.now(),count:0},d.usage);if(d.selectedProvider)state.selectedProvider=d.selectedProvider;if(d.selectedModel)state.selectedModel=d.selectedModel}catch(e){console.error("load failed",e)}}
+function saveAll(){if(!storageOK()){notify("Unable to save local data. Export your conversations before continuing.","error");return}try{localStorage.setItem(STORAGE_KEY,JSON.stringify({version:STORAGE_VERSION,providers:state.providers,models:state.models,modelsMeta:state.modelsMeta,conversations:state.conversations,settings:state.settings,favorites:state.favorites,disabledModels:state.disabledModels,logs:state.logs,lastRefresh:state.lastRefresh,selectedProvider:state.selectedProvider,selectedModel:state.selectedModel,usage:state.usage,workspaces:state.workspaces,currentWorkspace:state.currentWorkspace}));}catch(e){notify("Unable to save local data. Export your conversations before continuing.","error")}}
+function loadAll(){if(!storageOK())return;try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(!d||typeof d!=="object")return;if(d.providers)state.providers=d.providers;if(d.models)state.models=d.models;if(d.modelsMeta)state.modelsMeta=d.modelsMeta;if(Array.isArray(d.conversations))state.conversations=d.conversations;if(d.settings)state.settings=Object.assign({},DEFAULT_SETTINGS,d.settings);if(Array.isArray(d.favorites))state.favorites=d.favorites;if(Array.isArray(d.disabledModels))state.disabledModels=d.disabledModels;if(Array.isArray(d.logs))state.logs=d.logs;if(d.lastRefresh)state.lastRefresh=d.lastRefresh;if(d.usage)state.usage=Object.assign({windowStart:Date.now(),count:0},d.usage);if(Array.isArray(d.workspaces))state.workspaces=d.workspaces;if(d.currentWorkspace)state.currentWorkspace=d.currentWorkspace;if(d.selectedProvider)state.selectedProvider=d.selectedProvider;if(d.selectedModel)state.selectedModel=d.selectedModel}catch(e){console.error("load failed",e)}}
 
 /* ============ PROVIDER SYSTEM ============ */
 const DEFAULT_ORDER=["openrouter","seekai"];
@@ -1200,7 +1300,26 @@ function updateProviderStatus(){
 }
 
 /* ============ CONVERSATIONS ============ */
-function newConversation(){const id="c"+Date.now()+Math.random().toString(36).slice(2,6);const c={id,title:"Untitled Chat",createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),provider:state.selectedProvider,model:state.selectedModel,messages:[]};state.conversations.unshift(c);state.currentConversationId=id;state.attachments=[];renderAttach();renderSidebar();renderChat();saveAll();closeSidebar();focusInput();return c;}
+function currentWorkspaceId(){const w=state.workspaces.find(x=>x.id===state.currentWorkspace);if(w)return w.id;if(state.workspaces[0])return state.workspaces[0].id;return null}
+function getWorkspace(id){return state.workspaces.find(w=>w.id===id)}
+function workspaceName(id){const w=getWorkspace(id);return w?w.name:"General"}
+function workspaceCount(id){return state.conversations.filter(c=>c.workspace===id).length}
+function initWorkspaces(){if(!state.workspaces.length){state.workspaces=[{id:"ws_default",name:"General",createdAt:new Date().toISOString()}]}if(!getWorkspace(currentWorkspaceId()))state.currentWorkspace=currentWorkspaceId();for(const c of state.conversations){if(!c.workspace)c.workspace=currentWorkspaceId()}updateWsChip();}
+function updateWsChip(){const el=document.getElementById("wsChipName");if(el)el.textContent=workspaceName(currentWorkspaceId());}
+function switchWorkspace(id){if(!getWorkspace(id))return;state.currentWorkspace=id;state.currentConversationId=null;saveAll();closeSidebar();renderSidebar();renderChat();updateWsChip();closeWsPanel();}
+function openWorkspacesPanel(){renderWorkspacesPanel();}
+function renderWorkspacesPanel(){
+  let ov=document.getElementById("wsModal");if(!ov){ov=document.createElement("div");ov.className="modal-overlay";ov.id="wsModal";ov.onclick=e=>{if(e.target===ov)closeWsPanel()};document.body.appendChild(ov)}
+  const rows=state.workspaces.map(w=>{const active=w.id===currentWorkspaceId();return '<div class="ws-row'+(active?" active":"")+'"><div class="ws-row-main" onclick="switchWorkspace(\''+w.id+'\')"><span class="ws-row-icon">'+I.folder+'</span><span class="ws-row-name">'+esc(w.name)+'</span><span class="ws-row-count">'+workspaceCount(w.id)+' chats</span></div><div class="ws-row-actions"><button class="btn small" onclick="event.stopPropagation();renameWorkspacePrompt(\''+w.id+'\')">'+I.pencil+'</button><button class="btn small danger" onclick="event.stopPropagation();deleteWorkspace(\''+w.id+'\')">'+I.trash+'</button></div></div>'}).join("");
+  ov.innerHTML='<div class="modal"><div class="modal-head"><h2>Workspaces</h2><button class="modal-close" onclick="closeWsPanel()">×</button></div><div class="modal-body"><div class="field" style="margin-bottom:12px"><label>Create a workspace</label><div class="field-row"><input type="text" id="wsNewName" placeholder="Workspace name..."><button class="btn primary" onclick="createWorkspace(document.getElementById(\'wsNewName\').value);document.getElementById(\'wsNewName\').value=\'\'">Create</button></div></div><div class="ws-list">'+rows+'</div><div class="info-box" style="margin-top:12px">Each workspace keeps its own conversations separate. Switch freely — history is isolated per workspace.</div></div></div>';
+  ov.style.display="flex";
+}
+function closeWsPanel(){const ov=document.getElementById("wsModal");if(ov)ov.remove();}
+function createWorkspace(name){name=(name||"").trim()||"New Workspace";const w={id:"ws"+Date.now()+Math.random().toString(36).slice(2,6),name,createdAt:new Date().toISOString()};state.workspaces.push(w);state.currentWorkspace=w.id;state.currentConversationId=null;saveAll();renderSidebar();renderChat();updateWsChip();renderWorkspacesPanel();notify("Workspace created.","success");}
+function renameWorkspace(id,name){const w=getWorkspace(id);if(!w)return;name=(name||"").trim()||w.name;w.name=name;saveAll();renderWorkspacesPanel();updateWsChip();}
+function renameWorkspacePrompt(id){const w=getWorkspace(id);if(!w)return;const name=prompt("Rename workspace:",w.name);if(name===null)return;renameWorkspace(id,name);}
+function deleteWorkspace(id){const w=getWorkspace(id);if(!w)return;if(state.workspaces.length<=1){notify("Cannot delete the last workspace.","error");return}confirmModal("Delete this workspace?","All conversations inside this workspace will be permanently deleted. This cannot be undone.","Delete",()=>{state.workspaces=state.workspaces.filter(x=>x.id!==id);state.conversations=state.conversations.filter(c=>c.workspace!==id);if(state.currentWorkspace===id){state.currentWorkspace=state.workspaces[0]?state.workspaces[0].id:null;state.currentConversationId=null;}saveAll();renderSidebar();renderChat();updateWsChip();renderWorkspacesPanel();notify("Workspace deleted.","info");});}
+function newConversation(){const id="c"+Date.now()+Math.random().toString(36).slice(2,6);const c={id,title:"Untitled Chat",createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),provider:state.selectedProvider,model:state.selectedModel,workspace:currentWorkspaceId(),messages:[]};state.conversations.unshift(c);state.currentConversationId=id;state.attachments=[];renderAttach();renderSidebar();renderChat();saveAll();closeSidebar();focusInput();return c;}
 function getConv(id){return state.conversations.find(c=>c.id===id)}
 function currentConv(){return getConv(state.currentConversationId)}
 function makeTitle(text){let t=text.replace(/\s+/g," ").trim();t=t.replace(/^(build|create|make|write|give|show|explain|design)\s+(me\s+)?/i,"");t=t.replace(/[^\w\s-]/g,"").replace(/\s+/g," ").trim();if(t.length>42)t=t.slice(0,42).replace(/\s+\S*$/,"");if(!t)t="Untitled Chat";return t.charAt(0).toUpperCase()+t.slice(1)}
@@ -1208,6 +1327,7 @@ function convGroup(ts){const d=new Date(ts);const now=new Date();const s=((now-d
 function renderSidebar(){
   const box=document.getElementById("convList");const q=($("#sbSearch").value||"").toLowerCase();
   let list=state.conversations.slice().sort((a,b)=>new Date(b.updatedAt)-new Date(a.updatedAt));
+  const ws=currentWorkspaceId();if(ws)list=list.filter(c=>c.workspace===ws);
   if(q)list=list.filter(c=>c.title.toLowerCase().includes(q)||c.messages.some(m=>String(m.content||"").toLowerCase().includes(q)));
   if(!list.length){box.innerHTML=q?'<div class="picker-empty">No conversations match.</div>':'<div class="picker-empty">No conversations yet.<br>Click ＋ New Chat to start.</div>';return}
   let html="",curGroup=null;
@@ -1247,8 +1367,13 @@ function scrollBottom(){scrollDown(true);}
 function usePrompt(btn){const input=$("#composerInput");input.value=btn.textContent;input.focus();}
 function heroHTML(){
   const cards=START_PROMPTS.map(p=>'<button class="start-card" onclick="fillPrompt(this)" data-p="'+esc(p.p)+'"><span class="sc-icon">'+p.svg+'</span><span class="sc-title">'+esc(p.title)+'</span><span class="sc-desc">'+esc(p.desc)+'</span></button>').join("");
-  return '<div class="empty-state"><div class="hero"><div class="hero-logo">dotcomAI</div><div class="hero-tag">Experience the <span class="hero-hl">frontier</span></div><p class="hero-sub">Select a model above to start chatting.</p></div><div class="start-title">Get started</div><div class="start-grid">'+cards+'</div></div>';
+  const hidden=!!state.settings.hideGetStarted;
+  const grid=hidden
+    ?'<div class="start-hidden"><button class="start-hide-btn" onclick="toggleGetStarted()">'+I.eye+' Show Get started</button></div>'
+    :'<div class="start-title-row"><span class="start-title">Get started</span><button class="start-hide" onclick="toggleGetStarted()" title="Hide">'+I.eyeOff+'</button></div><div class="start-grid">'+cards+'</div>';
+  return '<div class="empty-state"><div class="hero"><div class="hero-logo">dotcomAI</div><div class="hero-tag">Experience the <span class="hero-hl">frontier</span></div><p class="hero-sub">Select a model above to start chatting.</p></div>'+grid+'</div>';
 }
+function toggleGetStarted(){state.settings.hideGetStarted=!state.settings.hideGetStarted;saveAll();renderChat();}
 function fillPrompt(btn){const i=$("#composerInput");i.value=btn.getAttribute("data-p");i.focus();autoResize();}
 
 /* ============ SEND / STREAM ============ */
@@ -1256,7 +1381,7 @@ function currentMessages(){const conv=currentConv();return conv?conv.messages.fi
 function getUsage(){if(!state.usage){state.usage={windowStart:Date.now(),count:0}}const s=state.settings;if(s.usageEnabled&&state.usage.windowStart+s.usageWindowMs<=Date.now()){state.usage.windowStart=Date.now();state.usage.count=0}return state.usage;}
 function isUsageBlocked(){const s=state.settings;if(!s.usageEnabled)return false;const u=getUsage();return u.count>=s.usageLimit;}
 function usageResetMs(){const s=state.settings;if(!s.usageEnabled)return 0;const u=getUsage();return Math.max(0,(u.windowStart+s.usageWindowMs)-Date.now());}
-function consumeUsage(){const s=state.settings;if(!s.usageEnabled)return;const u=getUsage();u.count++;saveAll();updateUsageBadge();}
+function consumeUsage(){const s=state.settings;if(!s.usageEnabled)return;const u=getUsage();u.count++;saveAll();updateUsageBadge();syncUsageRemote();}
 function fmtDur(ms){ms=Math.max(0,Math.floor(ms/1000));const h=Math.floor(ms/3600);const m=Math.floor((ms%3600)/60);const s=ms%60;return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");}
 function updateUsageBadge(){const b=$("#usageBadge");if(!b)return;const s=state.settings;if(!s.usageEnabled){b.textContent="";return}const left=usageLeft();b.textContent=left+" / "+s.usageLimit+" left";}
 function usageLeft(){const s=state.settings;if(!s.usageEnabled)return 0;const u=getUsage();return Math.max(0,s.usageLimit-u.count);}
@@ -1417,6 +1542,7 @@ function copyCode(btn){const code=btn.closest(".codeblock").querySelector("pre")
 /* ============ EVENT HANDLERS ============ */
 function wireEvents(){
   $("#btnNewChat").onclick=newConversation;
+  $("#btnWorkspaces").onclick=openWorkspacesPanel;
   $("#btnSettings2").onclick=()=>openSettings("providers");
   $("#btnTheme").onclick=cycleTheme;
   $("#btnHamburger").onclick=openSidebar;
@@ -1547,7 +1673,7 @@ function setSetting(key,val){state.settings[key]=val;saveAll();if(key==="streami
 function setUsageEnabled(v){state.settings.usageEnabled=!!v;if(v){state.usage={windowStart:Date.now(),count:0}}saveAll();renderSettingsBody();updateUsageBadge();notify("Message limit "+(v?"enabled":"disabled"),"success");}
 function setUsageLimit(v){const n=parseInt(v,10);if(!(n>0)){notify("Enter a number above 0.","error");return}state.settings.usageLimit=n;saveAll();renderSettingsBody();updateUsageBadge();notify("Limit set to "+n+" messages.","success");}
 function setUsageWindow(v){const n=parseInt(v,10);if(!(n>0)){notify("Enter a number above 0.","error");return}state.settings.usageWindowMs=n*3600000;saveAll();renderSettingsBody();notify("Reset window set to "+n+" hour(s).","success");}
-function resetUsageNow(){state.usage={windowStart:Date.now(),count:0};saveAll();renderSettingsBody();updateUsageBadge();notify("Usage counter reset.","success");}
+function resetUsageNow(){state.usage={windowStart:Date.now(),count:0};saveAll();renderSettingsBody();updateUsageBadge();syncUsageRemote();notify("Usage counter reset.","success");}
 function generationTabHTML(){const s=state.settings;return'<div class="setting-group"><h3>Generation</h3><div class="field"><label>Temperature (0 – 2)</label><input type="number" step="0.1" min="0" max="2" value="'+s.temperature+'" onchange="setNum(\'temperature\',Number(this.value))"></div><div class="field"><label>Max Tokens</label><input type="number" min="1" value="'+s.maxTokens+'" onchange="setNum(\'maxTokens\',Math.max(1,Number(this.value)))"></div><div class="field"><label>Top P (0 – 1)</label><input type="number" step="0.05" min="0.01" max="1" value="'+s.topP+'" onchange="setNum(\'topP\',Number(this.value))"></div></div>'}
 function setNum(k,v){state.settings[k]=v;saveAll();notify("Generation settings saved.","success");}
 function usageTabHTML(){
@@ -1583,9 +1709,33 @@ function saveSystemPrompt(v){state.settings.systemPrompt=v;saveAll();notify("Sys
 function setDemo(v){state.settings.demoMode=v;saveAll();renderSettingsBody();$("#demoBanner").classList.toggle("show",v);notify("Demo Mode "+(v?"ON":"OFF"),v?"info":"info")}
 function setDebug(v){state.settings.debugMode=v;saveAll();renderSettingsBody()}
 
+/* ============ AUTH (Supabase) ============ */
+const SUPABASE_CONFIG={url:"https://ouwtdrfthgrhwflolxzz.supabase.co",anonKey:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im91d3RkcmZ0aGdyaHdmbG9seHp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwMDcyNTAsImV4cCI6MjEwMzU4MzI1MH0.iJ1E3hI9Pw0yXpPnVzDy1xQuWm90TYFhon0BTmOQp9o"};
+let supabaseClient=null;
+const GICON='<svg viewBox="0 0 24 24" width="20" height="20"><path fill="#EA4335" d="M11.94 4.5c1.7 0 3.1.6 4.3 1.7l2.9-2.9C17.3 1.7 14.9.5 11.94.5 7.3.5 3.4 3.1 1.6 6.9l3.5 2.7c.8-2.4 3-4.1 6.84-5.1z"/><path fill="#4285F4" d="M23.44 12.2c0-.9-.1-1.6-.2-2.2H11.94v4.4h6.5c-.3 1.4-1.2 2.6-2.5 3.4l3.3 2.6c2.2-2 3.3-5 3.3-8.2z"/><path fill="#FBBC05" d="M5.14 7.3c-.5.9-.8 1.9-.8 2.9s.3 2 .8 2.9L1.6 15.9C.4 13.8.04 12.9.04 12s.2-1.8 1-3.6l4.1-1.1z"/><path fill="#34A853" d="M11.94 23.5c2.9 0 5.3-1 7.1-2.7l-3.3-2.6c-1 .7-2.3 1.1-3.8 1.1-3.2 0-5.4-2-6.2-4.6l-3.5 2.9c1.8 3 5.7 5.9 9.7 5.9z"/></svg>';
+function initSupabase(){if(typeof supabase==="undefined")return false;const url=SUPABASE_CONFIG.url,key=SUPABASE_CONFIG.anonKey;if(!url||!key)return false;try{supabaseClient=supabase.createClient(url,key);return true}catch(e){return false}}
+function syncUsageRemote(){if(!supabaseClient)return;supabaseClient.auth.getUser().then(({data})=>{const uid=data.user&&data.user.id;if(!uid)return;const u=getUsage();const row={id:uid,window_start:new Date(u.windowStart).toISOString(),count:u.count,updated_at:new Date().toISOString()};supabaseClient.from("user_usage").upsert(row,{onConflict:"id"}).then(()=>{}).catch(()=>{});}).catch(()=>{});}
+function loadUsageRemote(){return new Promise((resolve)=>{if(!supabaseClient)return resolve();supabaseClient.auth.getUser().then(({data})=>{const uid=data.user&&data.user.id;if(!uid)return resolve();supabaseClient.from("user_usage").select("window_start,count").eq("id",uid).maybeSingle().then(({data:row,error})=>{if(error){resolve();return;}if(row){state.usage={windowStart:new Date(row.window_start).getTime(),count:row.count||0};getUsage();updateUsageBadge();}else{syncUsageRemote();}resolve();}).catch(()=>resolve());}).catch(()=>resolve());});}
+function renderAuthMode(mode){const form=$("#authForm");if(!form)return;if(mode==="signup")form.innerHTML=signupHTML();else if(mode==="forgot")form.innerHTML=forgotHTML();else form.innerHTML=signinHTML();const r=$("#authRemember");if(r){const saved=localStorage.getItem("dc_auth_email");if(saved)r.checked=true;}const em=$("#authEmail");if(em&&em.value===""&&localStorage.getItem("dc_auth_email"))em.value=localStorage.getItem("dc_auth_email");}
+const AUTH_FOOT='<div class="auth-legal">By continuing, you agree to dotcomAI\'s <a onclick="showLegal(\'terms\')">terms</a>, <a onclick="showLegal(\'privacy\')">privacy policy</a>, and <a onclick="showLegal(\'privacy\')">cookie policy</a>.</div><div class="auth-copyright">© 2026 All Rights Reserved. Proudly made in Sri Lanka 🇱🇰</div>';
+function signinHTML(){return'<h1 class="auth-title">Sign in to <span class="ac">dotcomAI</span></h1><div class="auth-err" id="authErr"></div><button class="auth-google" onclick="goGoogle()">Continue with Google</button><div class="auth-or"><span>OR</span></div><div class="field"><label>Email</label><input type="email" id="authEmail" autocomplete="email" placeholder="name@example.com"></div><div class="field"><label>Password</label><div class="pw-wrap"><input type="password" id="authPass" autocomplete="current-password" placeholder="••••••••"><button type="button" class="pw-eye" onclick="togglePw()">'+I.eye+'</button></div></div><label class="remember"><input type="checkbox" id="authRemember"><span>Save email and login method on this device</span></label><button class="auth-btn" id="btnSignin" onclick="authSignIn()">Sign in</button><div class="auth-links"><p>Don\'t have an account? <button class="link" onclick="renderAuthMode(\'signup\')">Sign up</button></p><p><button class="link" onclick="renderAuthMode(\'forgot\')">Forgot your email or password?</button></p></div>'+AUTH_FOOT;}
+function signupHTML(){return'<h1 class="auth-title">Sign up for <span class="ac">dotcomAI</span></h1><div class="auth-err" id="authErr"></div><button class="auth-google" onclick="goGoogle()">Continue with Google</button><div class="auth-or"><span>OR</span></div><div class="field"><label>Email</label><input type="email" id="authEmail" autocomplete="email" placeholder="name@example.com"></div><div class="field"><label>Password</label><div class="pw-wrap"><input type="password" id="authPass" autocomplete="new-password" placeholder="At least 6 characters"><button type="button" class="pw-eye" onclick="togglePw(\'authPass\')">'+I.eye+'</button></div></div><div class="field"><label>Confirm password</label><div class="pw-wrap"><input type="password" id="authConfirmPass" autocomplete="new-password" placeholder="Repeat password"><button type="button" class="pw-eye" onclick="togglePw(\'authConfirmPass\')">'+I.eye+'</button></div></div><button class="auth-btn" id="authBtn" onclick="authSignUp()">Sign up</button><div class="auth-links"><p>Already have an account? <button class="link" onclick="renderAuthMode(\'signin\')">Sign in</button></p></div>'+AUTH_FOOT;}
+function forgotHTML(){return'<h1 class="auth-title">Reset your <span class="ac">password</span></h1><div class="auth-err" id="authErr"></div><p style="color:#3c3c3c;font-size:13px;margin:0 0 14px">Enter the email associated with your account and we\'ll send you a reset link.</p><div class="field"><label>Email</label><input type="email" id="authEmail" autocomplete="email" placeholder="name@example.com"></div><button class="auth-btn" id="authBtn" onclick="authForgot()">Send reset link</button><div class="auth-links"><p><button class="link" onclick="renderAuthMode(\'signin\')">Back to sign in</button></p></div>';}
+function togglePw(id){const el=$("#"+id);if(!el)return;const isPw=el.type==="password";el.type=isPw?"text":"password";const btn=el.parentElement.querySelector(".pw-eye");if(btn)btn.innerHTML=isPw?I.eyeOff:I.eye;}
+function authError(m){const el=$("#authErr");if(el){el.textContent=m;el.style.display="block";}}
+function authOk(m){const el=$("#authErr");if(el){el.textContent=m;el.style.display="block";el.className="auth-ok";}}
+function authBtnLoading(on){const b=$("#authBtn");if(b){b.disabled=on;b.textContent=on?(b.textContent==="Sign in"?"Signing in…":"Please wait…"):(b.dataset.orig||b.textContent);}}
+async function authSignIn(){const email=$("#authEmail").value.trim();const pass=$("#authPass").value;if(!email||!pass){authError("Enter your email and password.");return}authError("");authBtnLoading(true);const r=$("#authRemember");try{if(r&&r.checked)localStorage.setItem("dc_auth_email",email);else localStorage.removeItem("dc_auth_email");}catch(e){}const {error}=await supabaseClient.auth.signInWithPassword({email,password:pass});authBtnLoading(false);if(error){authError(error.message);return}authScreenHide();notify("Signed in.","success");}
+async function authSignUp(){const email=$("#authEmail").value.trim();const pass=$("#authPass").value;const conf=$("#authConfirmPass").value;if(!email||!pass||!conf){authError("Please fill in all fields.");return}if(pass.length<6){authError("Password must be at least 6 characters.");return}if(pass!==conf){authError("Passwords do not match.");return}authError("");authBtnLoading(true);const {data,error}=await supabase.auth.signUp({email,password:pass,options:{}});authBtnLoading(false);if(error){authError(error.message);return}if(data.session){authScreenHide();notify("Signed in.","success");}else{authOk("Account created. Check your email to confirm your sign-up.");renderAuthMode("signin");}}
+async function authForgot(){const email=$("#authEmail").value.trim();if(!email){authError("Enter your email.");return}authError("");const {error}=await supabase.auth.resetPasswordForEmail(email);if(error){authError(error.message);return}authOk("Reset link sent. Check your inbox.");}
+async function goGoogle(){try{const {error}=await supabase.auth.signInWithOAuth({provider:"google",options:{redirectTo:window.location.href}});if(error)authError(error.message);}catch(e){authError("Google sign-in unavailable. Sign in with email instead.");}}
+function authScreenHide(){const sc=$("#authScreen");if(sc)sc.classList.add("hidden");}
+function initAuth(){const sc=$("#authScreen");renderAuthMode("signin");if(!initSupabase()){if(sc)sc.classList.add("hidden");return;}supabase.auth.getSession().then(({data})=>{if(data.session){if(sc)sc.classList.add("hidden");loadUsageRemote();}else{if(sc)sc.classList.remove("hidden");renderAuthMode("signin");}}).catch(()=>{if(sc)sc.classList.remove("hidden");renderAuthMode("signin");});supabase.auth.onAuthStateChange((ev,session)=>{if(sc){if(session){sc.classList.add("hidden");loadUsageRemote();}else{sc.classList.remove("hidden");renderAuthMode(ev==="PASSWORD_RECOVERY"?"forgot":"signin");}}});}
+
 /* ============ INITIALIZATION ============ */
 function init(){
-  loadAll();ensureProviders();applyTheme();
+  initAuth();
+  loadAll();ensureProviders();applyTheme();initWorkspaces();
   // validate selected provider/model still exist
   if(!getProvider(state.selectedProvider))state.selectedProvider=state.providers.find(p=>p.enabled&&p.apiKey)?.id||null;
   if(state.selectedProvider){const models=state.models[state.selectedProvider]||[];if(!models.some(m=>m.id===state.selectedModel))state.selectedModel=models.length?models[0].id:null}
