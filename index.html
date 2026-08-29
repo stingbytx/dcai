@@ -105,6 +105,7 @@ body.sb-collapsed .sidebar{display:none}
 .sb-item-actions button.danger{color:var(--red)}
 .sb-item-actions button.danger:hover{background:rgba(240,107,114,.1)}
 .sb-foot{padding:10px 14px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sb-foot-right{display:flex;align-items:center;gap:6px}
 .sb-links{display:flex;gap:2px;flex-wrap:wrap;align-items:center;padding:9px 12px;border-top:1px solid var(--border);font-size:11px;color:var(--text3)}
 .sb-links button{background:none;border:none;color:var(--text3);font-size:11px;cursor:pointer;padding:2px 4px;transition:color .12s}
 .sb-links button:hover{color:var(--text)}
@@ -477,9 +478,14 @@ textarea{flex:1;border:none;background:none;resize:none;outline:none;font-size:1
     </div>
     <div class="sb-foot">
       <div class="offline-dot" id="offlineDot"><span class="dot"></span><span id="offlineLabel">Online</span></div>
-      <button class="icon-btn" id="btnTheme" title="Toggle theme" aria-label="Toggle theme">
-        <svg viewBox="0 0 24 24" class="filled"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
+      <div class="sb-foot-right">
+        <button class="icon-btn" id="btnTheme" title="Toggle theme" aria-label="Toggle theme">
+          <svg viewBox="0 0 24 24" class="filled"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <button class="icon-btn" id="btnSignOut" title="Sign out" aria-label="Sign out" onclick="signOut()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
     </div>
   </aside>
   <div class="overlay" id="sbOverlay"></div>
@@ -1668,7 +1674,7 @@ function removeKey(id){const p=getProvider(id);confirmModal("Remove this provide
 function maskedKey(k){return k?("••••••••••••"+k.slice(-4)):""}
 function setProviderEnabled(id,enabled){const p=getProvider(id);p.enabled=enabled;saveAll();renderProvider();notify(p.name+(enabled?" enabled":" disabled"),"info");}
 function exportConfig(){const data={app:"MY_AI",version:STORAGE_VERSION,exportedAt:new Date().toISOString(),providers:state.providers.map(({id,name,baseURL,enabled})=>({id,name,baseURL,enabled})),settings:state.settings,favorites:state.favorites,disabledModels:state.disabledModels};download("myai-config.json",JSON.stringify(data,null,2),"application/json");notify("Config exported (API keys excluded).","success");}
-function importConfig(){const input=document.createElement("input");input.type="file";input.accept=".json";input.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d.app!=="Your AI")throw new Error("Not a valid config file");if(d.settings)state.settings=Object.assign({},DEFAULT_SETTINGS,d.settings);if(Array.isArray(d.favorites))state.favorites=d.favorites;if(Array.isArray(d.disabledModels))state.disabledModels=d.disabledModels;if(Array.isArray(d.providers))for(const prov of d.providers){const p=getProvider(prov.id);if(p){p.baseURL=prov.baseURL||p.baseURL;p.enabled=prov.enabled!==undefined?prov.enabled:p.enabled}}applyTheme();saveAll();renderProvider();renderSettingsBody();notify("Config imported.","success")}catch(err){notify("Import failed: invalid config.","error")}};r.readAsText(f)};input.click();}
+function importConfig(){const input=document.createElement("input");input.type="file";input.accept=".json";input.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d.app!=="MY_AI")throw new Error("Not a valid config file");if(d.settings)state.settings=Object.assign({},DEFAULT_SETTINGS,d.settings);if(Array.isArray(d.favorites))state.favorites=d.favorites;if(Array.isArray(d.disabledModels))state.disabledModels=d.disabledModels;if(Array.isArray(d.providers))for(const prov of d.providers){const p=getProvider(prov.id);if(p){p.baseURL=prov.baseURL||p.baseURL;p.enabled=prov.enabled!==undefined?prov.enabled:p.enabled}}applyTheme();saveAll();renderProvider();renderSettingsBody();notify("Config imported.","success")}catch(err){notify("Import failed: invalid config.","error")}};r.readAsText(f)};input.click();}
 function chatTabHTML(){
   const s=state.settings;
   return'<div class="setting-group"><h3>Chat</h3><div class="toggle-row"><div><div class="lbl">Streaming</div><div class="sub">Show responses progressively as they arrive</div></div><label class="switch"><input type="checkbox" '+(s.streaming?"checked":"")+' onchange="setSetting(\'streaming\',this.checked)"><span class="slider"></span></label></div>'+
@@ -1706,7 +1712,7 @@ function logsTabHTML(){
 function clearLogs(){confirmModal("Clear logs?","This removes the local request log.","Clear",()=>{state.logs=[];saveAll();renderSettingsBody()})}
 function dataTabHTML(){return'<div class="setting-group"><h3>Data</h3><div class="btn-row" style="flex-direction:column;align-items:stretch"><button class="btn" onclick="exportAll()">Export all data (JSON)</button><button class="btn" onclick="importAll()">Import data (JSON)</button><button class="btn danger" onclick="clearConversations()">Clear conversations</button><button class="btn danger" onclick="clearLogsData()">Clear logs</button><button class="btn danger" onclick="resetSettings()">Reset settings</button><button class="btn danger" onclick="resetApp()">Delete all local data</button></div></div>'+
 '<div class="setting-group"><h3>Privacy</h3><div class="info-box">This application runs in your browser. Your API keys and conversations are stored locally unless you intentionally send content to an AI provider.<br><br>This single-file version is intended for private personal use. Do not publish this HTML file with your API keys inside it.</div></div>'}
-function exportAll(){const data={app:"Your AI",version:STORAGE_VERSION,providers:state.providers,models:state.models,conversations:state.conversations,settings:state.settings,favorites:state.favorites,disabledModels:state.disabledModels,logs:state.logs};download("myai-backup.json",JSON.stringify(data,null,2),"application/json");notify("All data exported.","success");}
+function exportAll(){const data={app:"MYAI",version:STORAGE_VERSION,providers:state.providers,models:state.models,conversations:state.conversations,settings:state.settings,favorites:state.favorites,disabledModels:state.disabledModels,logs:state.logs};download("myai-backup.json",JSON.stringify(data,null,2),"application/json");notify("All data exported.","success");}
 function importAll(){const inp=document.createElement("input");inp.type="file";inp.accept=".json";inp.onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d.app!=="MYAI")throw new Error("bad");if(d.providers)state.providers=d.providers;if(d.models)state.models=d.models;if(Array.isArray(d.conversations))state.conversations=d.conversations;if(d.settings)state.settings=Object.assign({},DEFAULT_SETTINGS,d.settings);if(Array.isArray(d.favorites))state.favorites=d.favorites;if(Array.isArray(d.disabledModels))state.disabledModels=d.disabledModels;if(Array.isArray(d.logs))state.logs=d.logs;applyTheme();saveAll();renderAll();renderSettingsBody();notify("Data imported.","success")}catch(err){notify("Import failed: invalid data.","error")}};r.readAsText(f)};inp.click();}
 function clearConversations(){confirmModal("Clear conversations?","This deletes all saved conversations. This cannot be undone.","Clear",()=>{state.conversations=[];state.currentConversationId=null;saveAll();renderSidebar();renderChat()})}
 function clearLogsData(){confirmModal("Clear logs?","This removes the local request history.","Clear",()=>{state.logs=[];saveAll();renderSettingsBody()})}
@@ -1716,6 +1722,7 @@ function systemTabHTML(){const s=state.settings;return'<div class="setting-group
 function saveSystemPrompt(v){state.settings.systemPrompt=v;saveAll();notify("System prompt saved.","success")}
 function setDemo(v){state.settings.demoMode=v;saveAll();renderSettingsBody();$("#demoBanner").classList.toggle("show",v);notify("Demo Mode "+(v?"ON":"OFF"),v?"info":"info")}
 function setDebug(v){state.settings.debugMode=v;saveAll();renderSettingsBody()}
+function setSystemPrompt(v){state.settings.systemPrompt=v;saveAll();notify("System prompt saved.","success")}
 
 /* ============ AUTH (Supabase) ============ */
 const SUPABASE_CONFIG={url:"https://ouwtdrfthgrhwflolxzz.supabase.co",anonKey:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im91d3RkcmZ0aGdyaHdmbG9seHp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgwMDcyNTAsImV4cCI6MjEwMzU4MzI1MH0.iJ1E3hI9Pw0yXpPnVzDy1xQuWm90TYFhon0BTmOQp9o"};
@@ -1743,6 +1750,7 @@ async function authSignUp(){const email=$("#authEmail").value.trim();const pass=
 async function authForgot(){const email=$("#authEmail").value.trim();if(!email){authError("Enter your email.");return}authError("");try{const {error}=await supabaseClient.auth.resetPasswordForEmail(email);if(error){authError(error.message);return}authOk("Reset link sent. Check your inbox.");}catch(e){authError("Failed to send reset link: "+(e&&e.message?e.message:"unreachable Supabase"));}}
 async function goGoogle(){try{const {error}=await supabaseClient.auth.signInWithOAuth({provider:"google",options:{redirectTo:window.location.href}});if(error){authError("Google sign-in failed: "+error.message);return;}}catch(e){authError("Google sign-in failed. Ensure the site is served over HTTPS and Google is enabled in your Supabase project.");}}
 function authScreenHide(){const sc=$("#authScreen");if(sc)sc.classList.add("hidden");}
+async function signOut(){try{if(supabaseClient&&supabaseClient.auth)await supabaseClient.auth.signOut()}catch(e){}const sc=$("#authScreen");if(sc)sc.classList.remove("hidden");renderAuthMode("signin");closeSidebar();notify("Signed out.","info")}
 function initAuth(){const sc=$("#authScreen");try{const saved=localStorage.getItem("dc_lang");if(saved&&LANGS[saved])LANG=saved;}catch(e){}if(document&&document.addEventListener)document.addEventListener("click",function(ev){const m=$("#langMenu");if(m&&m.classList.contains("open")&&(!ev.target||!ev.target.closest||!ev.target.closest(".lang-wrap")))m.classList.remove("open");});renderAuthMode("signin");if(!initSupabase()){if(sc)sc.classList.add("hidden");return;}supabaseClient.auth.getSession().then(({data})=>{if(data.session){if(sc)sc.classList.add("hidden");loadUsageRemote();}else{if(sc)sc.classList.remove("hidden");renderAuthMode("signin");}}).catch(()=>{if(sc)sc.classList.remove("hidden");renderAuthMode("signin");});supabaseClient.auth.onAuthStateChange((ev,session)=>{if(sc){if(session){sc.classList.add("hidden");loadUsageRemote();}else{sc.classList.remove("hidden");renderAuthMode(ev==="PASSWORD_RECOVERY"?"forgot":"signin");}}});}
 
 /* ============ INITIALIZATION ============ */
