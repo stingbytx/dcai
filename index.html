@@ -245,6 +245,17 @@ textarea{flex:1;border:none;background:none;resize:none;outline:none;font-size:1
 .settings-nav button{color:var(--text2);padding:8px 14px;border-radius:6px 6px 0 0;font-size:13px;font-weight:500}
 .settings-nav button:hover{color:var(--text)}
 .settings-nav button.active{color:var(--text);border-bottom:2px solid var(--accent)}
+.limit-modal{max-width:380px;text-align:center;padding:28px 24px}
+.limit-modal .limit-icon{width:48px;height:48px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;border-radius:13px;background:rgba(239,68,68,.13);color:#ef4444}
+.limit-modal .limit-icon svg{width:24px;height:24px}
+.limit-modal h2{margin:0 0 10px;font-size:20px}
+.limit-msg{font-size:13px;color:var(--text2);line-height:1.55}
+.limit-countdown{font-size:34px;font-weight:700;letter-spacing:1px;font-variant-numeric:tabular-nums;margin:14px 0 6px;color:var(--accent)}
+.limit-sub{font-size:12px;color:var(--text3);margin-bottom:18px}
+.limit-modal .btn.primary{margin-top:2px}
+.usage-badge{display:inline-flex;align-items:center;gap:6px;color:var(--text3);font-size:11px;font-weight:500}
+.usage-badge.warn{color:#f59e0b}
+.usage-badge.ok{color:var(--accent)}
 .setting-group{margin-bottom:22px}
 .setting-group h3{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text2);margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border)}
 .field{margin-bottom:14px}
@@ -436,7 +447,7 @@ textarea{flex:1;border:none;background:none;resize:none;outline:none;font-size:1
             <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
         </div>
-        <div class="composer-hint" id="composerHint">All Rights Reserved. Proudly made in Sri Lanka 🇱🇰</div>
+        <div class="composer-hint" id="composerHint">All Rights Reserved. Proudly made in Sri Lanka 🇱🇰<span class="usage-badge" id="usageBadge"></span></div>
       </div>
     </div>
   </main>
@@ -452,7 +463,7 @@ textarea{flex:1;border:none;background:none;resize:none;outline:none;font-size:1
 const STORAGE_KEY="my_ai_platform_v1", STORAGE_VERSION=1;
 /* Default providers are hidden and locked for visitors. Paste the owner's keys here — they can never be seen or edited in the UI. */
 const DEFAULT_PROVIDER_KEYS={seekai:"sk-seXDAgaEdGlcn6n3z81jmneOZaxOzEyi3D3VZmBkTn9urAKX",openrouter:"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"};
-const DEFAULT_SETTINGS={theme:"dark",streaming:true,enterToSend:true,showTimestamps:true,temperature:0.7,maxTokens:2048,topP:1,systemPrompt:"You are my personal AI assistant. Be clear, concise, and helpful.",maxFileSizeMB:5,debugMode:false,demoMode:false};
+const DEFAULT_SETTINGS={theme:"dark",streaming:true,enterToSend:true,showTimestamps:true,temperature:0.7,maxTokens:2048,topP:1,systemPrompt:"You are my personal AI assistant. Be clear, concise, and helpful.",maxFileSizeMB:5,debugMode:false,demoMode:false,usageEnabled:true,usageLimit:20,usageWindowMs:21600000};
 const FILE_EXTENSIONS=["txt","md","json","csv","js","ts","jsx","tsx","py","html","css"];
 const QUICK_PROMPTS=["Explain something","Write code","Analyze text","Brainstorm ideas"];
 const START_PROMPTS=[
@@ -488,12 +499,12 @@ function favGlyph(pid,mid){return isFav(pid,mid)?I.star:I.starOutline;}
 
 
 /* ============ STATE ============ */
-const state={providers:[],models:{},modelsMeta:{},conversations:[],currentConversationId:null,selectedProvider:null,selectedModel:null,settings:Object.assign({},DEFAULT_SETTINGS),favorites:[],disabledModels:[],logs:[],attachments:[],lastRefresh:{},generating:false,abortController:null};
+const state={providers:[],models:{},modelsMeta:{},conversations:[],currentConversationId:null,selectedProvider:null,selectedModel:null,settings:Object.assign({},DEFAULT_SETTINGS),favorites:[],disabledModels:[],logs:[],attachments:[],lastRefresh:{},usage:{windowStart:Date.now(),count:0},generating:false,abortController:null};
 
 /* ============ STORAGE ============ */
 function storageOK(){try{localStorage.setItem("__t","1");localStorage.removeItem("__t");return true}catch(e){return false}}
-function saveAll(){if(!storageOK()){notify("Unable to save local data. Export your conversations before continuing.","error");return}try{localStorage.setItem(STORAGE_KEY,JSON.stringify({version:STORAGE_VERSION,providers:state.providers,models:state.models,modelsMeta:state.modelsMeta,conversations:state.conversations,settings:state.settings,favorites:state.favorites,disabledModels:state.disabledModels,logs:state.logs,lastRefresh:state.lastRefresh,selectedProvider:state.selectedProvider,selectedModel:state.selectedModel}));}catch(e){notify("Unable to save local data. Export your conversations before continuing.","error")}}
-function loadAll(){if(!storageOK())return;try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(!d||typeof d!=="object")return;if(d.providers)state.providers=d.providers;if(d.models)state.models=d.models;if(d.modelsMeta)state.modelsMeta=d.modelsMeta;if(Array.isArray(d.conversations))state.conversations=d.conversations;if(d.settings)state.settings=Object.assign({},DEFAULT_SETTINGS,d.settings);if(Array.isArray(d.favorites))state.favorites=d.favorites;if(Array.isArray(d.disabledModels))state.disabledModels=d.disabledModels;if(Array.isArray(d.logs))state.logs=d.logs;if(d.lastRefresh)state.lastRefresh=d.lastRefresh;if(d.selectedProvider)state.selectedProvider=d.selectedProvider;if(d.selectedModel)state.selectedModel=d.selectedModel}catch(e){console.error("load failed",e)}}
+function saveAll(){if(!storageOK()){notify("Unable to save local data. Export your conversations before continuing.","error");return}try{localStorage.setItem(STORAGE_KEY,JSON.stringify({version:STORAGE_VERSION,providers:state.providers,models:state.models,modelsMeta:state.modelsMeta,conversations:state.conversations,settings:state.settings,favorites:state.favorites,disabledModels:state.disabledModels,logs:state.logs,lastRefresh:state.lastRefresh,selectedProvider:state.selectedProvider,selectedModel:state.selectedModel,usage:state.usage}));}catch(e){notify("Unable to save local data. Export your conversations before continuing.","error")}}
+function loadAll(){if(!storageOK())return;try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(!d||typeof d!=="object")return;if(d.providers)state.providers=d.providers;if(d.models)state.models=d.models;if(d.modelsMeta)state.modelsMeta=d.modelsMeta;if(Array.isArray(d.conversations))state.conversations=d.conversations;if(d.settings)state.settings=Object.assign({},DEFAULT_SETTINGS,d.settings);if(Array.isArray(d.favorites))state.favorites=d.favorites;if(Array.isArray(d.disabledModels))state.disabledModels=d.disabledModels;if(Array.isArray(d.logs))state.logs=d.logs;if(d.lastRefresh)state.lastRefresh=d.lastRefresh;if(d.usage)state.usage=Object.assign({windowStart:Date.now(),count:0},d.usage);if(d.selectedProvider)state.selectedProvider=d.selectedProvider;if(d.selectedModel)state.selectedModel=d.selectedModel}catch(e){console.error("load failed",e)}}
 
 /* ============ PROVIDER SYSTEM ============ */
 const DEFAULT_ORDER=["openrouter","seekai"];
@@ -1242,6 +1253,23 @@ function fillPrompt(btn){const i=$("#composerInput");i.value=btn.getAttribute("d
 
 /* ============ SEND / STREAM ============ */
 function currentMessages(){const conv=currentConv();return conv?conv.messages.filter(m=>m.role!=="error").map(m=>({role:m.role,content:m.content})):[]}
+function getUsage(){if(!state.usage){state.usage={windowStart:Date.now(),count:0}}const s=state.settings;if(s.usageEnabled&&state.usage.windowStart+s.usageWindowMs<=Date.now()){state.usage.windowStart=Date.now();state.usage.count=0}return state.usage;}
+function isUsageBlocked(){const s=state.settings;if(!s.usageEnabled)return false;const u=getUsage();return u.count>=s.usageLimit;}
+function usageResetMs(){const s=state.settings;if(!s.usageEnabled)return 0;const u=getUsage();return Math.max(0,(u.windowStart+s.usageWindowMs)-Date.now());}
+function consumeUsage(){const s=state.settings;if(!s.usageEnabled)return;const u=getUsage();u.count++;saveAll();updateUsageBadge();}
+function fmtDur(ms){ms=Math.max(0,Math.floor(ms/1000));const h=Math.floor(ms/3600);const m=Math.floor((ms%3600)/60);const s=ms%60;return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");}
+function updateUsageBadge(){const b=$("#usageBadge");if(!b)return;const s=state.settings;if(!s.usageEnabled){b.textContent="";return}const left=usageLeft();b.textContent=left+" / "+s.usageLimit+" left";}
+function usageLeft(){const s=state.settings;if(!s.usageEnabled)return 0;const u=getUsage();return Math.max(0,s.usageLimit-u.count);}
+function showLimitModal(){
+  const s=state.settings;const hrs=s.usageWindowMs/3600000;
+  const ov=document.createElement("div");ov.className="modal-overlay";
+  ov.innerHTML='<div class="modal limit-modal"><div class="limit-icon">'+I.alert+'</div><h2>Daily Limit Reached</h2><div class="limit-msg">You\'ve used all <b>'+s.usageLimit+'</b> messages for this '+ (hrs>=24?"day":"period") +'. New messages unlock when the timer below reaches zero.</div><div class="limit-countdown" id="limitCd">--:--:--</div><div class="limit-sub" id="limitSub">Resets in '+ (hrs>=24? (hrs/24)+" day(s)" : hrs+" hour(s)") +'.</div><button class="btn primary" onclick="this.closest(\'.modal-overlay\').remove()">Got it</button></div>';
+  document.body.appendChild(ov);
+  const cd=ov.querySelector("#limitCd");const sub=ov.querySelector("#limitSub");
+  const tick=()=>{const ms=usageResetMs();if(ms<=0){clearInterval(tv);cd.textContent="00:00:00";sub.textContent="Your limit has reset \u2014 you can send again now.";setTimeout(()=>{ov.remove();},1600);return;}cd.textContent=fmtDur(ms);};
+  tick();const tv=setInterval(tick,1000);
+  ov.querySelector(".modal-close")&&ov.querySelector(".modal-close").addEventListener("click",()=>ov.remove());
+}
 async function sendMessage(){
   if(state.generating)return;
   const input=$("#composerInput");let text=input.value.trim();
@@ -1251,6 +1279,8 @@ async function sendMessage(){
   const p=getProvider(state.selectedProvider);
   if(!state.settings.demoMode&&!p.apiKey){notify("Add an API key for "+p.name+" in Settings → Providers.","error");return}
   if(!state.selectedModel){const models=visibleModels(state.selectedProvider);if(models.length)state.selectedModel=models[0].id;else{notify("No model selected. Refresh models first.","error");return}}
+  // usage limit gate
+  if(isUsageBlocked()){showLimitModal();return}
   // ensure conversation exists
   let c=conv;
   if(!c){c=newConversation();}
@@ -1262,6 +1292,7 @@ async function sendMessage(){
   c.messages.push(userMsg);c.updatedAt=new Date().toISOString();
   state.attachments=[];renderAttach();input.value="";
   renderChat();renderSidebar();saveAll();
+  consumeUsage();
   if(state.settings.demoMode){demoResponse(c);return}
   await requestAssistant(c);
 }
@@ -1513,9 +1544,14 @@ function chatTabHTML(){
   '<div class="setting-group"><h3>Attachments</h3><div class="field"><label>Max file size (MB)</label><input type="number" value="'+s.maxFileSizeMB+'" min="1" max="20" onchange="setSetting(\'maxFileSizeMB\',Number(this.value))"></div></div>';}
 function setTheme(t){state.settings.theme=t;applyTheme();saveAll();renderSettingsBody();}
 function setSetting(key,val){state.settings[key]=val;saveAll();if(key==="streaming"){}renderSettingsBody();}
+function setUsageEnabled(v){state.settings.usageEnabled=!!v;if(v){state.usage={windowStart:Date.now(),count:0}}saveAll();renderSettingsBody();updateUsageBadge();notify("Message limit "+(v?"enabled":"disabled"),"success");}
+function setUsageLimit(v){const n=parseInt(v,10);if(!(n>0)){notify("Enter a number above 0.","error");return}state.settings.usageLimit=n;saveAll();renderSettingsBody();updateUsageBadge();notify("Limit set to "+n+" messages.","success");}
+function setUsageWindow(v){const n=parseInt(v,10);if(!(n>0)){notify("Enter a number above 0.","error");return}state.settings.usageWindowMs=n*3600000;saveAll();renderSettingsBody();notify("Reset window set to "+n+" hour(s).","success");}
+function resetUsageNow(){state.usage={windowStart:Date.now(),count:0};saveAll();renderSettingsBody();updateUsageBadge();notify("Usage counter reset.","success");}
 function generationTabHTML(){const s=state.settings;return'<div class="setting-group"><h3>Generation</h3><div class="field"><label>Temperature (0 – 2)</label><input type="number" step="0.1" min="0" max="2" value="'+s.temperature+'" onchange="setNum(\'temperature\',Number(this.value))"></div><div class="field"><label>Max Tokens</label><input type="number" min="1" value="'+s.maxTokens+'" onchange="setNum(\'maxTokens\',Math.max(1,Number(this.value)))"></div><div class="field"><label>Top P (0 – 1)</label><input type="number" step="0.05" min="0.01" max="1" value="'+s.topP+'" onchange="setNum(\'topP\',Number(this.value))"></div></div>'}
 function setNum(k,v){state.settings[k]=v;saveAll();notify("Generation settings saved.","success");}
 function usageTabHTML(){
+  const s=state.settings;const u=getUsage();
   const logs=state.logs;const total=logs.length;const ok=logs.filter(l=>l.status==="success").length;const fail=logs.length-ok;
   const byProv={};const byModel={};let durSum=0,durN=0;
   for(const l of logs){byProv[l.provider]=(byProv[l.provider]||0)+1;if(l.status==="success"){byModel[l.model]=(byModel[l.model]||0)+1;if(l.duration!=null){durSum+=l.duration;durN++}}}
@@ -1523,7 +1559,9 @@ function usageTabHTML(){
   const avg=durN?Math.round(durSum/durN)+" ms":"—";
   const rate=total?((ok/total)*100).toFixed(1)+"%":"—";
   let provRows="";for(const p of state.providers){const n=byProv[p.id]||0;provRows+='<div class="urow"><span class="key">'+esc(p.name)+'</span><span class="val">'+n+"</span></div>"}
-  return'<div class="setting-stat"><div class="stat-card"><div class="num">'+total+'</div><div class="lbl">Total Requests</div></div><div class="stat-card"><div class="num">'+ok+'</div><div class="lbl">Successful</div></div><div class="stat-card"><div class="num">'+fail+'</div><div class="lbl">Failed</div></div><div class="stat-card"><div class="num">'+rate+'</div><div class="lbl">Success Rate</div></div></div>'+
+  return'<div class="setting-group"><h3>Usage Limits</h3><div class="toggle-row"><div><div class="lbl">Enable message limit</div><div class="sub">Restrict how many messages a user can send per window</div></div><label class="switch"><input type="checkbox" '+(s.usageEnabled?"checked":"")+' onchange="setUsageEnabled(this.checked)"><span class="slider"></span></label></div>'+
+  (s.usageEnabled?'<div class="field"><label>Messages per window</label><input type="number" min="1" value="'+s.usageLimit+'" onchange="setUsageLimit(this.value)"></div><div class="field"><label>Reset every (hours)</label><input type="number" min="1" value="'+Math.round(s.usageWindowMs/3600000)+'" onchange="setUsageWindow(this.value)"></div><div class="info-box">When the limit is reached, the user sees a full-screen \u201cLimit Reached\u201d screen with a live countdown to the next reset. Used: <b>'+u.count+' / '+s.usageLimit+'</b> \u00b7 resets in <b>'+fmtDur(usageResetMs())+'</b><button class="btn small" style="margin-left:8px" onclick="resetUsageNow()">Reset now</button></div>':'<div class="info-box">The message limit is currently disabled.</div>')+
+  '<div class="setting-stat"><div class="stat-card"><div class="num">'+total+'</div><div class="lbl">Total Requests</div></div><div class="stat-card"><div class="num">'+ok+'</div><div class="lbl">Successful</div></div><div class="stat-card"><div class="num">'+fail+'</div><div class="lbl">Failed</div></div><div class="stat-card"><div class="num">'+rate+'</div><div class="lbl">Success Rate</div></div></div>'+
   '<div class="setting-group"><h3>By Provider</h3><div class="usage-list">'+provRows+'</div></div>'+
   '<div class="setting-group"><h3>Summary</h3><div class="usage-list"><div class="urow"><span class="key">Most used model</span><span class="val">'+esc(topModel?topModel[0]:"—")+'</span></div><div class="urow"><span class="key">Average response time (successful)</span><span class="val">'+avg+'</span></div></div></div>'+
   '<div class="setting-group"><h3>Provider balance</h3><div class="info-box">Provider balance: <b>Unavailable through API</b>.<br>This application does not claim a remaining balance unless a provider\u0027s official API provides it.</div></div>'+
@@ -1553,6 +1591,7 @@ function init(){
   if(state.selectedProvider){const models=state.models[state.selectedProvider]||[];if(!models.some(m=>m.id===state.selectedModel))state.selectedModel=models.length?models[0].id:null}
   if(!state.conversations.length){state.currentConversationId=null}else if(!getConv(state.currentConversationId))state.currentConversationId=state.conversations[0]?.id||null;
   wireEvents();renderSidebar();renderProvider();renderModelList();renderChat();renderAttach();updateOffline();updateProviderStatus();$("#demoBanner").classList.toggle("show",state.settings.demoMode);
+  updateUsageBadge();
   autoLoadModels();
   // first-run screen
   const hasAnyKey=state.providers.some(p=>p.apiKey);
