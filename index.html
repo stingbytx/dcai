@@ -1562,7 +1562,7 @@ function closeSidebar(){document.body.classList.add("sb-collapsed");$("#sidebar"
 function openSidebar(){document.body.classList.remove("sb-collapsed");$("#sidebar").classList.add("open");$("#sbOverlay").classList.add("show")}
 
 /* ============ THEME ============ */
-function applyTheme(){const t=state.settings.theme;const resolved=t==="system"?(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"):t;document.documentElement.setAttribute("data-theme",resolved);}
+function applyTheme(){const t=state.settings.theme;const resolved=t==="system"?(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"):t;document.documentElement.setAttribute("data-theme",resolved);const bl=document.querySelector(".brand-logo");if(bl)bl.src=resolved==="light"?"logo-light.png?v=1":"logo.png?v=3";}
 function cycleTheme(){const order=["dark","light","system"];const i=order.indexOf(state.settings.theme);state.settings.theme=order[(i+1)%3];applyTheme();saveAll();notify("Theme: "+state.settings.theme,"info");}
 function updateOffline(){const off=!navigator.onLine;const d=$("#offlineDot");d.classList.toggle("offline",off);$("#offlineLabel").textContent=off?"Offline":"Online";}
 
