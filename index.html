@@ -585,7 +585,7 @@ textarea{flex:1;border:none;background:none;resize:none;outline:none;font-size:1
 /* ============ CONFIGURATION ============ */
 const STORAGE_KEY="my_ai_platform_v1", STORAGE_VERSION=1;
 /* Default providers are hidden and locked for visitors. Paste the owner's keys here — they can never be seen or edited in the UI. */
-const DEFAULT_PROVIDER_KEYS={seekai:"sk-seXDAgaEdGlcn6n3z81jmneOZaxOzEyi3D3VZmBkTn9urAKX",openrouter:"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",teamorouter:"sk-teamo-d61cca122576615398169bb0f922d4d9952a40f7ba498cae"};
+const DEFAULT_PROVIDER_KEYS={seekai:"sk-seXDAgaEdGlcn6n3z81jmneOZaxOzEyi3D3VZmBkTn9urAKX",openrouter:"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"};
 const DEFAULT_SETTINGS={theme:"dark",streaming:true,enterToSend:true,showTimestamps:true,temperature:0.7,maxTokens:2048,topP:1,systemPrompt:"You are my personal AI assistant. Be clear, concise, and helpful.",maxFileSizeMB:5,debugMode:false,demoMode:false,usageEnabled:true,usageLimit:20,usageWindowMs:21600000,hideGetStarted:false};
 const FILE_EXTENSIONS=["txt","md","json","csv","js","ts","jsx","tsx","py","html","css"];
 const QUICK_PROMPTS=["Explain something","Write code","Analyze text","Brainstorm ideas"];
@@ -632,16 +632,10 @@ function loadAll(){if(!storageOK())return;try{const d=JSON.parse(localStorage.ge
 
 /* ============ PROVIDER SYSTEM ============ */
 const DEFAULT_ORDER=["openrouter","seekai"];
-function isDefault(p){return p.id==="openrouter"||p.id==="seekai"||p.id==="teamorouter"}
+function isDefault(p){return p.id==="openrouter"||p.id==="seekai"}
 function providerLabel(p){return isDefault(p)?(p.id==="openrouter"?"Default 1":p.id==="seekai"?"Default 2":"Default 3"):(p&&p.name||"Custom")}
-const TEAMO_MODELS=[
-{id:"deepseek-v4-pro-free",name:"DeepSeek V4 Pro Free",context:1000000,capabilities:["chat"]},
-{id:"deepseek-v4-flash-free",name:"DeepSeek V4 Flash Free",context:1000000,capabilities:["chat"]},
-{id:"glm-5.3-flash-free",name:"GLM 5.3 Flash Free",context:1000000,capabilities:["chat"]}
-];
-const TEAMO_MODEL_IDS=TEAMO_MODELS.map(m=>m.id);
-function defaultProviders(){return[{id:"seekai",name:"SeekAI",baseURL:"https://seekai.cc/v1",apiKey:DEFAULT_PROVIDER_KEYS.seekai,enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter",name:"OpenRouter",baseURL:"https://openrouter.ai/api/v1",apiKey:DEFAULT_PROVIDER_KEYS.openrouter,enabled:true,status:"notconf",lastTested:null,locked:true},{id:"teamorouter",name:"TeamoRouter",baseURL:"https://api.teamorouter.com/v1",apiKey:DEFAULT_PROVIDER_KEYS.teamorouter,enabled:true,status:"notconf",lastTested:null,locked:true}]}
-function ensureProviders(){for(const def of defaultProviders()){const ex=state.providers.find(p=>p.id===def.id);if(ex){ex.locked=true;ex.baseURL=def.baseURL;if(DEFAULT_PROVIDER_KEYS[def.id])ex.apiKey=DEFAULT_PROVIDER_KEYS[def.id]}else state.providers.push(def)}state.models=state.models||{};if(!(state.models["teamorouter"]&&state.models["teamorouter"].length))state.models["teamorouter"]=TEAMO_MODELS}
+function defaultProviders(){return[{id:"seekai",name:"SeekAI",baseURL:"https://seekai.cc/v1",apiKey:DEFAULT_PROVIDER_KEYS.seekai,enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter",name:"OpenRouter",baseURL:"https://openrouter.ai/api/v1",apiKey:DEFAULT_PROVIDER_KEYS.openrouter,enabled:true,status:"notconf",lastTested:null,locked:true}]}
+function ensureProviders(){for(const def of defaultProviders()){const ex=state.providers.find(p=>p.id===def.id);if(ex){ex.locked=true;ex.baseURL=def.baseURL;if(DEFAULT_PROVIDER_KEYS[def.id])ex.apiKey=DEFAULT_PROVIDER_KEYS[def.id]}else state.providers.push(def)}state.models=state.models||{}}
 function addCustomProvider(){const id="custom-"+Date.now();const p={id,name:"My Provider",baseURL:"",apiKey:"",enabled:true,status:"notconf",lastTested:null,custom:true};state.providers.push(p);saveAll();renderSettingsBody();renderProvider();notify("Added a custom provider. Configure it below.","info");}
 function removeCustomProvider(id){const p=getProvider(id);if(!p||isDefault(p))return;confirmModal("Remove this provider?","This will delete the custom provider '"+p.name+"' and its key from local storage.","Remove",()=>{if(state.selectedProvider===id){state.selectedProvider=null;state.selectedModel=null}state.providers=state.providers.filter(x=>x.id!==id);delete state.models[id];saveAll();renderSettings();renderProvider();updateProviderStatus();notify("Provider removed.","success")})}
 const getProvider=id=>state.providers.find(p=>p.id===id);
@@ -663,11 +657,6 @@ const adapters={
   },
   openrouter:{
     async getModels(p){const res=await fetch(p.baseURL+"/models",{headers:authHeaders(p)});const data=await res.json().catch(()=>({}));if(!res.ok)throw buildHttpError(res,data);return(data.data||[]).map(m=>({id:m.id||"unknown",name:m.name||m.id||"unknown",context:m.context_length||null,capabilities:(m.architecture&&m.architecture.modality)||null,pricing:m.pricing||null}))},
-    async chat(p,model,messages,opts,signal){const res=await fetch(p.baseURL+"/chat/completions",{method:"POST",headers:Object.assign(authHeaders(p),{"Content-Type":"application/json"}),body:JSON.stringify(buildChatBody(model,messages,opts,false)),signal});if(!res.ok)throw buildHttpError(res,await res.json().catch(()=>null));return res.json()},
-    async stream(p,model,messages,opts,signal){const res=await fetch(p.baseURL+"/chat/completions",{method:"POST",headers:Object.assign(authHeaders(p),{"Content-Type":"application/json","Accept":"text/event-stream"}),body:JSON.stringify(buildChatBody(model,messages,opts,true)),signal});if(!res.ok)throw buildHttpError(res,await res.json().catch(()=>null));if(!res.body)throw new Error("no-stream");return res.body.getReader()}
-  },
-  teamorouter:{
-    async getModels(p){const res=await fetch(p.baseURL+"/models",{headers:authHeaders(p)});const data=await res.json().catch(()=>({}));if(!res.ok)throw buildHttpError(res,data);const all=((data.data&&Array.isArray(data.data))?data.data:[]).map(m=>({id:m.id||m.name||"unknown",name:m.name||m.id||"unknown",context:m.context_length||m.context||null,capabilities:m.capabilities||null,pricing:m.pricing||null}));return all.filter(m=>TEAMO_MODEL_IDS.includes(m.id))},
     async chat(p,model,messages,opts,signal){const res=await fetch(p.baseURL+"/chat/completions",{method:"POST",headers:Object.assign(authHeaders(p),{"Content-Type":"application/json"}),body:JSON.stringify(buildChatBody(model,messages,opts,false)),signal});if(!res.ok)throw buildHttpError(res,await res.json().catch(()=>null));return res.json()},
     async stream(p,model,messages,opts,signal){const res=await fetch(p.baseURL+"/chat/completions",{method:"POST",headers:Object.assign(authHeaders(p),{"Content-Type":"application/json","Accept":"text/event-stream"}),body:JSON.stringify(buildChatBody(model,messages,opts,true)),signal});if(!res.ok)throw buildHttpError(res,await res.json().catch(()=>null));if(!res.body)throw new Error("no-stream");return res.body.getReader()}
   },
