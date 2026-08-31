@@ -199,11 +199,19 @@ body.sb-collapsed .sidebar{display:none}
 .msg.assistant .msg-avatar{background:var(--btn-bg);color:var(--btn-fg)}
 .msg.assistant .msg-avatar svg{stroke:var(--btn-fg)}
 .msg.system .msg-avatar{background:var(--text3)}
-.msg-actions{display:flex;gap:4px;margin-top:8px;opacity:0;transition:opacity .12s}
-.msg:hover .msg-actions{opacity:1}
-.msg-actions button{display:inline-flex;align-items:center;gap:5px;color:var(--text2);padding:4px 9px;border-radius:6px;font-size:12px}
-.msg-actions button:hover{background:var(--bg-hover);color:var(--text)}
-.msg-actions button svg{width:14px;height:14px}
+.msg-actions{display:flex;gap:2px;margin-top:6px;opacity:.35;transition:opacity .12s}
+.msg:hover .msg-actions,.msg-actions:hover{opacity:1}
+.msg-actions button.ma{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;color:var(--text3);background:transparent;border-radius:7px;padding:0;line-height:0}
+.msg-actions button.ma svg{width:15px;height:15px}
+.msg-actions button.ma:hover{background:var(--bg-hover);color:var(--text)}
+.msg-actions button.ma.on{color:var(--accent)}
+.src-block{margin-top:8px}
+.src-btn{display:inline-flex;align-items:center;gap:6px;color:var(--text3);font-size:12px;padding:5px 10px;border-radius:7px;border:1px solid var(--border);background:transparent;cursor:pointer}
+.src-btn:hover{background:var(--bg-hover);color:var(--text)}
+.src-btn svg{width:14px;height:14px}
+.src-list{display:none;margin-top:8px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg-input)}
+.src-list a{display:block;padding:4px 0;font-size:13px;color:var(--accent);text-decoration:none;word-break:break-word}
+.src-list a:hover{text-decoration:underline}
 .error-box{background:rgba(224,107,93,.06);border:1px solid rgba(224,107,93,.3);border-radius:8px;padding:12px;font-size:13px;color:var(--red)}
 .error-box .eb-title{font-weight:600;margin-bottom:6px}
 .error-box .eb-detail{display:none;margin-top:8px}
@@ -666,7 +674,7 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
 const STORAGE_KEY="my_ai_platform_v1", STORAGE_VERSION=1;
 /* Default providers are hidden and locked for visitors. Paste the owner's keys here — they can never be seen or edited in the UI. */
 const DEFAULT_PROVIDER_KEYS={seekai:"sk-seXDAgaEdGlcn6n3z81jmneOZaxOzEyi3D3VZmBkTn9urAKX",openrouter:"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"};
-const DEFAULT_SETTINGS={theme:"dark",streaming:true,enterToSend:true,showTimestamps:true,temperature:0.7,maxTokens:2048,topP:1,systemPrompt:"You are my personal AI assistant. Be clear, concise, and helpful.",maxFileSizeMB:5,debugMode:false,demoMode:false,usageEnabled:true,usageLimit:20,usageWindowMs:21600000,hideGetStarted:false};
+const DEFAULT_SETTINGS={theme:"dark",streaming:true,enterToSend:true,showTimestamps:true,temperature:0.7,maxTokens:2048,topP:1,systemPrompt:"You are my personal AI assistant. Be clear, concise, and helpful.",maxFileSizeMB:5,debugMode:false,demoMode:false,usageEnabled:true,usageLimit:20,usageWindowMs:21600000,hideGetStarted:false,webSearch:true};
 const FILE_EXTENSIONS=["txt","md","json","csv","js","ts","jsx","tsx","py","html","css"];
 const QUICK_PROMPTS=["Explain something","Write code","Analyze text","Brainstorm ideas"];
 const START_PROMPTS=[
@@ -1463,9 +1471,31 @@ function renderMsg(m,i,conv){
     return '<div class="msg" data-idx="'+i+'"><div class="msg-avatar">!</div><div class="msg-body"><div class="msg-meta"><span class="msg-role">Error</span>'+timeStr+'</div><div class="error-box"><div class="eb-title">'+ebTitle+'</div><div>'+esc(err.message||"")+'</div><button class="toggle-detail" onclick="this.nextElementSibling.classList.toggle(\'show\')">Technical details</button><div class="eb-detail"><pre>'+esc(err.technical||"")+'</pre></div></div><div class="error-actions"><button onclick="retryMessage()">Retry</button><button onclick="switchModel()">Switch Model</button></div></div></div>';
   }
   const avatar=m.role==="user"?I.user:m.role==="system"?I.gear:I.ai;
-      return'<div class="msg '+m.role+'" data-idx="'+i+'"><div class="msg-avatar">'+avatar+"</div><div class=\"msg-body\"><div class=\"msg-meta\"><span class=\"msg-role\">"+(m.role==="user"?"You":m.role==="system"?"System":"dotcomAI")+"</span>"+timeStr+modelTag+(m.model?'<span class="msg-model">'+esc(m.model)+"</span>":"")+'</div><div class="msg-content md">'+renderMarkdown(String(m.content||""))+'</div><div class="msg-actions">'+(m.role==="assistant"?actionsForMsg(m):"")+"</div></div></div>";
+      return'<div class="msg '+m.role+'" data-idx="'+i+'"><div class="msg-avatar">'+avatar+"</div><div class=\"msg-body\"><div class=\"msg-meta\"><span class=\"msg-role\">"+(m.role==="user"?"You":m.role==="system"?"System":"dotcomAI")+"</span>"+timeStr+modelTag+(m.model?'<span class="msg-model">'+esc(m.model)+"</span>":"")+'</div><div class="msg-content md">'+renderMarkdown(String(m.content||""))+'</div>'+(m.role==="assistant"&&m.sources&&m.sources.length?sourcesHTML(m,i):"")+'<div class="msg-actions">'+(m.role==="assistant"?actionsForMsg(m,i):"")+"</div></div></div>";
 }
-function actionsForMsg(m){return'<button onclick="copyText(this,\''+esc(m.content)+'\')">Copy</button><button onclick="regenerate()">Regenerate</button>'}
+const MA_ICONS={
+ copy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+ up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10v12"/><path d="M15 5.88L14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/></svg>',
+ down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 14V2"/><path d="M9 18.12L10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.76a2 2 0 0 0-1.79 1.11L12 22a3.13 3.13 0 0 1-3-3.88Z"/></svg>',
+ regen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>',
+ branch:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>',
+ book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>'
+};
+function actionsForMsg(m,i){
+  const upV=m.vote==="up",dnV=m.vote==="down";
+  return '<button class="ma'+(upV?" on":"")+'" data-vote="up" title="Good response" aria-label="Good response" onclick="voteMsg('+i+',\'up\')">'+MA_ICONS.up+'</button>'
+    +'<button class="ma'+(dnV?" on":"")+'" data-vote="down" title="Bad response" aria-label="Bad response" onclick="voteMsg('+i+',\'down\')">'+MA_ICONS.down+'</button>'
+    +'<button class="ma" title="Copy" aria-label="Copy" onclick="copyMsg('+i+')">'+MA_ICONS.copy+'</button>'
+    +'<button class="ma" title="Regenerate" aria-label="Regenerate" onclick="regenerate()">'+MA_ICONS.regen+'</button>'
+    +'<button class="ma" title="Branch in new chat" aria-label="Branch in new chat" onclick="branchMsg('+i+')">'+MA_ICONS.branch+'</button>';
+}
+function copyMsg(i){const conv=currentConv();if(!conv||!conv.messages[i])return;copyText(String(conv.messages[i].content||""))}
+function branchMsg(i){const c=currentConv();if(!c||!c.messages[i])return;if(state.generating){notify("Wait for the current reply to finish.","error");return}const id="c"+Date.now()+Math.random().toString(36).slice(2,6);const branch={id,title:((c.title&&c.title!=="Untitled Chat"?c.title:"Untitled Chat")+" · Branch"),createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),provider:c.provider||state.selectedProvider,model:c.model||state.selectedModel,workspace:currentWorkspaceId(),messages:c.messages.slice(0,i+1).map(x=>({...x}))};state.conversations.unshift(branch);state.currentConversationId=id;state.attachments=[];renderAttach();renderSidebar();renderChat();saveAll();closeSidebar();focusInput();notify("Branch created — continuing in a new chat.","success")}
+function voteMsg(i,v){const conv=currentConv();if(!conv||!conv.messages[i])return;const m=conv.messages[i];if(m.role!=="assistant")return;m.vote=(m.vote===v?null:v);saveAll();const el=document.querySelector('.msg[data-idx="'+i+'"]');if(!el)return;el.querySelectorAll('[data-vote]').forEach(b=>b.classList.toggle("on",m.vote===b.getAttribute("data-vote")))}
+function lastUserText(c){for(let j=c.messages.length-1;j>=0;j--){if(c.messages[j].role==="user")return String(c.messages[j].content||"")}return""}
+async function webSearch(q){try{const url="https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch="+encodeURIComponent((q||"").slice(0,120))+"&format=json&srlimit=5&srprop=snippet&origin=*";const res=await fetch(url);if(!res.ok)return[];const d=await res.json();const list=(d&&d.query&&d.query.search)||[];return list.slice(0,5).map(x=>({title:String(x.title||""),snippet:String(x.snippet||"").replace(/<[^>]+>/g,""),url:"https://en.wikipedia.org/wiki/"+encodeURIComponent(String(x.title||"").replace(/ /g,"_"))}))}catch(e){return[]}}
+function sourcesHTML(m,i){return '<div class="src-block"><button class="src-btn" onclick="toggleSources('+i+')">'+MA_ICONS.book+'<span>View sources</span></button><div class="src-list" id="srclist-'+i+'">'+m.sources.map((s,k)=>'<a href="'+esc(s.url)+'" target="_blank" rel="noopener">['+(k+1)+'] '+esc(s.title)+'</a>').join('')+'</div></div>'}
+function toggleSources(i){const el=document.getElementById('srclist-'+i);if(!el)return;el.style.display=(el.style.display==="block"?"none":"block")}
 function scrollDown(smooth){const w=document.getElementById("chatWrap");w.scrollTo({top:w.scrollHeight,behavior:smooth?"smooth":"auto"})}
 function scrollBottom(){scrollDown(true);}
 function usePrompt(btn){const input=$("#composerInput");input.value=btn.textContent;input.focus();}
@@ -1541,7 +1571,13 @@ async function requestAssistant(c){
   // timeout
   const timeoutTimer=setTimeout(()=>ac.abort(),180000);
   try{
-    const msgs=currentMessages().slice(0,-1);
+    let msgs=currentMessages().slice(0,-1);
+    const src=state.settings.webSearch?await webSearch(lastUserText(c)):[];
+    if(src.length){
+      const ctx="You have been provided web search results to inform your answer. Use them for facts, and cite sources inline as [1], [2], ... matching the numbered list. When a source supports a claim, add its number.\nSOURCES:\n"+src.map((x,i)=>"["+(i+1)+"] "+x.title+" — "+x.url).join("\n");
+      msgs=[{role:"system",content:ctx}].concat(msgs);
+      assistantMsg.sources=src;
+    }
     const result=await sendChat(state.selectedProvider,state.selectedModel,msgs,opts,ac.signal);
     let usage=null,finish=null,model=state.selectedModel;
     if(result.stream){
@@ -1776,7 +1812,7 @@ function chatTabHTML(){
   const s=state.settings;
   return'<div class="setting-group"><h3>Chat</h3><div class="toggle-row"><div><div class="lbl">Streaming</div><div class="sub">Show responses progressively as they arrive</div></div><label class="switch"><input type="checkbox" '+(s.streaming?"checked":"")+' onchange="setSetting(\'streaming\',this.checked)"><span class="slider"></span></label></div>'+
   '<div class="toggle-row"><div><div class="lbl">Enter to send</div><div class="sub">Use Shift+Enter for a new line</div></div><label class="switch"><input type="checkbox" '+(s.enterToSend?"checked":"")+' onchange="setSetting(\'enterToSend\',this.checked)"><span class="slider"></span></label></div>'+
-  '<div class="toggle-row"><div><div class="lbl">Show timestamps</div></div><label class="switch"><input type="checkbox" '+(s.showTimestamps?"checked":"")+' onchange="setSetting(\'showTimestamps\',this.checked)"><span class="slider"></span></label></div></div>'+
+  '<div class="toggle-row"><div><div class="lbl">Show timestamps</div></div><label class="switch"><input type="checkbox" '+(s.showTimestamps?"checked":"")+' onchange="setSetting(\'showTimestamps\',this.checked)"><span class="slider"></span></label></div><div class="toggle-row"><div><div class="lbl">Web search</div><div class="sub">Look up sources and cite links in replies</div></div><label class="switch"><input type="checkbox" '+(s.webSearch?"checked":"")+' onchange="setSetting(\'webSearch\',this.checked)"><span class="slider"></span></label></div></div>'+
   '<div class="setting-group"><h3>Theme</h3><div class="btn-row"><button class="btn '+(s.theme==="dark"?"primary":"")+'" onclick="setTheme(\'dark\')">Dark</button><button class="btn '+(s.theme==="light"?"primary":"")+'" onclick="setTheme(\'light\')">Light</button><button class="btn '+(s.theme==="system"?"primary":"")+'" onclick="setTheme(\'system\')">System</button></div></div>'+
   '<div class="setting-group"><h3>Attachments</h3><div class="field"><label>Max file size (MB)</label><input type="number" value="'+s.maxFileSizeMB+'" min="1" max="20" onchange="setSetting(\'maxFileSizeMB\',Number(this.value))"></div></div>';}
 function setTheme(t){state.settings.theme=t;applyTheme();saveAll();renderSettingsBody();}
