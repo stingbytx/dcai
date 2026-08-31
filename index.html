@@ -452,6 +452,81 @@ textarea{flex:1;border:none;background:none;resize:none;outline:none;font-size:1
 .register-btn{margin-top:24px;display:flex;align-items:center;gap:9px;background:#fff;color:#0c0d0e;border:none;border-radius:8px;padding:12px 20px;font-size:14px;font-weight:600;cursor:pointer}
 .register-btn svg{width:16px;height:16px}
 @media (max-width:860px){.auth-right{display:none}.auth-left{min-height:100vh}}
+
+
+/* ============ PREMIUM POLISH ============
+   Refines feel only (transitions, focus, micro-motion, scrollbars).
+   Does NOT change colors, layout, or the design system. */
+button,.btn,.start-card,.icon-btn,.sb-close,.attach-btn,.send-btn,.picker-btn,.picker-item,.input-row,input,select,textarea,.model-hover-item,.tab,.lang{cursor:pointer;transition:background .18s ease,color .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease,opacity .18s ease}
+button,select,input,textarea{-webkit-tap-highlight-color:transparent}
+.start-card{transition:border-color .12s,background .12s,transform .18s ease,box-shadow .18s ease}
+.start-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.start-card:active{transform:translateY(0) scale(.985)}
+.btn:hover{transform:translateY(-1px)}
+.btn:active,.picker-item:active{transform:scale(.98)}
+.icon-btn:hover,.sb-close:hover,.attach-btn:hover{transform:translateY(-1px)}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.picker-dropdown{animation:premPop .16s cubic-bezier(.2,.7,.3,1)}
+.modal{animation:premPop .2s cubic-bezier(.2,.7,.3,1)}
+.modal-overlay{animation:premFade .16s ease}
+.toast{animation:premIn .2s cubic-bezier(.2,.7,.3,1)}
+@keyframes premFade{from{opacity:0}to{opacity:1}}
+@keyframes premPop{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
+@keyframes premIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+*::-webkit-scrollbar{width:9px;height:9px}
+*::-webkit-scrollbar-thumb{background:var(--border);border-radius:8px;border:2px solid transparent;background-clip:content-box}
+*::-webkit-scrollbar-thumb:hover{background:var(--text3);background-clip:content-box}
+body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+
+/* ============ MOBILE RESPONSIVENESS ============ */
+@media (max-width:860px){
+  .authScreen{overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .auth-wrap{min-height:100%}
+  .auth-left{min-height:100%;align-items:flex-start;justify-content:flex-start;padding:28px 16px 32px}
+  .auth-legal{white-space:normal}
+  .auth-copyright{margin-top:32px}
+}
+@media (max-width:820px){
+  .topbar{padding:8px 12px;gap:8px}
+  .chat-inner{padding:22px 18px 12px}
+  .composer{padding:8px 14px 16px}
+  .model-picker{gap:4px}
+}
+@media (max-width:640px){
+  .chat-inner{padding:18px 14px 10px}
+  .hero .hero-logo{font-size:32px;gap:8px}
+  .hero .hero-logo img.hero-brand{width:28px;height:28px}
+  .hero .hero-tag{font-size:20px}
+  .hero .hero-sub{font-size:13px}
+  .start-card{padding:14px}
+  .attach-btn span{display:none}
+  .attach-btn{padding:7px;border-radius:50%}
+  .input-row{padding:6px 8px;border-radius:14px}
+  .send-btn{width:32px;height:32px}
+  .topbar{gap:6px;padding:8px 10px}
+  .picker-btn .pk-val{max-width:110px}
+  .provider-status{display:none}
+  .modal{max-width:100%}
+  .modal-overlay{padding:12px}
+  .modal-head{padding:14px 16px}
+  .modal-body{padding:16px}
+  .composer-hint{flex-wrap:wrap}
+  .msg{gap:10px;padding:12px 0}
+}
+@media (max-width:460px){
+  .start-grid{grid-template-columns:1fr}
+  .start-title{max-width:100%}
+  .hero .hero-logo{font-size:28px}
+  .hero .hero-tag{font-size:18px}
+  .chat-inner{padding:14px 12px 10px}
+  .composer{padding:6px 12px 14px}
+  .picker-btn .pk-val{max-width:90px}
+  .model-picker{flex-wrap:wrap}
+  .auth-left{padding:24px 14px 28px}
+  .auth-title{font-size:24px}
+  .auth-form{padding:0}
+}
+
 </style>
 </head>
 <body>
@@ -754,7 +829,7 @@ Welcome to **dotcomAI**.
 
 These Terms & Conditions ("Terms") govern your access to and use of the dotcomAI website, applications, software, AI services, features, and related products (collectively, the "Service").
 
-The Service is operated under **DotcomOne / UniPOS** and was developed by **Manuja Damsara** in Sri Lanka.
+The Service is operated under **DotcomONE / UniPOS** and was developed by **Manuja Damsara** in Sri Lanka.
 
 By accessing or using dotcomAI, you agree to these Terms. If you do not agree with these Terms, you should not use the Service.
 
@@ -952,7 +1027,7 @@ Nothing in these Terms excludes rights or protections that cannot legally be exc
 
 ## 17. Limitation of Liability
 
-To the maximum extent permitted by applicable law, dotcomAI, DotcomOne, UniPOS, and their respective personnel shall not be liable for indirect, incidental, consequential, special, or unforeseeable losses arising from your use of the Service.
+To the maximum extent permitted by applicable law, dotcomAI, DotcomONE, UniPOS, and their respective personnel shall not be liable for indirect, incidental, consequential, special, or unforeseeable losses arising from your use of the Service.
 
 This includes, where legally permitted, losses resulting from reliance on AI-generated information, service interruptions, third-party API failures, data loss, or unauthorized access.
 
@@ -1006,12 +1081,12 @@ Made in Sri Lanka.
 
 Developed by **Manuja Damsara**
 
-Under **DotcomOne / UniPOS**`},
+Under **DotcomONE / UniPOS**`},
   privacy:{title:"Privacy Policy",body:`# Privacy Policy
 
 **Last Updated: August 29, 2026**
 
-This Privacy Policy explains how **dotcomAI**, operated under **DotcomOne / UniPOS** and developed by **Manuja Damsara**, collects, uses, processes, stores, and protects information when you use our website, applications, and AI services.
+This Privacy Policy explains how **dotcomAI**, operated under **DotcomONE / UniPOS** and developed by **Manuja Damsara**, collects, uses, processes, stores, and protects information when you use our website, applications, and AI services.
 
 dotcomAI is developed and operated from Sri Lanka.
 
@@ -1225,7 +1300,7 @@ If you have a privacy question, request, concern, or complaint regarding the pro
 
 Developed by **Manuja Damsara**
 
-Under **DotcomOne / UniPOS**
+Under **DotcomONE / UniPOS**
 
 **Sri Lanka**`},
   about:{title:"About dotcomAI",body:`# About dotcomAI
@@ -1234,7 +1309,7 @@ Under **DotcomOne / UniPOS**
 
 **dotcomAI** is a Sri Lankan artificial intelligence platform designed to make modern AI technology more accessible, useful, and affordable for everyone.
 
-Built under **DotcomOne** and **UniPOS**, dotcomAI provides users with access to AI-powered services through integrations with leading Large Language Model (LLM) and artificial intelligence technologies.
+Built under **DotcomONE** and **UniPOS**, dotcomAI provides users with access to AI-powered services through integrations with leading Large Language Model (LLM) and artificial intelligence technologies.
 
 Our goal is simple: **make powerful AI tools easier for people to access and use.**
 
@@ -1256,7 +1331,7 @@ Manuja Damsara works across multiple areas of technology, including:
 * Digital Product Development
 * Software Solutions
 
-Through **DotcomOne** and **UniPOS**, the vision is to build practical technology products that help individuals and organizations use modern digital technologies more effectively.
+Through **DotcomONE** and **UniPOS**, the vision is to build practical technology products that help individuals and organizations use modern digital technologies more effectively.
 
 ## Our Mission
 
