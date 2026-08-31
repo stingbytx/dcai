@@ -60,7 +60,7 @@ svg.filled{fill:currentColor;stroke:none}
 .sb-social-btn svg{width:17px;height:17px}
 .sb-social-btn:hover{background:var(--bg-hover);color:var(--text)}
 body.sb-collapsed .sidebar{display:none}
-.sb-brand{display:flex;align-items:center;gap:7px;font-family:var(--serif);font-weight:600;font-size:21px;letter-spacing:.2px;padding:12px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-brand{display:flex;align-items:center;gap:7px;font-family:var(--serif);font-weight:600;font-size:21px;letter-spacing:.2px;padding:12px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
 .sb-brand .brand-logo{width:24px;height:24px;object-fit:contain;flex-shrink:0;border-radius:6px}
 .sb-brand .logo{width:26px;height:26px;border-radius:7px;background:var(--accent);color:#111;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
 .new-btn{display:flex;align-items:center;gap:8px;width:calc(100% - 20px);margin:12px 10px 8px;padding:9px 12px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);color:var(--text);font-size:13px;font-weight:500;transition:background .12s}
@@ -188,7 +188,7 @@ body.sb-collapsed .sidebar{display:none}
 .msg{display:flex;gap:12px;padding:16px 0}
 .msg-body{flex:1;min-width:0}
 .msg-meta{display:flex;align-items:center;gap:8px;margin-bottom:4px}
-.msg-role{font-weight:600;font-size:13px}
+.msg-role{font-weight:600;font-size:13px;color:var(--text)}
 .msg-time{font-size:11px;color:var(--text3)}
 .msg-model{font-size:11px;color:var(--text3)}
 .msg-content{color:var(--text);overflow-wrap:break-word}
@@ -212,6 +212,11 @@ body.sb-collapsed .sidebar{display:none}
 .src-list{display:none;margin-top:8px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg-input)}
 .src-list a{display:block;padding:4px 0;font-size:13px;color:var(--accent);text-decoration:none;word-break:break-word}
 .src-list a:hover{text-decoration:underline}
+.mb{display:inline-block;font-size:10px;font-weight:600;padding:1px 6px;border-radius:6px;margin-left:6px;line-height:1.6;vertical-align:middle}
+.mb-free{background:rgba(34,197,94,.15);color:var(--green)}
+.mb-paid{background:rgba(234,179,8,.15);color:var(--amber)}
+.mb-rate{background:rgba(234,179,8,.2);color:var(--amber)}
+.mb-down{background:rgba(239,68,68,.18);color:var(--red)}
 .error-box{background:rgba(224,107,93,.06);border:1px solid rgba(224,107,93,.3);border-radius:8px;padding:12px;font-size:13px;color:var(--red)}
 .error-box .eb-title{font-weight:600;margin-bottom:6px}
 .error-box .eb-detail{display:none;margin-top:8px}
@@ -473,7 +478,7 @@ button,select,input,textarea{-webkit-tap-highlight-color:transparent}
 .btn:hover{transform:translateY(-1px)}
 .btn:active,.picker-item:active{transform:scale(.98)}
 .icon-btn:hover,.sb-close:hover,.attach-btn:hover{transform:translateY(-1px)}
-input:focus-visible,select:focus-visible,textarea:focus-visible{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:none;border-color:var(--border2)}
 .picker-dropdown{animation:premPop .16s cubic-bezier(.2,.7,.3,1)}
 .modal{animation:premPop .2s cubic-bezier(.2,.7,.3,1)}
 .modal-overlay{animation:premFade .16s ease}
@@ -823,7 +828,7 @@ function renderModelList(){
   const sorted=[...shown].sort((a,b)=>(isFav(b.pid,b.m.id)?1:0)-(isFav(a.pid,a.m.id)?1:0));
   listEl.innerHTML=sorted.length?sorted.map(it=>{
     const selected=state.selectedProvider===it.pid&&state.selectedModel===it.m.id;
-    return '<div class="picker-item'+(selected?" selected":"")+'" onclick="selectModel(\''+it.pid+'\',\''+it.m.id+'\')"><button class="star'+(isFav(it.pid,it.m.id)?" on":"")+'" onclick="event.stopPropagation();toggleFav(\''+it.pid+'\',\''+it.m.id+'\')" title="Favorite">'+favGlyph(it.pid,it.m.id)+'</button><span class="mname">'+esc(it.m.name)+'</span><span class="mctx">'+esc(providerLabel(getProvider(it.pid)))+' · '+fmtCtx(it.m.context)+'</span></div>';
+    return '<div class="picker-item'+(selected?" selected":"")+'" onclick="selectModel(\''+it.pid+'\',\''+it.m.id+'\')"><button class="star'+(isFav(it.pid,it.m.id)?" on":"")+'" onclick="event.stopPropagation();toggleFav(\''+it.pid+'\',\''+it.m.id+'\')" title="Favorite">'+favGlyph(it.pid,it.m.id)+'</button><span class="mname">'+esc(it.m.name)+'</span>'+modelBadge(it.pid,it.m.id)+'<span class="mctx">'+esc(providerLabel(getProvider(it.pid)))+' · '+fmtCtx(it.m.context)+'</span></div>';
   }).join(""):'<div class="picker-empty">No models match.</div>';
   lbl.textContent=modelName(state.selectedProvider,state.selectedModel)||"Select";
 }
@@ -1471,7 +1476,7 @@ function renderMsg(m,i,conv){
     return '<div class="msg" data-idx="'+i+'"><div class="msg-avatar">!</div><div class="msg-body"><div class="msg-meta"><span class="msg-role">Error</span>'+timeStr+'</div><div class="error-box"><div class="eb-title">'+ebTitle+'</div><div>'+esc(err.message||"")+'</div><button class="toggle-detail" onclick="this.nextElementSibling.classList.toggle(\'show\')">Technical details</button><div class="eb-detail"><pre>'+esc(err.technical||"")+'</pre></div></div><div class="error-actions"><button onclick="retryMessage()">Retry</button><button onclick="switchModel()">Switch Model</button></div></div></div>';
   }
   const avatar=m.role==="user"?I.user:m.role==="system"?I.gear:I.ai;
-      return'<div class="msg '+m.role+'" data-idx="'+i+'"><div class="msg-avatar">'+avatar+"</div><div class=\"msg-body\"><div class=\"msg-meta\"><span class=\"msg-role\">"+(m.role==="user"?"You":m.role==="system"?"System":"dotcomAI")+"</span>"+timeStr+modelTag+(m.model?'<span class="msg-model">'+esc(m.model)+"</span>":"")+'</div><div class="msg-content md">'+renderMarkdown(String(m.content||""))+'</div>'+(m.role==="assistant"&&m.sources&&m.sources.length?sourcesHTML(m,i):"")+'<div class="msg-actions">'+(m.role==="assistant"?actionsForMsg(m,i):"")+"</div></div></div>";
+      return'<div class="msg '+m.role+'" data-idx="'+i+'"><div class="msg-avatar">'+avatar+"</div><div class=\"msg-body\"><div class=\"msg-meta\"><span class=\"msg-role\">"+(m.role==="user"?"You":m.role==="system"?"System":"dotcomAI")+"</span>"+timeStr+modelTag+'</div><div class="msg-content md">'+renderMarkdown(String(m.content||""))+'</div>'+(m.role==="assistant"&&m.sources&&m.sources.length?sourcesHTML(m,i):"")+'<div class="msg-actions">'+(m.role==="assistant"?actionsForMsg(m,i):"")+"</div></div></div>";
 }
 const MA_ICONS={
  copy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
@@ -1562,6 +1567,84 @@ async function sendMessage(){
   if(state.settings.demoMode){demoResponse(c);return}
   await requestAssistant(c);
 }
+
+/* ============ MODEL RESILIENCE (auto-hide bad models, fallback, health badges) ============ */
+function isFreeModel(pid,mid){
+  if(/:free$/.test(mid||''))return true;
+  const m=getModel(pid,mid);
+  if(m&&m.pricing){
+    const pr=m.pricing;
+    const p=Number(pr.prompt),c=Number(pr.completion);
+    if((!isNaN(p)&&!isNaN(c)&&p===0&&c===0)||pr.free===true)return true;
+  }
+  return false;
+}
+function isPaidModel(pid,mid){
+  const p=getProvider(pid);
+  if(p&&p.id==='openrouter')return !isFreeModel(pid,mid);
+  return false;
+}
+function modelsMetaKey(pid,mid){return pid+'|'+mid}
+function markModelStatus(pid,mid,status){
+  state.modelMeta=state.modelMeta||{};
+  state.modelMeta[modelsMetaKey(pid,mid)]={status:status,ts:Date.now()};
+  saveAll();
+  if(status!=='ok')renderModelList();
+}
+function markModelOk(pid,mid){if(state.modelMeta)delete state.modelMeta[modelsMetaKey(pid,mid)];}
+function modelBadge(pid,mid){
+  let tag='';
+  if(isFreeModel(pid,mid))tag+='<span class="mb mb-free">free</span>';
+  else if(isPaidModel(pid,mid))tag+='<span class="mb mb-paid">paid</span>';
+  const mt=(state.modelMeta||{})[modelsMetaKey(pid,mid)];
+  if(mt&&mt.status==='rate')tag+='<span class="mb mb-rate">rate limited</span>';
+  if(mt&&mt.status==='down')tag+='<span class="mb mb-down">unavailable</span>';
+  return tag;
+}
+function modelCandidates(){
+  const order=[];
+  if(state.selectedProvider&&getProvider(state.selectedProvider)&&state.selectedModel)order.push({pid:state.selectedProvider,mid:state.selectedModel});
+  for(const pr of enabledProviders()){
+    if(!pr.apiKey)continue;
+    for(const m of visibleModels(pr.id))order.push({pid:pr.id,mid:m.id});
+  }
+  const seen=new Set(),out=[];
+  for(const x of order){const k=x.pid+'|'+x.mid;if(seen.has(k))continue;seen.add(k);out.push(x);}
+  return out.slice(0,4);
+}
+function autoDisableModel(pid,mid){
+  const k=modelsMetaKey(pid,mid);
+  if(!state.disabledModels.includes(k)){state.disabledModels.push(k);}
+  saveAll();
+  notify('Model '+modelName(pid,mid)+' is not available on '+((getProvider(pid)||{}).name||'this provider')+' \u2014 removed from your models.','error');
+  renderProvider();renderModelList();
+}
+async function runChatWithFallback(ms,opts,signal){
+  const cands=modelCandidates();
+  let last=null;
+  for(let i=0;i<cands.length;i++){
+    const c=cands[i];
+    const maxTry=(i===0?2:1);
+    for(let r=0;r<maxTry;r++){
+      try{
+        const res=await sendChat(c.pid,c.mid,ms,opts,signal);
+        markModelOk(c.pid,c.mid);
+        if(i>0||r>0)notify('Used '+((getProvider(c.pid)||{}).name||c.pid)+' \u2014 '+modelName(c.pid,c.mid)+(i>0?' (fallback)':r>0?' (retry)':'')+'.','success');
+        return {result:res,pid:c.pid,mid:c.mid,fallback:i>0,retry:r>0};
+      }catch(e){
+        const st=Number(e&&e.status)||0,msg=(e&&e.message)||'';
+        last=e;
+        if(st===404){autoDisableModel(c.pid,c.mid);break;}
+        const transient=st===429||st===408||st===504||(st>=300&&st<=599)||/network|fetch|timeout|econn|temporarily|unavailable/i.test(msg);
+        if(!transient)throw e;
+        markModelStatus(c.pid,c.mid,st===429?'rate':'down');
+        if(i>0||r>0)notify('Model '+modelName(c.pid,c.mid)+' failed \u2014 trying the next available model\u2026','info');
+      }
+    }
+  }
+  throw last||new Error('All models failed.');
+}
+
 async function requestAssistant(c){
   const assistantMsg={role:"assistant",content:"",timestamp:new Date().toISOString(),model:state.selectedModel};
   c.messages.push(assistantMsg);renderChat();renderSidebar();
@@ -1578,8 +1661,10 @@ async function requestAssistant(c){
       msgs=[{role:"system",content:ctx}].concat(msgs);
       assistantMsg.sources=src;
     }
-    const result=await sendChat(state.selectedProvider,state.selectedModel,msgs,opts,ac.signal);
-    let usage=null,finish=null,model=state.selectedModel;
+    const fb=await runChatWithFallback(msgs,opts,ac.signal);
+    const result=fb.result;
+    if(fb.pid!==state.selectedProvider||fb.mid!==state.selectedModel){state.selectedProvider=fb.pid;state.selectedModel=fb.mid;c.provider=fb.pid;c.model=fb.mid;saveAll();renderProvider();updateProviderStatus();}
+    let usage=null,finish=null,model=fb.mid;
     if(result.stream){
       const reader=result.reader;
       const contentEl=document.querySelector('#chatInner .msg:last-child .msg-content');
@@ -1609,6 +1694,7 @@ async function requestAssistant(c){
       // replace assistant msg with error
       const idx=c.messages.length-1;c.messages[idx]=errMsg;
       log(state.selectedProvider,state.selectedModel,"error",Date.now()-startTime,null);
+      notify(((getProvider(state.selectedProvider)||{}).name||"This provider")+" model error \u2014 try another model on this provider, or switch to a different provider.","error");
     }else{
       // stopped - keep partial
       log(state.selectedProvider,state.selectedModel,"aborted",Date.now()-startTime,null);
