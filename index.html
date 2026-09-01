@@ -63,6 +63,7 @@ body.sb-collapsed .sidebar{display:none}
 .sb-brand{display:flex;align-items:center;gap:7px;font-family:var(--serif);font-weight:600;font-size:21px;letter-spacing:.2px;padding:12px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
 .sb-brand .brand-logo{width:24px;height:24px;object-fit:contain;flex-shrink:0;border-radius:6px}
 .sb-brand .logo{width:26px;height:26px;border-radius:7px;background:var(--accent);color:#111;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.beta-badge{display:inline-block;font-family:var(--font);font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:#111;background:var(--accent);border-radius:5px;padding:2px 5px;margin-left:3px;vertical-align:middle;line-height:1;flex-shrink:0}
 .new-btn{display:flex;align-items:center;gap:8px;width:calc(100% - 20px);margin:12px 10px 8px;padding:9px 12px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);color:var(--text);font-size:13px;font-weight:500;transition:background .12s}
 .new-btn:hover{background:var(--bg-hover)}
 .new-btn svg{width:15px;height:15px}
@@ -546,7 +547,7 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
 <div class="app">
   <aside class="sidebar" id="sidebar" aria-label="Conversations">
     <div class="sb-head">
-      <div class="sb-brand"><img class="brand-logo" src="logo.png?v=3" alt="dotcomAI"> dotcomAI</div>
+      <div class="sb-brand"><img class="brand-logo" src="logo.png?v=3" alt="dotcomAI"> dotcomAI<span class="beta-badge">Beta</span></div>
       <div class="sb-head-right">
         <button class="sb-close" id="btnSidebarClose" aria-label="Close sidebar" title="Close sidebar">
           <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -678,7 +679,7 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
 /* ============ CONFIGURATION ============ */
 const STORAGE_KEY="my_ai_platform_v1", STORAGE_VERSION=1;
 /* Default providers are hidden and locked for visitors. Paste the owner's keys here — they can never be seen or edited in the UI. */
-const DEFAULT_PROVIDER_KEYS={seekai:"sk-DqOTqIGKJvV0TmeiHWFLuvdaowrdVwfV694KIslasL8wcNtb",openrouter:"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",groq:"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",mistral:"d2tZcqemC1dDx3Bqncz0P0daHygrOlJh"};
+const DEFAULT_PROVIDER_KEYS={seekai:"sk-wlTHgCrEiysJoemeUbFZHZL6MnsowmW1r87olX8CBEQeAKqJ",openrouter:"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",openrouter2:"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",groq:"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",mistral:"d2tZcqemC1dDx3Bqncz0P0daHygrOlJh"};
 const DEFAULT_SETTINGS={theme:"dark",streaming:true,enterToSend:true,showTimestamps:true,temperature:0.7,maxTokens:2048,topP:1,systemPrompt:"You are my personal AI assistant. Be clear, concise, and helpful.",maxFileSizeMB:5,debugMode:false,demoMode:false,usageEnabled:true,usageLimit:20,usageWindowMs:21600000,hideGetStarted:false,webSearch:true};
 const FILE_EXTENSIONS=["txt","md","json","csv","js","ts","jsx","tsx","py","html","css"];
 const QUICK_PROMPTS=["Explain something","Write code","Analyze text","Brainstorm ideas"];
@@ -724,10 +725,10 @@ function saveAll(){if(!storageOK()){notify("Unable to save local data. Export yo
 function loadAll(){if(!storageOK())return;try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(!d||typeof d!=="object")return;if(d.providers)state.providers=d.providers;if(d.models)state.models=d.models;if(d.modelsMeta)state.modelsMeta=d.modelsMeta;if(Array.isArray(d.conversations))state.conversations=d.conversations;if(d.settings)state.settings=Object.assign({},DEFAULT_SETTINGS,d.settings);if(Array.isArray(d.favorites))state.favorites=d.favorites;if(Array.isArray(d.disabledModels))state.disabledModels=d.disabledModels;if(Array.isArray(d.logs))state.logs=d.logs;if(d.lastRefresh)state.lastRefresh=d.lastRefresh;if(d.usage)state.usage=Object.assign({windowStart:Date.now(),count:0},d.usage);if(Array.isArray(d.workspaces))state.workspaces=d.workspaces;if(d.currentWorkspace)state.currentWorkspace=d.currentWorkspace;if(d.selectedProvider)state.selectedProvider=d.selectedProvider;if(d.selectedModel)state.selectedModel=d.selectedModel}catch(e){console.error("load failed",e)}}
 
 /* ============ PROVIDER SYSTEM ============ */
-const DEFAULT_ORDER=["openrouter","seekai","ovh","groq","mistral"];
+const DEFAULT_ORDER=["openrouter","seekai","ovh","groq","mistral","openrouter2"];
 function isDefault(p){return DEFAULT_ORDER.includes(p.id)}
 function providerLabel(p){const i=DEFAULT_ORDER.indexOf(p.id);return i>=0?("Default "+(i+1)):(p&&p.name||"Custom")}
-function defaultProviders(){return[{id:"seekai",name:"SeekAI",baseURL:"https://seekai.cc/v1",apiKey:DEFAULT_PROVIDER_KEYS.seekai,enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter",name:"OpenRouter",baseURL:"https://openrouter.ai/api/v1",apiKey:DEFAULT_PROVIDER_KEYS.openrouter,enabled:true,status:"notconf",lastTested:null,locked:true},{id:"ovh",name:"OVHcloud AI",baseURL:"https://oai.endpoints.kepler.ai.cloud.ovh.net/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"groq",name:"Groq",baseURL:"https://api.groq.com/openai/v1",apiKey:DEFAULT_PROVIDER_KEYS.groq,enabled:true,status:"notconf",lastTested:null,locked:true},{id:"mistral",name:"Mistral",baseURL:"https://api.mistral.ai/v1",apiKey:DEFAULT_PROVIDER_KEYS.mistral,enabled:true,status:"notconf",lastTested:null,locked:true}]}
+function defaultProviders(){return[{id:"seekai",name:"SeekAI",baseURL:"https://seekai.cc/v1",apiKey:DEFAULT_PROVIDER_KEYS.seekai,enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter",name:"OpenRouter",baseURL:"https://openrouter.ai/api/v1",apiKey:DEFAULT_PROVIDER_KEYS.openrouter,enabled:true,status:"notconf",lastTested:null,locked:true},{id:"ovh",name:"OVHcloud AI",baseURL:"https://oai.endpoints.kepler.ai.cloud.ovh.net/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"groq",name:"Groq",baseURL:"https://api.groq.com/openai/v1",apiKey:DEFAULT_PROVIDER_KEYS.groq,enabled:true,status:"notconf",lastTested:null,locked:true},{id:"mistral",name:"Mistral",baseURL:"https://api.mistral.ai/v1",apiKey:DEFAULT_PROVIDER_KEYS.mistral,enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter2",name:"OpenRouter 2",baseURL:"https://openrouter.ai/api/v1",apiKey:DEFAULT_PROVIDER_KEYS.openrouter2,enabled:true,status:"notconf",lastTested:null,locked:true}]}
 function ensureProviders(){for(const def of defaultProviders()){const ex=state.providers.find(p=>p.id===def.id);if(ex){ex.locked=true;ex.baseURL=def.baseURL;if(DEFAULT_PROVIDER_KEYS[def.id])ex.apiKey=DEFAULT_PROVIDER_KEYS[def.id]}else state.providers.push(def)}state.models=state.models||{}}
 function addCustomProvider(){const id="custom-"+Date.now();const p={id,name:"My Provider",baseURL:"",apiKey:"",enabled:true,status:"notconf",lastTested:null,custom:true};state.providers.push(p);saveAll();renderSettingsBody();renderProvider();notify("Added a custom provider. Configure it below.","info");}
 function removeCustomProvider(id){const p=getProvider(id);if(!p||isDefault(p))return;confirmModal("Remove this provider?","This will delete the custom provider '"+p.name+"' and its key from local storage.","Remove",()=>{if(state.selectedProvider===id){state.selectedProvider=null;state.selectedModel=null}state.providers=state.providers.filter(x=>x.id!==id);delete state.models[id];saveAll();renderSettings();renderProvider();updateProviderStatus();notify("Provider removed.","success")})}
@@ -1990,8 +1991,17 @@ function init(){
   // first-run screen
   const hasAnyKey=state.providers.some(p=>p.apiKey);
   if(!hasAnyKey)showWelcome();
+  maybeShowPilot();
 }
 async function autoLoadModels(){for(const p of enabledProviders()){if(state.models[p.id]&&state.models[p.id].length)continue;try{state.models[p.id]=await getModels(p.id);state.lastRefresh[p.id]=new Date().toISOString();p.status="connected";}catch(e){p.status="error"}}saveAll();renderProvider();updateProviderStatus();}
+function maybeShowPilot(){
+  try{if(localStorage.getItem("dc_pilot_seen"))return;}catch(e){return;}
+  const ov=document.createElement("div");ov.className="modal-overlay";ov.id="pilotModal";
+  ov.innerHTML='<div class="modal" style="max-width:480px"><div class="modal-head"><h2>dotcomAI <span class="beta-badge">Beta</span></h2><button class="modal-close" onclick="dismissPilot()">\u00d7</button></div><div class="modal-body"><div style="text-align:center;font-size:30px;margin-bottom:8px">'+I.ai+'</div><p style="font-weight:600;font-size:16px;margin:0 0 6px">Welcome to our pilot project</p><p style="color:var(--text2);line-height:1.6;margin:0 0 14px">Because we provide <b>free AI models</b>, responses may be <b>slow</b> or <b>unavailable at times</b> due to sudden changes in servers, load, or model availability. If a model fails, please try switching to another model or provider \u2014 thank you for being an early user!</p><div style="text-align:right"><button class="btn primary" onclick="dismissPilot()">Got it</button></div></div></div>';
+  ov.addEventListener("click",function(e){if(e.target===ov)dismissPilot();});
+  document.body.appendChild(ov);
+}
+function dismissPilot(){try{localStorage.setItem("dc_pilot_seen","1");}catch(e){}const el=document.getElementById("pilotModal");if(el)el.remove();}
 function showWelcome(){
   const ov=document.createElement("div");ov.className="modal-overlay";ov.id="welcomeModal";
   ov.innerHTML='<div class="modal"><div class="modal-head"><h2>dotcomAI</h2><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">×</button></div><div class="modal-body"><div style="text-align:center;margin-bottom:16px"><div style="font-size:28px">'+I.ai+'</div><p style="margin:6px 0 2px;font-weight:600;font-size:16px">Your personal multi-provider AI workspace.</p><p style="color:var(--text2)">Connect a provider to begin. This app runs locally in your browser — keys are stored only on this device.</p></div>'+
