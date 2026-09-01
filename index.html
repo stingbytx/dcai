@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>dotcomAI — Free AI Service Platform with 50+ AI Models | Made in Sri Lanka</title>
+<title>dotcomAI — Free AI Service Platform with 400+ AI Models | Made in Sri Lanka</title>
 <meta name="description" content="dotcomAI is a Sri Lankan AI platform providing accessible AI-powered services with 50+ AI Models through modern LLM technology. Built by Manuja Damsara under DotcomOne">
 <meta name="keywords" content="dotcomAI, dotcom AI, AI Sri Lanka, artificial intelligence Sri Lanka, free AI, free AI tools, AI assistant, AI platform, LLM platform, AI chatbot, Sri Lankan AI platform, AI tools Sri Lanka, AI software Sri Lanka, Manuja Damsara, DotcomOne, UniPOS">
 <link rel="icon" type="image/png" href="favicon.png">
@@ -1997,7 +1997,7 @@ async function autoLoadModels(){for(const p of enabledProviders()){if(state.mode
 function maybeShowPilot(){
   try{if(localStorage.getItem("dc_pilot_seen"))return;}catch(e){return;}
   const ov=document.createElement("div");ov.className="modal-overlay";ov.id="pilotModal";
-  ov.innerHTML='<div class="modal" style="max-width:480px"><div class="modal-head"><h2>dotcomAI <span class="beta-badge">Beta</span></h2><button class="modal-close" onclick="dismissPilot()">\u00d7</button></div><div class="modal-body"><div style="text-align:center;font-size:30px;margin-bottom:8px">'+I.ai+'</div><p style="font-weight:600;font-size:16px;margin:0 0 6px">Welcome to our pilot project</p><p style="color:var(--text2);line-height:1.6;margin:0 0 14px">Because we provide <b>free AI models</b>, responses may be <b>slow</b> or <b>unavailable at times</b> due to sudden changes in servers, load, or model availability. If a model fails, please try switching to another model or provider \u2014 thank you for being an early user!</p><div style="text-align:right"><button class="btn primary" onclick="dismissPilot()">Got it</button></div></div></div>';
+  ov.innerHTML='<div class="modal" style="max-width:480px"><div class="modal-head"><h2>dotcomAI <span class="beta-badge">Beta</span></h2><button class="modal-close" onclick="dismissPilot()">\u00d7</button></div><div class="modal-body"><p style="font-weight:600;font-size:16px;margin:0 0 6px">Welcome to our pilot project</p><p style="color:var(--text2);line-height:1.6;margin:0 0 14px">Because we provide <b>free AI models</b>, responses may be <b>slow</b> or <b>unavailable at times</b> due to sudden changes in servers, load, or model availability. If a model fails, please try switching to another model or provider \u2014 thank you for being an early user!</p><div style="text-align:right"><button class="btn primary" onclick="dismissPilot()">Got it</button></div></div></div>';
   ov.addEventListener("click",function(e){if(e.target===ov)dismissPilot();});
   document.body.appendChild(ov);
 }
