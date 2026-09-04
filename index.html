@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>dotcomAI — Free AI Service Platform with 400+ AI Models | By Manuja Damsara</title>
+<title>dotcomAI — Free AI Service Platform with 50+ AI Models | Made in Sri Lanka</title>
 <meta name="description" content="dotcomAI is a Sri Lankan AI platform providing accessible AI-powered services with 50+ AI Models through modern LLM technology. Built by Manuja Damsara under DotcomOne">
 <meta name="keywords" content="dotcomAI, dotcom AI, AI Sri Lanka, artificial intelligence Sri Lanka, free AI, free AI tools, AI assistant, AI platform, LLM platform, AI chatbot, Sri Lankan AI platform, AI tools Sri Lanka, AI software Sri Lanka, Manuja Damsara, DotcomOne, UniPOS">
 <link rel="icon" type="image/png" href="favicon.png">
@@ -334,6 +334,20 @@ textarea{flex:1;border:none;background:none;resize:none;outline:none;font-size:1
 .conn-state.err{color:#ef4444;background:rgba(239,68,68,.12)}
 .conn-state.na{color:var(--text3);background:var(--bg-hover)}
 .conn-state{color:var(--text3)}
+.profile-wrap{position:relative}
+.profile-pop{position:absolute;right:0;top:calc(100% + 8px);min-width:230px;background:var(--bg);border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.35);z-index:600;overflow:hidden}
+.profile-pop-head{padding:13px 15px;border-bottom:1px solid var(--border)}
+.profile-email{font-weight:600;font-size:13px;word-break:break-all;color:var(--text)}
+.profile-sub{font-size:11px;color:var(--text3);margin-top:3px}
+.profile-pop-body{padding:12px}
+.profile-btn{display:block;width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;background:var(--accent);color:#111;text-align:center;font-weight:700;cursor:pointer;font-size:14px}
+.profile-btn:hover{filter:brightness(1.08)}
+.onboard-spot{position:fixed;z-index:3000;background:var(--bg);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 34px rgba(0,0,0,.45);padding:16px 18px;max-width:320px;animation:obIn .25s ease}
+@keyframes obIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.ob-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px}
+.ob-body{font-size:13px;line-height:1.55;color:var(--text2);margin-bottom:14px}
+.ob-foot{display:flex;justify-content:flex-end;gap:8px}
+.ob-tag{position:fixed;z-index:2999;pointer-events:none;animation:obIn .25s ease}
 .switch{position:relative;display:inline-block;width:40px;height:22px}
 .switch input{opacity:0;width:0;height:0}
 .switch .slider{position:absolute;cursor:pointer;inset:0;background:var(--border2);border-radius:22px;transition:.15s}
@@ -630,12 +644,26 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
       </div>
       <div class="topbar-right">
         <div class="provider-status unconf" id="providerStatus" style="display:none"><span class="pdot"></span><span id="providerStatusLabel">No provider</span></div>
+        <button class="icon-btn" id="btnHome" title="Home" aria-label="Home" onclick="goHome()">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </button>
         <button class="icon-btn" id="btnCheckConn" title="Check Connection" aria-label="Check Connection" onclick="checkConnections()">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
         </button>
         <button class="icon-btn" id="btnSettings2" title="Settings" aria-label="Settings">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </button>
+        <div class="profile-wrap">
+          <button class="icon-btn" id="btnProfile" title="Profile" aria-label="Profile" onclick="toggleProfile()">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </button>
+          <div class="profile-pop" id="profilePop" style="display:none">
+            <div class="profile-pop-head"><div class="profile-email" id="profileEmail">Loading…</div><div class="profile-sub">Signed in via dotcomAI</div></div>
+            <div class="profile-pop-body">
+              <button class="profile-btn" onclick="upgradePlan()">Upgrade Plan</button>
+            </div>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -692,7 +720,7 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
 /* ============ CONFIGURATION ============ */
 const STORAGE_KEY="my_ai_platform_v1", STORAGE_VERSION=1;
 /* Default providers are hidden and locked for visitors. Paste the owner's keys here — they can never be seen or edited in the UI. */
-const DEFAULT_PROVIDER_KEYS={inceptionlabs:"sk_66a28394f26a2782e079c10e7d0b8773",unorouter:"sk-DFEv4NKYS3RVXs1mNEDz5yxujI4jjySjPxDcQzwubQnmW22d",justworker:"sk-vu7nvQLOdCuyWqy8Xv27gV3P4QkXU7ijgMhgEK52RSpdzBRL",openrouter:"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",openrouter2:"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",groq:"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",mistral:"ry9C20qO8BAC8cCSymCpd7qTFTYtEpTr",tokenharbor:"thk_live_NtOuF8NamDiX_rFeYeAfSh4AxKXJ4-gevTruImWAOnJ112F1OyTH-XjrZxqkD4ZZ",navy:"sk-navy-zaXB3WmbpciGi1rKpfQY9vtOTU7lwy2aJKNL5tIlrfQ"};
+const DEFAULT_PROVIDER_KEYS={inceptionlabs:"sk_66a28394f26a2782e079c10e7d0b8773",unorouter:"sk-DFEv4NKYS3RVXs1mNEDz5yxujI4jjySjPxDcQzwubQnmW22d",justworker:"sk-W9WGpjenz6BeVwhF9OHlzv5ZVhnj3sj9YIhP57yKEu20JLit",openrouter:"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",openrouter2:"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",groq:"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",mistral:"ry9C20qO8BAC8cCSymCpd7qTFTYtEpTr",tokenharbor:"thk_live_Mmh6prl3RR-12ziVHXKNRmokNa7sAIiOXsKkX3C1iw_AzmDzZlNPloqRl1MvQnG4",navy:"sk-navy-zaXB3WmbpciGi1rKpfQY9vtOTU7lwy2aJKNL5tIlrfQ"};
 const DEFAULT_SETTINGS={theme:"dark",streaming:true,enterToSend:true,showTimestamps:true,temperature:0.7,maxTokens:2048,topP:1,systemPrompt:"You are my personal AI assistant. Be clear, concise, and helpful.",maxFileSizeMB:5,debugMode:false,demoMode:false,usageEnabled:true,usageLimit:20,usageWindowMs:21600000,hideGetStarted:false,webSearch:true};
 const FILE_EXTENSIONS=["txt","md","json","csv","js","ts","jsx","tsx","py","html","css"];
 const QUICK_PROMPTS=["Explain something","Write code","Analyze text","Brainstorm ideas"];
@@ -818,6 +846,40 @@ function checkConnections(){
   (async()=>{for(const r of rows){const p=r.p;try{const list=await getModels(p.id);r.result=(list&&list.length)?"ok":"na";p.status="connected";}catch(e){const c=classifyError(e);r.result=(c.type==="cors"||c.type==="network"||c.type==="timeout"||c.type==="http"&&e.status>=500)?"na":"err";p.status="error";}render();}saveAll();if(btn)btn.disabled=false;})();
 }
 function closeConnModal(){const el=document.getElementById("connModal");if(el)el.remove();}
+/* ============ HOME + PROFILE ============ */
+function goHome(){try{window.location.href="https://home.dotcomai.site"}catch(e){try{window.open("https://home.dotcomai.site","_self")}catch(e2){}}}
+function getCurrentEmail(){try{const s=localStorage.getItem("dc_auth_email");if(s)return s;}catch(e){}try{if(supabaseClient&&supabaseClient.auth){let em=null;supabaseClient.auth.getUser().then(({data})=>{if(data&&data.user&&data.user.email){const el=document.getElementById("profileEmail");if(el)el.textContent=data.user.email;}else if(localStorage.getItem("dc_auth_email")&&document.getElementById("profileEmail"))document.getElementById("profileEmail").textContent=localStorage.getItem("dc_auth_email");}).catch(()=>{});}}catch(e){}return null}
+function toggleProfile(){const pop=document.getElementById("profilePop");if(!pop)return;const show=pop.style.display!=="block";pop.style.display=show?"block":"none";if(show){const em=document.getElementById("profileEmail");if(em){const saved=localStorage.getItem("dc_auth_email");if(saved)em.textContent=saved;}getCurrentEmail();}}
+function upgradePlan(){const pop=document.getElementById("profilePop");if(pop)pop.style.display="none";try{window.location.href="https://home.dotcomai.site/upgrade"}catch(e){try{window.open("https://home.dotcomai.site/upgrade","_blank")}catch(e2){}}}
+if(document&&document.addEventListener)document.addEventListener("click",function(ev){const pop=document.getElementById("profilePop");const btn=document.getElementById("btnProfile");if(pop&&pop.style.display==="block"&&ev.target&&(!btn||!btn.contains(ev.target))&&!pop.contains(ev.target))pop.style.display="none";});
+/* ============ NEW-USER ONBOARDING ============ */
+const OB_STEPS=[
+  {target:"#btnCheckConn",tag:"flash",title:"First, check what's available",body:"Click the <b>flash icon</b> (Check Connection) at the top to see which providers and models are working at the moment.",btn:"Next"},
+  {target:"#providerPickerBtn",tag:"providers",title:"Select a provider & a working model",body:"Use the <b>Provider</b> and <b>Model</b> dropdowns to pick a provider and one of its working models before chatting.",btn:"Next"},
+  {target:"#modelPickerBtn",tag:"models",title:"You're all set",body:"Everything is ready. Pick a model, type your message below, and start chatting. Enjoy dotcomAI!",btn:"Start chatting"}
+];
+let _obActive=false, _obPos=null;
+function maybeShowOnboarding(){if(_obActive)return;try{if(localStorage.getItem("dc_onboard_done"))return;}catch(e){}_obActive=true;showObStep(0);}
+function showObStep(i){
+  document.querySelectorAll(".onboard-spot,.ob-tag").forEach(e=>e.remove());if(_obPos){window.removeEventListener("resize",_obPos);_obPos=null;}
+  if(i>=OB_STEPS.length){try{localStorage.setItem("dc_onboard_done","1");}catch(e){}_obActive=false;return;}
+  const s=OB_STEPS[i];
+  const spot=document.createElement("div");spot.className="onboard-spot";spot.id="obSpot";
+  spot.innerHTML='<div class="ob-title">'+esc(s.title)+'</div><div class="ob-body">'+s.body+'</div><div class="ob-foot"><button class="btn" onclick="skipOb()">Skip</button><button class="btn primary" onclick="obNext('+(i+1)+')">'+esc(s.btn)+'</button></div>';
+  document.body.appendChild(spot);
+  const tag=document.createElement("div");tag.className="ob-tag";tag.innerHTML='<svg viewBox="0 0 24 24" width="26" height="26" style="display:block"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z" fill="#22c55e"/></svg>';document.body.appendChild(tag);
+  _obPos=()=>{
+    const t=document.querySelector(s.target);if(!t)return;
+    const r=t.getBoundingClientRect();const sw=spot.offsetWidth||300,sh=spot.offsetHeight||150;
+    let left=r.left+(r.width/2)-(sw/2),top=r.bottom+14;left=Math.max(8,Math.min(left,window.innerWidth-sw-8));if(top+sh>window.innerHeight-8)top=Math.max(8,r.top-sh-14);
+    spot.style.left=left+"px";spot.style.top=top+"px";
+    tag.style.left=(r.left+(r.width/2)-13)+"px";tag.style.top=(r.bottom+2)+"px";
+  };
+  _obPos();window.addEventListener("resize",_obPos);
+  const t=document.querySelector(s.target);if(t&&t.scrollIntoView)t.scrollIntoView({block:"center"});
+}
+function obNext(i){showObStep(i);}
+function skipOb(){try{localStorage.setItem("dc_onboard_done","1");}catch(e){}_obActive=false;if(_obPos){window.removeEventListener("resize",_obPos);_obPos=null;}document.querySelectorAll(".onboard-spot,.ob-tag").forEach(e=>e.remove());}
 
 /* ============ UI: PROVIDER/MODEL PICKERS ============ */
 function enabledProviders(){return state.providers.filter(p=>p.enabled)}
@@ -1994,7 +2056,7 @@ function togglePw(id){const el=$("#"+id);if(!el)return;const isPw=el.type==="pas
 function authError(m){const el=$("#authErr");if(el){el.textContent=m;el.style.display="block";}}
 function authOk(m){const el=$("#authErr");if(el){el.textContent=m;el.style.display="block";el.className="auth-ok";}}
 function authBtnLoading(on){const b=$("#authBtn");if(b){b.disabled=on;b.textContent=on?(b.textContent==="Sign in"?"Signing in…":"Please wait…"):(b.dataset.orig||b.textContent);}}
-async function authSignIn(){const email=$("#authEmail").value.trim();const pass=$("#authPass").value;if(!email||!pass){authError("Enter your email and password.");return}authError("");authBtnLoading(true);const r=$("#authRemember");try{if(r&&r.checked)localStorage.setItem("dc_auth_email",email);else localStorage.removeItem("dc_auth_email");}catch(e){}const {error}=await supabaseClient.auth.signInWithPassword({email,password:pass});authBtnLoading(false);if(error){authError(error.message);return}authScreenHide();notify("Signed in.","success");}
+async function authSignIn(){const email=$("#authEmail").value.trim();const pass=$("#authPass").value;if(!email||!pass){authError("Enter your email and password.");return}authError("");authBtnLoading(true);const r=$("#authRemember");try{if(r&&r.checked)localStorage.setItem("dc_auth_email",email);else localStorage.removeItem("dc_auth_email");}catch(e){}const {error}=await supabaseClient.auth.signInWithPassword({email,password:pass});authBtnLoading(false);if(error){authError(error.message);return}authScreenHide();notify("Signed in.","success");try{localStorage.setItem("dc_auth_email",email);}catch(e){}if(document.getElementById("profileEmail"))document.getElementById("profileEmail").textContent=email;setTimeout(()=>{maybeShowOnboarding();},500);}
 async function authSignUp(){const email=$("#authEmail").value.trim();const pass=$("#authPass").value;const conf=$("#authConfirmPass").value;if(!email||!pass||!conf){authError("Please fill in all fields.");return}if(pass.length<6){authError("Password must be at least 6 characters.");return}if(pass!==conf){authError("Passwords do not match.");return}authError("");authBtnLoading(true);try{const {data,error}=await supabaseClient.auth.signUp({email,password:pass,options:{}});authBtnLoading(false);if(error){authError(error.message);return}if(data.session){authScreenHide();notify("Signed in.","success");}else{authOk("Account created. Check your email to confirm your sign-up.");renderAuthMode("signin");}}catch(e){authBtnLoading(false);authError("Sign-up failed: "+(e&&e.message?e.message:"unable to reach Supabase. Check your connection."));}}
 async function authForgot(){const email=$("#authEmail").value.trim();if(!email){authError("Enter your email.");return}authError("");try{const {error}=await supabaseClient.auth.resetPasswordForEmail(email);if(error){authError(error.message);return}authOk("Reset link sent. Check your inbox.");}catch(e){authError("Failed to send reset link: "+(e&&e.message?e.message:"unreachable Supabase"));}}
 async function goGoogle(){try{const {error}=await supabaseClient.auth.signInWithOAuth({provider:"google",options:{redirectTo:window.location.href}});if(error){authError("Google sign-in failed: "+error.message);return;}}catch(e){authError("Google sign-in failed. Ensure the site is served over HTTPS and Google is enabled in your Supabase project.");}}
@@ -2029,7 +2091,7 @@ function maybeShowPilot(){
   ov.addEventListener("click",function(e){if(e.target===ov)dismissPilot();});
   document.body.appendChild(ov);
 }
-function dismissPilot(){try{localStorage.setItem("dc_pilot_seen","1");}catch(e){}const el=document.getElementById("pilotModal");if(el)el.remove();}
+function dismissPilot(){try{localStorage.setItem("dc_pilot_seen","1");}catch(e){}const el=document.getElementById("pilotModal");if(el)el.remove();setTimeout(()=>{try{if(document.getElementById("authScreen")&&!document.getElementById("authScreen").classList.contains("hidden"))return;}catch(e){}maybeShowOnboarding();},300);}
 function showWelcome(){
   const ov=document.createElement("div");ov.className="modal-overlay";ov.id="welcomeModal";
   ov.innerHTML='<div class="modal"><div class="modal-head"><h2>dotcomAI</h2><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">×</button></div><div class="modal-body"><div style="text-align:center;margin-bottom:16px"><div style="font-size:28px">'+I.ai+'</div><p style="margin:6px 0 2px;font-weight:600;font-size:16px">Your personal multi-provider AI workspace.</p><p style="color:var(--text2)">Connect a provider to begin. This app runs locally in your browser — keys are stored only on this device.</p></div>'+
