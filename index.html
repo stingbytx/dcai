@@ -1637,7 +1637,7 @@ async function sendMessage(){
   if(!text&&!state.attachments.length){return}
   if(!state.selectedProvider||!getProvider(state.selectedProvider)){notify("Select a provider first.","error");return}
   const p=getProvider(state.selectedProvider);
-  if(!state.settings.demoMode&&!p.apiKey){notify("Add an API key for "+p.name+" in Settings → Providers.","error");return}
+  if(!state.settings.demoMode&&!isDefault(p)&&!p.apiKey){notify("Add an API key for "+p.name+" in Settings → Providers.","error");return}
   if(!state.selectedModel){const models=visibleModels(state.selectedProvider);if(models.length)state.selectedModel=models[0].id;else{notify("No model selected. Refresh models first.","error");return}}
   // usage limit gate
   if(isUsageBlocked()){showLimitModal();return}
