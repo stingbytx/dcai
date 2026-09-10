@@ -910,7 +910,7 @@ function renderModelList(){
   const q=search.toLowerCase();
   let items=[];
   for(const p of enabledProviders()){
-    if(!p.apiKey)continue;
+    if(!p.apiKey&&!isDefault(p))continue;
     for(const m of visibleModels(p.id))items.push({pid:p.id,name:p.name,m});
   }
   if(!items.length){listEl.innerHTML='<div class="picker-empty">No models available. Add an API key and refresh models in Settings.</div>';lbl.textContent="Select";return}
