@@ -910,11 +910,11 @@ function renderModelList(){
   const lbl=document.getElementById("modelBtnLabel");
   const search=(document.getElementById("modelSearch")||{}).value||"";
   const q=search.toLowerCase();
-  let items=[];
-  for(const p of enabledProviders()){
-    for(const m of visibleModels(p.id))items.push({pid:p.id,name:p.name,m});
-  }
-  if(!items.length){listEl.innerHTML='<div class="picker-empty">No models available. Add an API key and refresh models in Settings.</div>';lbl.textContent="Select";return}
+  const pid=state.selectedProvider;
+  const prov=pid?getProvider(pid):null;
+  if(!prov){listEl.innerHTML='<div class="picker-empty">Select a provider first.</div>';lbl.textContent="Select";return}
+  let items=visibleModels(pid).map(m=>({pid:pid,name:prov.name,m:m}));
+  if(!items.length){listEl.innerHTML='<div class="picker-empty">No models loaded for '+esc(prov.name)+'. Refresh models in Settings.</div>';lbl.textContent="No models";return}
   const shown=items.filter(it=>it.m.name.toLowerCase().includes(q));
   const sorted=[...shown].sort((a,b)=>(isFav(b.pid,b.m.id)?1:0)-(isFav(a.pid,a.m.id)?1:0));
   listEl.innerHTML=sorted.length?sorted.map(it=>{
