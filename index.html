@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>dotcomAI — Free AI Service Platform with 400+ AI Models | Made in Sri Lanka</title>
+<title>dotcomAI — Free AI Service Platform with 400+ Large Language Models | Made in Sri Lanka</title>
 <meta name="description" content="dotcomAI is a Sri Lankan AI platform providing accessible AI-powered services with 50+ AI Models through modern LLM technology. Built by Manuja Damsara under DotcomOne">
 <meta name="keywords" content="dotcomAI, dotcom AI, AI Sri Lanka, artificial intelligence Sri Lanka, free AI, free AI tools, AI assistant, AI platform, LLM platform, AI chatbot, Sri Lankan AI platform, AI tools Sri Lanka, AI software Sri Lanka, Manuja Damsara, DotcomOne, UniPOS">
 <link rel="icon" type="image/png" href="favicon.png">
@@ -596,9 +596,9 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
     </form>
     <div class="sb-list" id="convList"></div>
     <div class="sb-links">
-      <button onclick="showLegal('terms')">Terms</button><span class="sep">·</span>
+      <button onclick="showLegal('terms')">Terms of Use</button><span class="sep">·</span>
       <button onclick="showLegal('privacy')">Privacy Policy</button><span class="sep">·</span>
-      <button onclick="showLegal('about')">About</button><span class="sep">·</span>
+      <button onclick="showLegal('about')">About Us</button><span class="sep">·</span>
       <button onclick="showLegal('refund')">Refund Policy</button>
     </div>
 <button class="sb-help" onclick="window.open('https://abacus.lk','_blank')" title="How to configure a 3rd-party API">
@@ -668,11 +668,6 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
       </div>
     </header>
 
-    <div class="demo-banner" id="demoBanner">
-      <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <span><b>Demo mode</b> — responses are simulated locally and are not real AI output.</span>
-    </div>
-
     <div class="chat-wrap" id="chatWrap"><div class="chat-inner" id="chatInner"></div></div>
 
     <div class="composer">
@@ -688,7 +683,7 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
             <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
         </div>
-        <div class="composer-hint" id="composerHint">dotcomAI models can make mistakes. Check important info<span class="usage-badge" id="usageBadge"></span></div>
+        <div class="composer-hint" id="composerHint">All Rights Reserved. Proudly made in Sri Lanka 🇱🇰<span class="usage-badge" id="usageBadge"></span></div>
       </div>
     </div>
   </main>
@@ -769,10 +764,10 @@ function saveAll(){if(!storageOK()){notify("Unable to save local data. Export yo
 function loadAll(){if(!storageOK())return;try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(!d||typeof d!=="object")return;if(d.providers)state.providers=d.providers;if(d.models)state.models=d.models;if(d.modelsMeta)state.modelsMeta=d.modelsMeta;if(Array.isArray(d.conversations))state.conversations=d.conversations;if(d.settings)state.settings=Object.assign({},DEFAULT_SETTINGS,d.settings);if(Array.isArray(d.favorites))state.favorites=d.favorites;if(Array.isArray(d.disabledModels))state.disabledModels=d.disabledModels;if(Array.isArray(d.logs))state.logs=d.logs;if(d.lastRefresh)state.lastRefresh=d.lastRefresh;if(d.usage)state.usage=Object.assign({windowStart:Date.now(),count:0},d.usage);if(Array.isArray(d.workspaces))state.workspaces=d.workspaces;if(d.currentWorkspace)state.currentWorkspace=d.currentWorkspace;if(d.selectedProvider)state.selectedProvider=d.selectedProvider;if(d.selectedModel)state.selectedModel=d.selectedModel}catch(e){console.error("load failed",e)}}
 
 /* ============ PROVIDER SYSTEM ============ */
-const DEFAULT_ORDER=["inceptionlabs","unorouter","openrouter2","groq","mistral","openrouter","xkiro"];
+const DEFAULT_ORDER=["nvidia","unorouter","openrouter2","groq","mistral","openrouter","xkiro","inceptionlabs"];
 function isDefault(p){return DEFAULT_ORDER.includes(p.id)}
 function providerLabel(p){const i=DEFAULT_ORDER.indexOf(p.id);return i>=0?("Default "+(i+1)):(p&&p.name||"Custom")}
-function defaultProviders(){return[{id:"inceptionlabs",name:"InceptionLabs",baseURL:"https://api.inceptionlabs.ai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"unorouter",name:"Unorouter",baseURL:"https://api.unorouter.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter2",name:"OpenRouter 2",baseURL:"https://openrouter.ai/api/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"groq",name:"Groq",baseURL:"https://api.groq.com/openai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"mistral",name:"Mistral",baseURL:"https://api.mistral.ai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter",name:"OpenRouter",baseURL:"https://openrouter.ai/api/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"xkiro",name:"xKiro",baseURL:"https://api.xkiro.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true}]}
+function defaultProviders(){return[{id:"nvidia",name:"NVIDIA",baseURL:"https://integrate.api.nvidia.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"unorouter",name:"Unorouter",baseURL:"https://api.unorouter.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter2",name:"OpenRouter 2",baseURL:"https://openrouter.ai/api/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"groq",name:"Groq",baseURL:"https://api.groq.com/openai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"mistral",name:"Mistral",baseURL:"https://api.mistral.ai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter",name:"OpenRouter",baseURL:"https://openrouter.ai/api/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"xkiro",name:"xKiro",baseURL:"https://api.xkiro.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"inceptionlabs",name:"InceptionLabs",baseURL:"https://api.inceptionlabs.ai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true}]}
 function ensureProviders(){for(const def of defaultProviders()){const ex=state.providers.find(p=>p.id===def.id);if(ex){ex.locked=true;ex.baseURL=def.baseURL;ex.apiKey=""}else state.providers.push(def)}state.models=state.models||{}}
 function addCustomProvider(){const id="custom-"+Date.now();const p={id,name:"My Provider",baseURL:"",apiKey:"",enabled:true,status:"notconf",lastTested:null,custom:true};state.providers.push(p);saveAll();renderSettingsBody();renderProvider();notify("Added a custom provider. Configure it below.","info");}
 function removeCustomProvider(id){const p=getProvider(id);if(!p||isDefault(p))return;confirmModal("Remove this provider?","This will delete the custom provider '"+p.name+"' and its key from local storage.","Remove",()=>{if(state.selectedProvider===id){state.selectedProvider=null;state.selectedModel=null}state.providers=state.providers.filter(x=>x.id!==id);delete state.models[id];saveAll();renderSettings();renderProvider();updateProviderStatus();notify("Provider removed.","success")})}
@@ -788,9 +783,15 @@ function normalizeResponse(json){const c=json&&json.choices&&json.choices[0];ret
 
 /* ============ PROVIDER ADAPTERS ============ */
 function keepChatModel(m){const id=(m&&(m.id||m.name)||"").toLowerCase();return !/(whisper|allam|orpheus|tts|embed|bge|rerank|dall|stable|speech|transcri|safeguard|guard|moderation|ocr|realtime|fim|voxtral|vibe|transcribe)/.test(id)}
+const NVIDIA_CHAT_MODELS=["deepseek-ai/deepseek-v4-flash-0731","meta/muse-glimmer-30b","meta/llama-3.2-11b-vision-instruct","mistralai/mistral-nemotron","nvidia/nemotron-3-super-120b-a12b","nvidia/nemotron-3-ultra-550b-a55b","nvidia/nemotron-3.5-lightning-30b-a3b","nvidia/ising-calibration-1.5-31b","openai/gpt-oss-20b","poolside/laguna-xs-2.1"];
 const adapters={
   openrouter:{
     async getModels(p){const data=await workerGetModels(p);return(data.data||[]).map(m=>({id:m.id||"unknown",name:m.name||m.id||"unknown",context:m.context_length||null,capabilities:(m.architecture&&m.architecture.modality)||null,pricing:m.pricing||null}))},
+    async chat(p,model,messages,opts,signal){const res=await workerChat(p,model,messages,opts,signal,false);return res.json()},
+    async stream(p,model,messages,opts,signal){const res=await workerChat(p,model,messages,opts,signal,true);if(!res.body)throw new Error("no-stream");return res.body.getReader()}
+  },
+  nvidia:{
+    async getModels(p){const data=await workerGetModels(p);const all=((data.data&&Array.isArray(data.data))?data.data:[]);const allow=NVIDIA_CHAT_MODELS;const picked=all.filter(m=>allow.includes(m.id||m.name));const src=picked.length?picked:all.filter(keepChatModel);return src.map(m=>({id:m.id||m.name||"unknown",name:m.name||m.id||"unknown",context:m.context_length||null}))},
     async chat(p,model,messages,opts,signal){const res=await workerChat(p,model,messages,opts,signal,false);return res.json()},
     async stream(p,model,messages,opts,signal){const res=await workerChat(p,model,messages,opts,signal,true);if(!res.body)throw new Error("no-stream");return res.body.getReader()}
   },
@@ -932,7 +933,7 @@ Welcome to **dotcomAI**.
 
 These Terms & Conditions ("Terms") govern your access to and use of the dotcomAI website, applications, software, AI services, features, and related products (collectively, the "Service").
 
-The Service is operated under **DotcomOne / UniPOS** and was developed by **Manuja Damsara** in Sri Lanka.
+The Service is operated under **DotcomONE / UniPOS** and was developed by **Manuja Damsara** in Sri Lanka.
 
 By accessing or using dotcomAI, you agree to these Terms. If you do not agree with these Terms, you should not use the Service.
 
@@ -1130,7 +1131,7 @@ Nothing in these Terms excludes rights or protections that cannot legally be exc
 
 ## 17. Limitation of Liability
 
-To the maximum extent permitted by applicable law, dotcomAI, DotcomOne, UniPOS, and their respective personnel shall not be liable for indirect, incidental, consequential, special, or unforeseeable losses arising from your use of the Service.
+To the maximum extent permitted by applicable law, dotcomAI, DotcomONE, UniPOS, and their respective personnel shall not be liable for indirect, incidental, consequential, special, or unforeseeable losses arising from your use of the Service.
 
 This includes, where legally permitted, losses resulting from reliance on AI-generated information, service interruptions, third-party API failures, data loss, or unauthorized access.
 
@@ -1184,12 +1185,12 @@ Made in Sri Lanka.
 
 Developed by **Manuja Damsara**
 
-Under **DotcomOne / UniPOS**`},
+Under **DotcomONE / UniPOS**`},
   privacy:{title:"Privacy Policy",body:`# Privacy Policy
 
 **Last Updated: August 29, 2026**
 
-This Privacy Policy explains how **dotcomAI**, operated under **DotcomOne / UniPOS** and developed by **Manuja Damsara**, collects, uses, processes, stores, and protects information when you use our website, applications, and AI services.
+This Privacy Policy explains how **dotcomAI**, operated under **DotcomONE / UniPOS** and developed by **Manuja Damsara**, collects, uses, processes, stores, and protects information when you use our website, applications, and AI services.
 
 dotcomAI is developed and operated from Sri Lanka.
 
@@ -1403,7 +1404,7 @@ If you have a privacy question, request, concern, or complaint regarding the pro
 
 Developed by **Manuja Damsara**
 
-Under **DotcomOne / UniPOS**
+Under **DotcomONE / UniPOS**
 
 **Sri Lanka**`},
   about:{title:"About dotcomAI",body:`# About dotcomAI
@@ -1412,7 +1413,7 @@ Under **DotcomOne / UniPOS**
 
 **dotcomAI** is a Sri Lankan artificial intelligence platform designed to make modern AI technology more accessible, useful, and affordable for everyone.
 
-Built under **DotcomOne** and **UniPOS**, dotcomAI provides users with access to AI-powered services through integrations with leading Large Language Model (LLM) and artificial intelligence technologies.
+Built under **DotcomONE** and **UniPOS**, dotcomAI provides users with access to AI-powered services through integrations with leading Large Language Model (LLM) and artificial intelligence technologies.
 
 Our goal is simple: **make powerful AI tools easier for people to access and use.**
 
@@ -1434,7 +1435,7 @@ Manuja Damsara works across multiple areas of technology, including:
 * Digital Product Development
 * Software Solutions
 
-Through **DotcomOne** and **UniPOS**, the vision is to build practical technology products that help individuals and organizations use modern digital technologies more effectively.
+Through **DotcomONE** and **UniPOS**, the vision is to build practical technology products that help individuals and organizations use modern digital technologies more effectively.
 
 ## Our Mission
 
@@ -2160,7 +2161,7 @@ function resetSettings(){confirmModal("Reset settings?","Settings will return to
 function resetApp(){confirmModal("Delete all local data?","This erases all providers, keys, conversations, models, logs, and settings stored in this browser. It does NOT affect your JustWorker or OpenRouter accounts.","Delete All",()=>{localStorage.removeItem(STORAGE_KEY);location.reload()})}
 function systemTabHTML(){const s=state.settings;return'<div class="setting-group"><h3>System Prompt</h3><div class="field"><label>Global default system prompt</label><textarea onchange="setSystemPrompt(this.value)">'+esc(s.systemPrompt)+'</textarea></div><div class="info-box" style="margin-top:8px">This is sent to the provider as the leading "system" message. Override per-conversation from the chat if desired.</div></div><div class="setting-group"><h3>Developer</h3><div class="toggle-row"><div><div class="lbl">Debug Mode</div><div class="sub">Shows technical details in errors (never API keys)</div></div><label class="switch"><input type="checkbox" '+(s.debugMode?"checked":"")+' onchange="setDebug(this.checked)"><span class="slider"></span></label></div><div class="toggle-row"><div><div class="lbl">Demo Mode</div><div class="sub">Local simulated responses (clearly labeled, not real AI)</div></div><label class="switch"><input type="checkbox" '+(s.demoMode?"checked":"")+' onchange="setDemo(this.checked)"><span class="slider"></span></label></div></div><div class="setting-group"><h3>Storage</h3><div class="info-box">Storage key: <code>'+STORAGE_KEY+'</code> (version '+STORAGE_VERSION+')<br>All data lives in your browser. No analytics, no tracking, no external servers.</div></div>'}
 function saveSystemPrompt(v){state.settings.systemPrompt=v;saveAll();notify("System prompt saved.","success")}
-function setDemo(v){state.settings.demoMode=v;saveAll();renderSettingsBody();$("#demoBanner").classList.toggle("show",v);notify("Demo Mode "+(v?"ON":"OFF"),v?"info":"info")}
+function setDemo(v){state.settings.demoMode=v;saveAll();renderSettingsBody();notify("Demo Mode "+(v?"ON":"OFF"),"info")}
 function setDebug(v){state.settings.debugMode=v;saveAll();renderSettingsBody()}
 function setSystemPrompt(v){state.settings.systemPrompt=v;saveAll();notify("System prompt saved.","success")}
 
@@ -2201,7 +2202,7 @@ function init(){
   if(!getProvider(state.selectedProvider))state.selectedProvider=state.providers.find(p=>p.enabled&&p.apiKey)?.id||null;
   if(state.selectedProvider){const models=state.models[state.selectedProvider]||[];if(!models.some(m=>m.id===state.selectedModel))state.selectedModel=models.length?models[0].id:null}
   if(!state.conversations.length){state.currentConversationId=null}else if(!getConv(state.currentConversationId))state.currentConversationId=state.conversations[0]?.id||null;
-  wireEvents();renderSidebar();renderProvider();renderModelList();renderChat();renderAttach();updateOffline();updateProviderStatus();$("#demoBanner").classList.toggle("show",state.settings.demoMode);
+  wireEvents();renderSidebar();renderProvider();renderModelList();renderChat();renderAttach();updateOffline();updateProviderStatus();
   updateUsageBadge();
   autoLoadModels();
   // keep the chat-search box empty on load (prevents browser autofill from injecting the saved email)
