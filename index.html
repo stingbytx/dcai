@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>dotcomAI — Free AI Service Platform with 50+ AI Models | Made in Sri Lanka</title>
+<title>dotcomAI — Free AI Service Platform with 450+ AI Models | Made in Sri Lanka</title>
 <meta name="description" content="dotcomAI is a Sri Lankan AI platform providing accessible AI-powered services with 50+ AI Models through modern LLM technology. Built by Manuja Damsara under DotcomOne">
 <meta name="keywords" content="dotcomAI, dotcom AI, AI Sri Lanka, artificial intelligence Sri Lanka, free AI, free AI tools, AI assistant, AI platform, LLM platform, AI chatbot, Sri Lankan AI platform, AI tools Sri Lanka, AI software Sri Lanka, Manuja Damsara, DotcomOne, UniPOS">
 <link rel="icon" type="image/png" href="favicon.png">
@@ -764,10 +764,10 @@ function saveAll(){if(!storageOK()){notify("Unable to save local data. Export yo
 function loadAll(){if(!storageOK())return;try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(!d||typeof d!=="object")return;if(d.providers)state.providers=d.providers;if(d.models)state.models=d.models;if(d.modelsMeta)state.modelsMeta=d.modelsMeta;if(Array.isArray(d.conversations))state.conversations=d.conversations;if(d.settings)state.settings=Object.assign({},DEFAULT_SETTINGS,d.settings);if(Array.isArray(d.favorites))state.favorites=d.favorites;if(Array.isArray(d.disabledModels))state.disabledModels=d.disabledModels;if(Array.isArray(d.logs))state.logs=d.logs;if(d.lastRefresh)state.lastRefresh=d.lastRefresh;if(d.usage)state.usage=Object.assign({windowStart:Date.now(),count:0},d.usage);if(Array.isArray(d.workspaces))state.workspaces=d.workspaces;if(d.currentWorkspace)state.currentWorkspace=d.currentWorkspace;if(d.selectedProvider)state.selectedProvider=d.selectedProvider;if(d.selectedModel)state.selectedModel=d.selectedModel}catch(e){console.error("load failed",e)}}
 
 /* ============ PROVIDER SYSTEM ============ */
-const DEFAULT_ORDER=["ollama","nvidia","unorouter","openrouter2","groq","mistral","openrouter","xkiro","inceptionlabs"];
+const DEFAULT_ORDER=["ollama","nvidia","unorouter","openrouter2","groq","mistral","openrouter","xkiro","inceptionlabs","cloudflare","dahl"];
 function isDefault(p){return DEFAULT_ORDER.includes(p.id)}
 function providerLabel(p){const i=DEFAULT_ORDER.indexOf(p.id);return i>=0?("Default "+(i+1)):(p&&p.name||"Custom")}
-function defaultProviders(){return[{id:"ollama",name:"Ollama",baseURL:"https://ollama.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"nvidia",name:"NVIDIA",baseURL:"https://integrate.api.nvidia.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"unorouter",name:"Unorouter",baseURL:"https://api.unorouter.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter2",name:"OpenRouter 2",baseURL:"https://openrouter.ai/api/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"groq",name:"Groq",baseURL:"https://api.groq.com/openai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"mistral",name:"Mistral",baseURL:"https://api.mistral.ai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter",name:"OpenRouter",baseURL:"https://openrouter.ai/api/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"xkiro",name:"xKiro",baseURL:"https://api.xkiro.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"inceptionlabs",name:"InceptionLabs",baseURL:"https://api.inceptionlabs.ai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true}]}
+function defaultProviders(){return[{id:"ollama",name:"Ollama",baseURL:"https://ollama.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"nvidia",name:"NVIDIA",baseURL:"https://integrate.api.nvidia.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"unorouter",name:"Unorouter",baseURL:"https://api.unorouter.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter2",name:"OpenRouter 2",baseURL:"https://openrouter.ai/api/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"groq",name:"Groq",baseURL:"https://api.groq.com/openai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"mistral",name:"Mistral",baseURL:"https://api.mistral.ai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter",name:"OpenRouter",baseURL:"https://openrouter.ai/api/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"xkiro",name:"xKiro",baseURL:"https://api.xkiro.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"inceptionlabs",name:"InceptionLabs",baseURL:"https://api.inceptionlabs.ai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"cloudflare",name:"Cloudflare AI",baseURL:"cloudflare://binding",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"dahl",name:"Dahl",baseURL:"https://inference.dahl.global/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true}]}
 function ensureProviders(){for(const def of defaultProviders()){const ex=state.providers.find(p=>p.id===def.id);if(ex){ex.locked=true;ex.baseURL=def.baseURL;ex.apiKey=""}else state.providers.push(def)}state.models=state.models||{}}
 function addCustomProvider(){const id="custom-"+Date.now();const p={id,name:"My Provider",baseURL:"",apiKey:"",enabled:true,status:"notconf",lastTested:null,custom:true};state.providers.push(p);saveAll();renderSettingsBody();renderProvider();notify("Added a custom provider. Configure it below.","info");}
 function removeCustomProvider(id){const p=getProvider(id);if(!p||isDefault(p))return;confirmModal("Remove this provider?","This will delete the custom provider '"+p.name+"' and its key from local storage.","Remove",()=>{if(state.selectedProvider===id){state.selectedProvider=null;state.selectedModel=null}state.providers=state.providers.filter(x=>x.id!==id);delete state.models[id];saveAll();renderSettings();renderProvider();updateProviderStatus();notify("Provider removed.","success")})}
@@ -785,6 +785,7 @@ function normalizeResponse(json){const c=json&&json.choices&&json.choices[0];ret
 function keepChatModel(m){const id=(m&&(m.id||m.name)||"").toLowerCase();return !/(whisper|allam|orpheus|tts|embed|bge|rerank|dall|stable|speech|transcri|safeguard|guard|moderation|ocr|realtime|fim|voxtral|vibe|transcribe)/.test(id)}
 const NVIDIA_CHAT_MODELS=["deepseek-ai/deepseek-v4-flash-0731","meta/muse-glimmer-30b","meta/llama-3.2-11b-vision-instruct","mistralai/mistral-nemotron","nvidia/nemotron-3-super-120b-a12b","nvidia/nemotron-3-ultra-550b-a55b","nvidia/nemotron-3.5-lightning-30b-a3b","nvidia/ising-calibration-1.5-31b","openai/gpt-oss-20b","poolside/laguna-xs-2.1"];
 const OLLAMA_CHAT_MODELS=["gpt-oss:20b","gpt-oss:120b","gemma4:31b","nemotron-3-super","nemotron-3-ultra","nemotron-3-nano:30b"];
+const DAHL_MODELS=["MiniMaxAI/MiniMax-M2.7"];
 const adapters={
   openrouter:{
     async getModels(p){const data=await workerGetModels(p);return(data.data||[]).map(m=>({id:m.id||"unknown",name:m.name||m.id||"unknown",context:m.context_length||null,capabilities:(m.architecture&&m.architecture.modality)||null,pricing:m.pricing||null}))},
@@ -798,6 +799,15 @@ const adapters={
   },
   nvidia:{
     async getModels(p){const data=await workerGetModels(p);const all=((data.data&&Array.isArray(data.data))?data.data:[]);const allow=NVIDIA_CHAT_MODELS;const picked=all.filter(m=>allow.includes(m.id||m.name));const src=picked.length?picked:all.filter(keepChatModel);return src.map(m=>({id:m.id||m.name||"unknown",name:m.name||m.id||"unknown",context:m.context_length||null}))},
+    async chat(p,model,messages,opts,signal){const res=await workerChat(p,model,messages,opts,signal,false);return res.json()},
+    async stream(p,model,messages,opts,signal){const res=await workerChat(p,model,messages,opts,signal,true);if(!res.body)throw new Error("no-stream");return res.body.getReader()}
+  },
+  cloudflare:{
+    async getModels(p){const data=await workerGetModels(p);const all=((data.data&&Array.isArray(data.data))?data.data:[]);return all.map(m=>({id:m.id||m.name||"unknown",name:m.name||m.id||"unknown",context:m.context_length||null}))},
+    async chat(p,model,messages,opts,signal){const res=await workerChat(p,model,messages,opts,signal,false);return res.json()}
+  },
+  dahl:{
+    async getModels(p){const data=await workerGetModels(p);const all=((data.data&&Array.isArray(data.data))?data.data:[]);const allow=DAHL_MODELS;const picked=all.filter(m=>allow.includes(m.id||m.name));const src=picked.length?picked:all.filter(keepChatModel);return src.map(m=>({id:m.id||m.name||"unknown",name:m.name||m.id||"unknown",context:m.context_length||null}))},
     async chat(p,model,messages,opts,signal){const res=await workerChat(p,model,messages,opts,signal,false);return res.json()},
     async stream(p,model,messages,opts,signal){const res=await workerChat(p,model,messages,opts,signal,true);if(!res.body)throw new Error("no-stream");return res.body.getReader()}
   },
@@ -939,7 +949,7 @@ Welcome to **dotcomAI**.
 
 These Terms & Conditions ("Terms") govern your access to and use of the dotcomAI website, applications, software, AI services, features, and related products (collectively, the "Service").
 
-The Service is operated under **DotcomONE / UniPOS** and was developed by **Manuja Damsara** in Sri Lanka.
+The Service is operated under **DotcomOne / UniPOS** and was developed by **Manuja Damsara** in Sri Lanka.
 
 By accessing or using dotcomAI, you agree to these Terms. If you do not agree with these Terms, you should not use the Service.
 
@@ -1137,7 +1147,7 @@ Nothing in these Terms excludes rights or protections that cannot legally be exc
 
 ## 17. Limitation of Liability
 
-To the maximum extent permitted by applicable law, dotcomAI, DotcomONE, UniPOS, and their respective personnel shall not be liable for indirect, incidental, consequential, special, or unforeseeable losses arising from your use of the Service.
+To the maximum extent permitted by applicable law, dotcomAI, DotcomOne, UniPOS, and their respective personnel shall not be liable for indirect, incidental, consequential, special, or unforeseeable losses arising from your use of the Service.
 
 This includes, where legally permitted, losses resulting from reliance on AI-generated information, service interruptions, third-party API failures, data loss, or unauthorized access.
 
@@ -1191,12 +1201,12 @@ Made in Sri Lanka.
 
 Developed by **Manuja Damsara**
 
-Under **DotcomONE / UniPOS**`},
+Under **DotcomOne / UniPOS**`},
   privacy:{title:"Privacy Policy",body:`# Privacy Policy
 
 **Last Updated: August 29, 2026**
 
-This Privacy Policy explains how **dotcomAI**, operated under **DotcomONE / UniPOS** and developed by **Manuja Damsara**, collects, uses, processes, stores, and protects information when you use our website, applications, and AI services.
+This Privacy Policy explains how **dotcomAI**, operated under **DotcomOne / UniPOS** and developed by **Manuja Damsara**, collects, uses, processes, stores, and protects information when you use our website, applications, and AI services.
 
 dotcomAI is developed and operated from Sri Lanka.
 
@@ -1410,7 +1420,7 @@ If you have a privacy question, request, concern, or complaint regarding the pro
 
 Developed by **Manuja Damsara**
 
-Under **DotcomONE / UniPOS**
+Under **DotcomOne / UniPOS**
 
 **Sri Lanka**`},
   about:{title:"About dotcomAI",body:`# About dotcomAI
@@ -1419,7 +1429,7 @@ Under **DotcomONE / UniPOS**
 
 **dotcomAI** is a Sri Lankan artificial intelligence platform designed to make modern AI technology more accessible, useful, and affordable for everyone.
 
-Built under **DotcomONE** and **UniPOS**, dotcomAI provides users with access to AI-powered services through integrations with leading Large Language Model (LLM) and artificial intelligence technologies.
+Built under **DotcomOne** and **UniPOS**, dotcomAI provides users with access to AI-powered services through integrations with leading Large Language Model (LLM) and artificial intelligence technologies.
 
 Our goal is simple: **make powerful AI tools easier for people to access and use.**
 
@@ -1441,7 +1451,7 @@ Manuja Damsara works across multiple areas of technology, including:
 * Digital Product Development
 * Software Solutions
 
-Through **DotcomONE** and **UniPOS**, the vision is to build practical technology products that help individuals and organizations use modern digital technologies more effectively.
+Through **DotcomOne** and **UniPOS**, the vision is to build practical technology products that help individuals and organizations use modern digital technologies more effectively.
 
 ## Our Mission
 
