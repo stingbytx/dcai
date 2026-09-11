@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>dotcomAI — Free AI Service Platform with 400+ Large Language Models | Made in Sri Lanka</title>
+<title>dotcomAI — Free AI Service Platform with 50+ AI Models | Made in Sri Lanka</title>
 <meta name="description" content="dotcomAI is a Sri Lankan AI platform providing accessible AI-powered services with 50+ AI Models through modern LLM technology. Built by Manuja Damsara under DotcomOne">
 <meta name="keywords" content="dotcomAI, dotcom AI, AI Sri Lanka, artificial intelligence Sri Lanka, free AI, free AI tools, AI assistant, AI platform, LLM platform, AI chatbot, Sri Lankan AI platform, AI tools Sri Lanka, AI software Sri Lanka, Manuja Damsara, DotcomOne, UniPOS">
 <link rel="icon" type="image/png" href="favicon.png">
@@ -596,9 +596,9 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
     </form>
     <div class="sb-list" id="convList"></div>
     <div class="sb-links">
-      <button onclick="showLegal('terms')">Terms</button><span class="sep">·</span>
+      <button onclick="showLegal('terms')">Terms of Use</button><span class="sep">·</span>
       <button onclick="showLegal('privacy')">Privacy Policy</button><span class="sep">·</span>
-      <button onclick="showLegal('about')">About</button><span class="sep">·</span>
+      <button onclick="showLegal('about')">About Us</button><span class="sep">·</span>
       <button onclick="showLegal('refund')">Refund Policy</button>
     </div>
 <button class="sb-help" onclick="window.open('https://abacus.lk','_blank')" title="How to configure a 3rd-party API">
@@ -683,7 +683,7 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
             <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
         </div>
-        <div class="composer-hint" id="composerHint">dotcomAI models can make mistakes. Check important info.<span class="usage-badge" id="usageBadge"></span></div>
+        <div class="composer-hint" id="composerHint">All Rights Reserved. Proudly made in Sri Lanka 🇱🇰<span class="usage-badge" id="usageBadge"></span></div>
       </div>
     </div>
   </main>
@@ -764,10 +764,10 @@ function saveAll(){if(!storageOK()){notify("Unable to save local data. Export yo
 function loadAll(){if(!storageOK())return;try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(!d||typeof d!=="object")return;if(d.providers)state.providers=d.providers;if(d.models)state.models=d.models;if(d.modelsMeta)state.modelsMeta=d.modelsMeta;if(Array.isArray(d.conversations))state.conversations=d.conversations;if(d.settings)state.settings=Object.assign({},DEFAULT_SETTINGS,d.settings);if(Array.isArray(d.favorites))state.favorites=d.favorites;if(Array.isArray(d.disabledModels))state.disabledModels=d.disabledModels;if(Array.isArray(d.logs))state.logs=d.logs;if(d.lastRefresh)state.lastRefresh=d.lastRefresh;if(d.usage)state.usage=Object.assign({windowStart:Date.now(),count:0},d.usage);if(Array.isArray(d.workspaces))state.workspaces=d.workspaces;if(d.currentWorkspace)state.currentWorkspace=d.currentWorkspace;if(d.selectedProvider)state.selectedProvider=d.selectedProvider;if(d.selectedModel)state.selectedModel=d.selectedModel}catch(e){console.error("load failed",e)}}
 
 /* ============ PROVIDER SYSTEM ============ */
-const DEFAULT_ORDER=["nvidia","unorouter","openrouter2","groq","mistral","openrouter","xkiro","inceptionlabs"];
+const DEFAULT_ORDER=["ollama","nvidia","unorouter","openrouter2","groq","mistral","openrouter","xkiro","inceptionlabs"];
 function isDefault(p){return DEFAULT_ORDER.includes(p.id)}
 function providerLabel(p){const i=DEFAULT_ORDER.indexOf(p.id);return i>=0?("Default "+(i+1)):(p&&p.name||"Custom")}
-function defaultProviders(){return[{id:"nvidia",name:"NVIDIA",baseURL:"https://integrate.api.nvidia.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"unorouter",name:"Unorouter",baseURL:"https://api.unorouter.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter2",name:"OpenRouter 2",baseURL:"https://openrouter.ai/api/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"groq",name:"Groq",baseURL:"https://api.groq.com/openai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"mistral",name:"Mistral",baseURL:"https://api.mistral.ai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter",name:"OpenRouter",baseURL:"https://openrouter.ai/api/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"xkiro",name:"xKiro",baseURL:"https://api.xkiro.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"inceptionlabs",name:"InceptionLabs",baseURL:"https://api.inceptionlabs.ai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true}]}
+function defaultProviders(){return[{id:"ollama",name:"Ollama",baseURL:"https://ollama.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"nvidia",name:"NVIDIA",baseURL:"https://integrate.api.nvidia.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"unorouter",name:"Unorouter",baseURL:"https://api.unorouter.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter2",name:"OpenRouter 2",baseURL:"https://openrouter.ai/api/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"groq",name:"Groq",baseURL:"https://api.groq.com/openai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"mistral",name:"Mistral",baseURL:"https://api.mistral.ai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"openrouter",name:"OpenRouter",baseURL:"https://openrouter.ai/api/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"xkiro",name:"xKiro",baseURL:"https://api.xkiro.com/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true},{id:"inceptionlabs",name:"InceptionLabs",baseURL:"https://api.inceptionlabs.ai/v1",apiKey:"",enabled:true,status:"notconf",lastTested:null,locked:true}]}
 function ensureProviders(){for(const def of defaultProviders()){const ex=state.providers.find(p=>p.id===def.id);if(ex){ex.locked=true;ex.baseURL=def.baseURL;ex.apiKey=""}else state.providers.push(def)}state.models=state.models||{}}
 function addCustomProvider(){const id="custom-"+Date.now();const p={id,name:"My Provider",baseURL:"",apiKey:"",enabled:true,status:"notconf",lastTested:null,custom:true};state.providers.push(p);saveAll();renderSettingsBody();renderProvider();notify("Added a custom provider. Configure it below.","info");}
 function removeCustomProvider(id){const p=getProvider(id);if(!p||isDefault(p))return;confirmModal("Remove this provider?","This will delete the custom provider '"+p.name+"' and its key from local storage.","Remove",()=>{if(state.selectedProvider===id){state.selectedProvider=null;state.selectedModel=null}state.providers=state.providers.filter(x=>x.id!==id);delete state.models[id];saveAll();renderSettings();renderProvider();updateProviderStatus();notify("Provider removed.","success")})}
@@ -784,9 +784,15 @@ function normalizeResponse(json){const c=json&&json.choices&&json.choices[0];ret
 /* ============ PROVIDER ADAPTERS ============ */
 function keepChatModel(m){const id=(m&&(m.id||m.name)||"").toLowerCase();return !/(whisper|allam|orpheus|tts|embed|bge|rerank|dall|stable|speech|transcri|safeguard|guard|moderation|ocr|realtime|fim|voxtral|vibe|transcribe)/.test(id)}
 const NVIDIA_CHAT_MODELS=["deepseek-ai/deepseek-v4-flash-0731","meta/muse-glimmer-30b","meta/llama-3.2-11b-vision-instruct","mistralai/mistral-nemotron","nvidia/nemotron-3-super-120b-a12b","nvidia/nemotron-3-ultra-550b-a55b","nvidia/nemotron-3.5-lightning-30b-a3b","nvidia/ising-calibration-1.5-31b","openai/gpt-oss-20b","poolside/laguna-xs-2.1"];
+const OLLAMA_CHAT_MODELS=["gpt-oss:20b","gpt-oss:120b","gemma4:31b","nemotron-3-super","nemotron-3-ultra","nemotron-3-nano:30b"];
 const adapters={
   openrouter:{
     async getModels(p){const data=await workerGetModels(p);return(data.data||[]).map(m=>({id:m.id||"unknown",name:m.name||m.id||"unknown",context:m.context_length||null,capabilities:(m.architecture&&m.architecture.modality)||null,pricing:m.pricing||null}))},
+    async chat(p,model,messages,opts,signal){const res=await workerChat(p,model,messages,opts,signal,false);return res.json()},
+    async stream(p,model,messages,opts,signal){const res=await workerChat(p,model,messages,opts,signal,true);if(!res.body)throw new Error("no-stream");return res.body.getReader()}
+  },
+  ollama:{
+    async getModels(p){const data=await workerGetModels(p);const all=((data.data&&Array.isArray(data.data))?data.data:[]);const allow=OLLAMA_CHAT_MODELS;const picked=all.filter(m=>allow.includes(m.id||m.name));const src=picked.length?picked:all.filter(keepChatModel);return src.map(m=>({id:m.id||m.name||"unknown",name:m.name||m.id||"unknown",context:m.context_length||null}))},
     async chat(p,model,messages,opts,signal){const res=await workerChat(p,model,messages,opts,signal,false);return res.json()},
     async stream(p,model,messages,opts,signal){const res=await workerChat(p,model,messages,opts,signal,true);if(!res.body)throw new Error("no-stream");return res.body.getReader()}
   },
