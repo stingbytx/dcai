@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>dotcomAI — Free AI Service Platform with 450+ AI Models | Made in Sri Lanka</title>
+<title>dotcomAI - Free AI Service Platform with 450+ AI Models | Made in Sri Lanka</title>
 <meta name="description" content="dotcomAI is a Sri Lankan AI platform providing accessible AI-powered services with 50+ AI Models through modern LLM technology. Built by Manuja Damsara under DotcomOne">
 <meta name="keywords" content="dotcomAI, dotcom AI, AI Sri Lanka, artificial intelligence Sri Lanka, free AI, free AI tools, AI assistant, AI platform, LLM platform, AI chatbot, Sri Lankan AI platform, AI tools Sri Lanka, AI software Sri Lanka, Manuja Damsara, DotcomOne, UniPOS">
 <link rel="icon" type="image/png" href="favicon.png">
@@ -342,6 +342,8 @@ textarea{flex:1;border:none;background:none;resize:none;outline:none;font-size:1
 .profile-pop-body{padding:12px}
 .profile-btn{display:block;width:100%;padding:10px 12px;border:1px solid var(--accent);border-radius:8px;background:var(--accent);color:#fff;text-align:center;font-weight:700;cursor:pointer;font-size:14px}
 .profile-btn:hover{filter:brightness(1.08)}
+.profile-menu-btn{display:block;width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--text);text-align:left;font-weight:600;cursor:pointer;font-size:13px;margin-bottom:8px}
+.profile-menu-btn:hover{background:var(--bg-hover)}
 .onboard-spot{position:fixed;z-index:3000;background:var(--bg);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 34px rgba(0,0,0,.45);padding:16px 18px;max-width:320px;animation:obIn .25s ease}
 @keyframes obIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .ob-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:6px}
@@ -596,15 +598,12 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
     </form>
     <div class="sb-list" id="convList"></div>
     <div class="sb-links">
-      <button onclick="showLegal('terms')">Terms</button><span class="sep">·</span>
+      <button onclick="showLegal('terms')">Terms of Use</button><span class="sep">·</span>
       <button onclick="showLegal('privacy')">Privacy Policy</button><span class="sep">·</span>
-      <button onclick="showLegal('about')">About</button><span class="sep">·</span>
+      <button onclick="showLegal('about')">About Us</button><span class="sep">·</span>
       <button onclick="showLegal('refund')">Refund Policy</button>
     </div>
-<button class="sb-help" onclick="window.open('https://abacus.lk','_blank')" title="How to configure a 3rd-party API">
-        <span>How to configure a 3rd-party API</span>
-      </button>
-    <div class="sb-foot">
+<div class="sb-foot">
       <div class="offline-dot" id="offlineDot"><span class="dot"></span><span id="offlineLabel">Online</span></div>
       <div class="sb-foot-right">
         <a class="sb-social-btn" href="https://instagram.com/manuja_damsara" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
@@ -645,14 +644,8 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
       </div>
       <div class="topbar-right">
         <div class="provider-status unconf" id="providerStatus" style="display:none"><span class="pdot"></span><span id="providerStatusLabel">No provider</span></div>
-        <button class="icon-btn" id="btnHome" title="Home" aria-label="Home" onclick="goHome()">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        </button>
         <button class="icon-btn" id="btnCheckConn" title="Check Connection" aria-label="Check Connection" onclick="checkConnections()">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
-        </button>
-        <button class="icon-btn" id="btnSettings2" title="Settings" aria-label="Settings">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         </button>
         <div class="profile-wrap">
           <button class="icon-btn" id="btnProfile" title="Profile" aria-label="Profile" onclick="toggleProfile()">
@@ -661,6 +654,8 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
           <div class="profile-pop" id="profilePop" style="display:none">
             <div class="profile-pop-head"><div class="profile-email" id="profileEmail">Loading…</div><div class="profile-sub">Signed in via dotcomAI</div></div>
             <div class="profile-pop-body">
+              <button class="profile-menu-btn" onclick="closeProfile();goHome()">Home</button>
+              <button class="profile-menu-btn" onclick="closeProfile();openSettings('providers')">Settings</button>
               <button class="profile-btn" onclick="upgradePlan()">Upgrade to Pro</button>
             </div>
           </div>
@@ -683,7 +678,7 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
             <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
         </div>
-        <div class="composer-hint" id="composerHint">dotcomAI models can make mistakes. Check important info.<span class="usage-badge" id="usageBadge"></span></div>
+        <div class="composer-hint" id="composerHint">All Rights Reserved. Proudly made in Sri Lanka 🇱🇰<span class="usage-badge" id="usageBadge"></span></div>
       </div>
     </div>
   </main>
@@ -867,6 +862,7 @@ function closeConnModal(){const el=document.getElementById("connModal");if(el)el
 function goHome(){try{window.location.href="https://home.dotcomai.site"}catch(e){try{window.open("https://home.dotcomai.site","_self")}catch(e2){}}}
 function getCurrentEmail(){try{const s=localStorage.getItem("dc_auth_email");if(s)return s;}catch(e){}try{if(supabaseClient&&supabaseClient.auth){let em=null;supabaseClient.auth.getUser().then(({data})=>{if(data&&data.user&&data.user.email){const el=document.getElementById("profileEmail");if(el)el.textContent=data.user.email;}else if(localStorage.getItem("dc_auth_email")&&document.getElementById("profileEmail"))document.getElementById("profileEmail").textContent=localStorage.getItem("dc_auth_email");}).catch(()=>{});}}catch(e){}return null}
 function toggleProfile(){const pop=document.getElementById("profilePop");if(!pop)return;const show=pop.style.display!=="block";pop.style.display=show?"block":"none";if(show){const em=document.getElementById("profileEmail");if(em){const saved=localStorage.getItem("dc_auth_email");if(saved)em.textContent=saved;}getCurrentEmail();}}
+function closeProfile(){const p=document.getElementById("profilePop");if(p)p.style.display="none";}
 function upgradePlan(){const pop=document.getElementById("profilePop");if(pop)pop.style.display="none";try{window.location.href="https://home.dotcomai.site/upgrade"}catch(e){try{window.open("https://home.dotcomai.site/upgrade","_blank")}catch(e2){}}}
 if(document&&document.addEventListener)document.addEventListener("click",function(ev){const pop=document.getElementById("profilePop");const btn=document.getElementById("btnProfile");if(pop&&pop.style.display==="block"&&ev.target&&(!btn||!btn.contains(ev.target))&&!pop.contains(ev.target))pop.style.display="none";});
 /* ============ NEW-USER ONBOARDING ============ */
@@ -2014,7 +2010,7 @@ function highlightCode(code,lang){const map={js:'javascript',jsx:'javascript',ts
 function wireEvents(){
   $("#btnNewChat").onclick=newConversation;
   $("#btnWorkspaces").onclick=openWorkspacesPanel;
-  $("#btnSettings2").onclick=()=>openSettings("providers");
+  const _bs2=$("#btnSettings2");if(_bs2)_bs2.onclick=()=>openSettings("providers");
   $("#btnTheme").onclick=cycleTheme;
   $("#btnHamburger").onclick=openSidebar;
   $("#btnSidebarClose").onclick=closeSidebar;
@@ -2079,13 +2075,13 @@ function modelsTabHTML(){
 /* ============ SETTINGS RENDER ============ */
 function renderSettingsModal(){
   const ov=document.createElement("div");ov.className="modal-overlay";ov.id="settingsModal";
-  const tabs=["providers","models","chat","generation","usage","logs","system","data"];
-  const labels={providers:"Providers",models:"Models",chat:"Chat",generation:"Generation",usage:"Usage",logs:"Logs",system:"System",data:"Data"};
+  const tabs=["providers","models","chat","generation","usage","logs","data"];
+  const labels={providers:"Providers",models:"Models",chat:"Chat",generation:"Generation",usage:"Usage",logs:"Logs",data:"Data"};
   ov.innerHTML='<div class="modal lg"><div class="modal-head"><h2>Settings</h2><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">×</button></div><div class="settings-nav">'+tabs.map(t=>'<button class="'+(settingsTab===t?"active":"")+'" onclick="switchTab(\''+t+'\')">'+labels[t]+"</button>").join("")+'</div><div class="modal-body" id="settingsBody"></div></div>';
   document.body.appendChild(ov);
   renderSettingsBody();
 }
-function switchTab(tab){settingsTab=tab;document.querySelectorAll(".settings-nav button").forEach(b=>b.classList.toggle("active",b.textContent===({providers:"Providers",models:"Models",chat:"Chat",generation:"Generation",usage:"Usage",logs:"Logs",system:"System",data:"Data"})[tab]));renderSettingsBody();}
+function switchTab(tab){settingsTab=tab;document.querySelectorAll(".settings-nav button").forEach(b=>b.classList.toggle("active",b.textContent===({providers:"Providers",models:"Models",chat:"Chat",generation:"Generation",usage:"Usage",logs:"Logs",data:"Data"})[tab]));renderSettingsBody();}
 function settingsTabBody(){
   if(settingsTab==="providers")return providersTabHTML();
   if(settingsTab==="models")return modelsTabHTML();
@@ -2093,15 +2089,12 @@ function settingsTabBody(){
   if(settingsTab==="generation")return generationTabHTML();
   if(settingsTab==="usage")return usageTabHTML();
   if(settingsTab==="logs")return logsTabHTML();
-  if(settingsTab==="system")return systemTabHTML();
   return dataTabHTML();
 }
 function renderSettingsBody(){const b=$("#settingsBody");b.innerHTML=settingsTabBody();b.scrollTop=0;}
 function statusBadge(p){return p.status==="connected"?'<span class="status-badge ok"><span class="sd"></span>Connected</span>':p.status==="error"?'<span class="status-badge err"><span class="sd"></span>Error</span>':(p.apiKey?'<span class="status-badge warn"><span class="sd"></span>Not tested</span>':'<span class="status-badge warn"><span class="sd"></span>Not configured</span>')}
 function providersTabHTML(){
-  return '<div class="secret-note">The two default providers (OpenRouter &amp; JustWorker) are pre-configured and locked — visitors cannot see or change them. You can add and manage your own custom provider below.</div>'+
-  state.providers.map(p=>isDefault(p)?providerLockedCard(p):providerCustomCard(p)).join("")+
-  '<div class="btn-row"><button class="btn" onclick="addCustomProvider()">Add Custom Provider</button></div>'+
+  return state.providers.filter(p=>isDefault(p)).map(p=>providerLockedCard(p)).join("")+
   '<div class="btn-row"><button class="btn small" onclick="exportConfig()">Export config (no keys)</button><button class="btn small" onclick="importConfig()">Import config</button></div>';
 }
 function providerLockedCard(p){
@@ -2156,9 +2149,7 @@ function usageTabHTML(){
   const avg=durN?Math.round(durSum/durN)+" ms":"—";
   const rate=total?((ok/total)*100).toFixed(1)+"%":"—";
   let provRows="";for(const p of state.providers){const n=byProv[p.id]||0;provRows+='<div class="urow"><span class="key">'+esc(p.name)+'</span><span class="val">'+n+"</span></div>"}
-  return'<div class="setting-group"><h3>Usage Limits</h3><div class="toggle-row"><div><div class="lbl">Enable message limit</div><div class="sub">Restrict how many messages a user can send per window</div></div><label class="switch"><input type="checkbox" '+(s.usageEnabled?"checked":"")+' onchange="setUsageEnabled(this.checked)"><span class="slider"></span></label></div>'+
-  (s.usageEnabled?'<div class="field"><label>Messages per window</label><input type="number" min="1" value="'+s.usageLimit+'" onchange="setUsageLimit(this.value)"></div><div class="field"><label>Reset every (hours)</label><input type="number" min="1" value="'+Math.round(s.usageWindowMs/3600000)+'" onchange="setUsageWindow(this.value)"></div><div class="info-box">When the limit is reached, the user sees a full-screen \u201cLimit Reached\u201d screen with a live countdown to the next reset. Used: <b>'+u.count+' / '+s.usageLimit+'</b> \u00b7 resets in <b>'+fmtDur(usageResetMs())+'</b><button class="btn small" style="margin-left:8px" onclick="resetUsageNow()">Reset now</button></div>':'<div class="info-box">The message limit is currently disabled.</div>')+
-  '<div class="setting-stat"><div class="stat-card"><div class="num">'+total+'</div><div class="lbl">Total Requests</div></div><div class="stat-card"><div class="num">'+ok+'</div><div class="lbl">Successful</div></div><div class="stat-card"><div class="num">'+fail+'</div><div class="lbl">Failed</div></div><div class="stat-card"><div class="num">'+rate+'</div><div class="lbl">Success Rate</div></div></div>'+
+  return'<div class="setting-stat"><div class="stat-card"><div class="num">'+total+'</div><div class="lbl">Total Requests</div></div><div class="stat-card"><div class="num">'+ok+'</div><div class="lbl">Successful</div></div><div class="stat-card"><div class="num">'+fail+'</div><div class="lbl">Failed</div></div><div class="stat-card"><div class="num">'+rate+'</div><div class="lbl">Success Rate</div></div></div>'+
   '<div class="setting-group"><h3>By Provider</h3><div class="usage-list">'+provRows+'</div></div>'+
   '<div class="setting-group"><h3>Summary</h3><div class="usage-list"><div class="urow"><span class="key">Most used model</span><span class="val">'+esc(topModel?topModel[0]:"—")+'</span></div><div class="urow"><span class="key">Average response time (successful)</span><span class="val">'+avg+'</span></div></div></div>'+
   '<div class="setting-group"><h3>Provider balance</h3><div class="info-box">Provider balance: <b>Unavailable through API</b>.<br>This application does not claim a remaining balance unless a provider\u0027s official API provides it.</div></div>'+
@@ -2241,7 +2232,7 @@ function dismissPilot(){try{localStorage.setItem("dc_pilot_seen","1");}catch(e){
 function showWelcome(){
   const ov=document.createElement("div");ov.className="modal-overlay";ov.id="welcomeModal";
   ov.innerHTML='<div class="modal"><div class="modal-head"><h2>dotcomAI</h2><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">×</button></div><div class="modal-body"><div style="text-align:center;margin-bottom:16px"><div style="font-size:28px">'+I.ai+'</div><p style="margin:6px 0 2px;font-weight:600;font-size:16px">Your personal multi-provider AI workspace.</p><p style="color:var(--text2)">Connect a provider to begin. This app runs locally in your browser — keys are stored only on this device.</p></div>'+
-  state.providers.map(p=>'<div class="provider-card"><div class="pc-head"><div class="pc-title">'+esc(p.name)+'</div></div><div class="field"><label>API Key</label><input type="password" id="welcomeKey-'+p.id+'" placeholder="Paste your '+esc(p.name)+' API key" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:9px;background:var(--bg2);color:var(--text)"></div><button class="btn primary" style="width:100%" onclick="welcomeConnect(\''+p.id+'\')">Connect '+esc(p.name)+'</button></div>').join("")+
+  ''
   '<div style="text-align:center;margin-top:12px"><button class="btn" style="width:100%" onclick="this.closest(\'.modal-overlay\').remove()">Skip for now</button></div></div></div>';
   document.body.appendChild(ov);
 }
