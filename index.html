@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>dotcomAI — Free AI Service Platform with 400+ AI Models | Made in Sri Lanka</title>
-<meta name="description" content="dotcomAI is a Sri Lankan AI platform providing accessible AI-powered services with 400+ AI Models through modern LLM technology. Built by Manuja Damsara under DotcomOne">
+<title>dotcomAI — Free AI Service Platform with 50+ AI Models | Made in Sri Lanka</title>
+<meta name="description" content="dotcomAI is a Sri Lankan AI platform providing accessible AI-powered services with 50+ AI Models through modern LLM technology. Built by Manuja Damsara under DotcomOne">
 <meta name="keywords" content="dotcomAI, dotcom AI, AI Sri Lanka, artificial intelligence Sri Lanka, free AI, free AI tools, AI assistant, AI platform, LLM platform, AI chatbot, Sri Lankan AI platform, AI tools Sri Lanka, AI software Sri Lanka, Manuja Damsara, DotcomOne, UniPOS">
 <link rel="icon" type="image/png" href="favicon.png">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -568,6 +568,52 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
   .auth-form{padding:0}
 }
 
+/* ============ MOBILE RESPONSIVENESS (additive, mobile only) ============ */
+@media (max-width:820px){
+  /* Use the dynamic viewport height so the composer is not hidden behind mobile browser UI */
+  .app{height:100dvh}
+  .auth-wrap{min-height:100dvh}
+  .auth-left{min-height:100dvh}
+  .modal{max-height:90dvh}
+
+  /* Prevent iOS auto-zoom when focusing inputs (font-size below 16px triggers it) */
+  #composerInput,textarea,input[type=text],input[type=password],input[type=number],input[type=email],select,.picker-search input{font-size:16px}
+
+  /* Settings tabs: one horizontally scrollable row instead of several wrapped rows */
+  .settings-nav{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .settings-nav::-webkit-scrollbar{display:none}
+  .settings-nav button{white-space:nowrap;flex:0 0 auto}
+
+  /* Model/provider dropdowns: fit the screen, list scrolls inside */
+  .picker-dropdown{max-height:calc(100dvh - 84px);display:flex;flex-direction:column}
+  .picker-list{max-height:none;flex:1;min-height:0}
+
+  /* Keep content inside the screen (no horizontal overflow) */
+  .msg-content img,.legal-body img{max-width:100%;height:auto}
+  .msg-content table,.legal-body table{display:block;overflow-x:auto;max-width:100%}
+  .msg-content pre,.codeblock{max-width:100%}
+  .urow{gap:8px}
+  .urow .key,.urow .val{min-width:0;overflow-wrap:anywhere}
+  .urow .val{text-align:right}
+  .profile-pop{max-width:calc(100vw - 24px)}
+  .legal-body{padding:18px 16px}
+
+  /* iPhone notch / home-indicator safe areas */
+  .composer{padding-bottom:calc(14px + env(safe-area-inset-bottom))}
+  .sidebar{padding-bottom:env(safe-area-inset-bottom)}
+}
+
+@media (max-width:460px){
+  /* Topbar wraps to two rows here, so open dropdowns below it */
+  .picker-dropdown{top:104px;max-height:calc(100dvh - 112px)}
+  .modal-overlay{padding:8px}
+  .settings-nav{margin-bottom:12px}
+}
+
+@media (max-width:380px){
+  .auth-title{white-space:normal}
+}
+
 </style>
 </head>
 <body>
@@ -753,7 +799,7 @@ function favGlyph(pid,mid){return isFav(pid,mid)?I.star:I.starOutline;}
 
 
 /* ============ STATE ============ */
-const state={providers:[],models:{},modelsMeta:{},conversations:[],currentConversationId:null,workspaces:[],currentWorkspace:null,selectedProvider:null,selectedModel:null,settings:Object.assign({},DEFAULT_SETTINGS),favorites:[],disabledModels:[],logs:[],attachments:[],lastRefresh:{},usage:{windowStart:Date.now(),count:0},generating:false,abortController:null};
+const state={providers:[],models:{},modelsMeta:{},conversations:[],currentConversationId:null,workspaces:[],currentWorkspace:null,selectedProvider:null,selectedModel:null,settings:Object.assign({},DEFAULT_SETTINGS),favorites:[],disabledModels:[],logs:[],attachments:[],lastRefresh:{},usage:{windowStart:Date.now(),count:0},generating:false,abortController:null,userPlan:"free"};
 
 /* ============ STORAGE ============ */
 function storageOK(){try{localStorage.setItem("__t","1");localStorage.removeItem("__t");return true}catch(e){return false}}
@@ -865,7 +911,72 @@ function goHome(){try{window.location.href="https://home.dotcomai.site"}catch(e)
 function getCurrentEmail(){try{const s=localStorage.getItem("dc_auth_email");if(s)return s;}catch(e){}try{if(supabaseClient&&supabaseClient.auth){let em=null;supabaseClient.auth.getUser().then(({data})=>{if(data&&data.user&&data.user.email){const el=document.getElementById("profileEmail");if(el)el.textContent=data.user.email;}else if(localStorage.getItem("dc_auth_email")&&document.getElementById("profileEmail"))document.getElementById("profileEmail").textContent=localStorage.getItem("dc_auth_email");}).catch(()=>{});}}catch(e){}return null}
 function toggleProfile(){const pop=document.getElementById("profilePop");if(!pop)return;const show=pop.style.display!=="block";pop.style.display=show?"block":"none";if(show){const em=document.getElementById("profileEmail");if(em){const saved=localStorage.getItem("dc_auth_email");if(saved)em.textContent=saved;}getCurrentEmail();}}
 function closeProfile(){const p=document.getElementById("profilePop");if(p)p.style.display="none";}
-function upgradePlan(){const pop=document.getElementById("profilePop");if(pop)pop.style.display="none";try{window.location.href="https://home.dotcomai.site/upgrade"}catch(e){try{window.open("https://home.dotcomai.site/upgrade","_blank")}catch(e2){}}}
+/* ============ dotcomAI PRO ============ */
+function isProUser(){return state.userPlan==="pro"}
+function updateProUI(){
+  const sub=document.querySelector("#profilePop .profile-sub");
+  if(sub)sub.textContent=isProUser()?"dotcomAI Pro ✓":"Free plan";
+  const up=document.querySelector("#profilePop .profile-btn");
+  if(up)up.textContent=isProUser()?"dotcomAI Pro ✓":"Upgrade to Pro";
+  updateUsageBadge();
+}
+async function loadProStatus(){
+  try{
+    if(!supabaseClient||!supabaseClient.auth)return;
+    const {data}=await supabaseClient.auth.getUser();
+    const u=data&&data.user;if(!u)return;
+    const res=await fetch(WORKER_URL+"/pro/status",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:(u.email||"").toLowerCase(),userId:u.id})});
+    const j=await res.json().catch(function(){return{}});
+    state.userPlan=(j&&j.plan==="pro")?"pro":"free";
+    updateProUI();
+  }catch(e){}
+}
+function openProModal(){
+  const pop=document.getElementById("profilePop");if(pop)pop.style.display="none";
+  const ov=document.createElement("div");ov.className="modal-overlay";ov.id="proModal";
+  ov.innerHTML='<div class="modal" style="max-width:440px"><div class="modal-head"><h2>dotcomAI Pro</h2><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()">×</button></div><div class="modal-body">'+
+    '<div style="text-align:center;margin-bottom:16px"><div style="font-size:38px;line-height:1">'+I.ai+'</div><p style="margin:10px 0 2px;font-weight:700;font-size:20px">LKR 2,000</p><p style="color:var(--text2);font-size:13px">One-time payment · Lifetime access</p></div>'+
+    '<div class="info-box" style="margin-bottom:16px">Unlimited messages · All models · No daily limits</div>'+
+    '<button class="btn primary" style="width:100%" id="proPayBtn" onclick="startProCheckout()">Pay with PayHere</button>'+
+    '<p style="color:var(--text3);font-size:11px;text-align:center;margin:10px 0 0">Secure payment via PayHere. Pro is linked to your signed-in email.</p>'+
+    '</div></div>';
+  ov.addEventListener("click",function(e){if(e.target===ov)ov.remove()});
+  document.body.appendChild(ov);
+}
+async function startProCheckout(){
+  const btn=document.getElementById("proPayBtn");
+  try{
+    if(!supabaseClient||!supabaseClient.auth){notify("Please sign in first.","error");return}
+    const {data}=await supabaseClient.auth.getUser();
+    const u=data&&data.user;if(!u){notify("Please sign in first.","error");return}
+    if(btn){btn.disabled=true;btn.textContent="Starting checkout…"}
+    const meta=u.user_metadata||{};
+    const res=await fetch(WORKER_URL+"/payhere/checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:(u.email||"").toLowerCase(),userId:u.id,firstName:meta.first_name||meta.full_name||"dotcomAI",lastName:meta.last_name||"Customer"})});
+    const j=await res.json().catch(function(){return{}});
+    if(!res.ok||!j||!j.fields||!j.action||!j.fields.hash){
+      notify((j&&j.error&&j.error.message)||"Could not start checkout.","error");
+      if(btn){btn.disabled=false;btn.textContent="Pay with PayHere"}
+      return;
+    }
+    const f=document.createElement("form");f.method="POST";f.action=j.action;f.style.display="none";
+    for(const k in j.fields){const i=document.createElement("input");i.type="hidden";i.name=k;i.value=j.fields[k];f.appendChild(i)}
+    document.body.appendChild(f);f.submit();
+  }catch(e){notify("Could not start checkout.","error");if(btn){btn.disabled=false;btn.textContent="Pay with PayHere"}}
+}
+function proReturnCheck(){
+  try{
+    const q=new URLSearchParams(location.search);
+    if(q.get("pro")!=="success")return;
+    notify("Payment received — activating Pro…","info");
+    let n=0;
+    const t=setInterval(function(){
+      n++;
+      loadProStatus().then(function(){if(isProUser()){clearInterval(t);notify("dotcomAI Pro activated. Enjoy unlimited access!","success");}});
+      if(n>=6)clearInterval(t);
+    },2000);
+  }catch(e){}
+}
+function upgradePlan(){const pop=document.getElementById("profilePop");if(pop)pop.style.display="none";if(isProUser()){notify("You already have dotcomAI Pro.","success");return}openProModal()}
 if(document&&document.addEventListener)document.addEventListener("click",function(ev){const pop=document.getElementById("profilePop");const btn=document.getElementById("btnProfile");if(pop&&pop.style.display==="block"&&ev.target&&(!btn||!btn.contains(ev.target))&&!pop.contains(ev.target))pop.style.display="none";});
 /* ============ NEW-USER ONBOARDING ============ */
 const OB_STEPS=[
@@ -1760,11 +1871,11 @@ function saveDeviceUsage(d){try{localStorage.setItem(DEV_KEY,JSON.stringify(d))}
 function isDeviceBlocked(){const s=state.settings;if(!s.usageEnabled)return false;const d=getDeviceUsage();return d.count>=s.usageLimit}
 function deviceResetMs(){const s=state.settings;if(!s.usageEnabled)return 0;const d=getDeviceUsage();return Math.max(0,(d.windowStart+s.usageWindowMs)-Date.now())}
 function captureIP(){const cur=localStorage.getItem("dc_device_ip");if(cur)return Promise.resolve();return fetch("https://api.ipify.org?format=json").then(r=>r.json()).then(j=>{if(j&&j.ip){localStorage.setItem("dc_device_ip",j.ip);const d=getDeviceUsage();d.ip=j.ip;saveDeviceUsage(d)}}).catch(()=>{})}
-function isUsageBlocked(){const s=state.settings;if(!s.usageEnabled)return false;if(isDeviceBlocked())return true;const u=getUsage();return u.count>=s.usageLimit;}
+function isUsageBlocked(){const s=state.settings;if(!s.usageEnabled)return false;if(isProUser())return false;if(isDeviceBlocked())return true;const u=getUsage();return u.count>=s.usageLimit;}
 function usageResetMs(){const s=state.settings;if(!s.usageEnabled)return 0;const u=getUsage();return Math.max(deviceResetMs(),Math.max(0,(u.windowStart+s.usageWindowMs)-Date.now()));}
-function consumeUsage(){const s=state.settings;if(!s.usageEnabled)return;const u=getUsage();u.count++;const d=getDeviceUsage();d.count++;d.ip=d.ip||localStorage.getItem("dc_device_ip")||null;saveDeviceUsage(d);captureIP();saveAll();updateUsageBadge();syncUsageRemote();}
+function consumeUsage(){const s=state.settings;if(!s.usageEnabled)return;if(isProUser())return;const u=getUsage();u.count++;const d=getDeviceUsage();d.count++;d.ip=d.ip||localStorage.getItem("dc_device_ip")||null;saveDeviceUsage(d);captureIP();saveAll();updateUsageBadge();syncUsageRemote();}
 function fmtDur(ms){ms=Math.max(0,Math.floor(ms/1000));const h=Math.floor(ms/3600);const m=Math.floor((ms%3600)/60);const s=ms%60;return String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");}
-function updateUsageBadge(){const b=$("#usageBadge");if(!b)return;const s=state.settings;if(!s.usageEnabled){b.textContent="";return}const left=usageLeft();b.textContent=left+" / "+s.usageLimit+" left";}
+function updateUsageBadge(){const b=$("#usageBadge");if(!b)return;const s=state.settings;if(isProUser()){b.textContent="Pro · Unlimited";return}if(!s.usageEnabled){b.textContent="";return}const left=usageLeft();b.textContent=left+" / "+s.usageLimit+" left";}
 function usageLeft(){const s=state.settings;if(!s.usageEnabled)return 0;const u=getUsage();return Math.max(0,s.usageLimit-u.count);}
 function showLimitModal(){
   const s=state.settings;const hrs=s.usageWindowMs/3600000;
@@ -2195,7 +2306,7 @@ function togglePw(id){const el=$("#"+id);if(!el)return;const isPw=el.type==="pas
 function authError(m){const el=$("#authErr");if(el){el.textContent=m;el.style.display="block";}}
 function authOk(m){const el=$("#authErr");if(el){el.textContent=m;el.style.display="block";el.className="auth-ok";}}
 function authBtnLoading(on){const b=$("#authBtn");if(b){b.disabled=on;b.textContent=on?(b.textContent==="Sign in"?"Signing in…":"Please wait…"):(b.dataset.orig||b.textContent);}}
-async function authSignIn(){const email=$("#authEmail").value.trim();const pass=$("#authPass").value;if(!email||!pass){authError("Enter your email and password.");return}authError("");authBtnLoading(true);const r=$("#authRemember");try{if(r&&r.checked)localStorage.setItem("dc_auth_email",email);else localStorage.removeItem("dc_auth_email");}catch(e){}const {error}=await supabaseClient.auth.signInWithPassword({email,password:pass});authBtnLoading(false);if(error){authError(error.message);return}authScreenHide();notify("Signed in.","success");try{localStorage.setItem("dc_auth_email",email);}catch(e){}if(document.getElementById("profileEmail"))document.getElementById("profileEmail").textContent=email;setTimeout(()=>{maybeShowOnboarding();},500);}
+async function authSignIn(){const email=$("#authEmail").value.trim();const pass=$("#authPass").value;if(!email||!pass){authError("Enter your email and password.");return}authError("");authBtnLoading(true);const r=$("#authRemember");try{if(r&&r.checked)localStorage.setItem("dc_auth_email",email);else localStorage.removeItem("dc_auth_email");}catch(e){}const {error}=await supabaseClient.auth.signInWithPassword({email,password:pass});authBtnLoading(false);if(error){authError(error.message);return}authScreenHide();notify("Signed in.","success");try{localStorage.setItem("dc_auth_email",email);}catch(e){}if(document.getElementById("profileEmail"))document.getElementById("profileEmail").textContent=email;loadProStatus();setTimeout(()=>{maybeShowOnboarding();},500);}
 async function authSignUp(){const email=$("#authEmail").value.trim();const pass=$("#authPass").value;const conf=$("#authConfirmPass").value;if(!email||!pass||!conf){authError("Please fill in all fields.");return}if(pass.length<6){authError("Password must be at least 6 characters.");return}if(pass!==conf){authError("Passwords do not match.");return}authError("");authBtnLoading(true);try{const {data,error}=await supabaseClient.auth.signUp({email,password:pass,options:{}});authBtnLoading(false);if(error){authError(error.message);return}if(data.session){authScreenHide();notify("Signed in.","success");}else{authOk("Account created. Check your email to confirm your sign-up.");renderAuthMode("signin");}}catch(e){authBtnLoading(false);authError("Sign-up failed: "+(e&&e.message?e.message:"unable to reach Supabase. Check your connection."));}}
 async function authForgot(){const email=$("#authEmail").value.trim();if(!email){authError("Enter your email.");return}authError("");try{const {error}=await supabaseClient.auth.resetPasswordForEmail(email);if(error){authError(error.message);return}authOk("Reset link sent. Check your inbox.");}catch(e){authError("Failed to send reset link: "+(e&&e.message?e.message:"unreachable Supabase"));}}
 async function goGoogle(){try{const {error}=await supabaseClient.auth.signInWithOAuth({provider:"google",options:{redirectTo:window.location.href}});if(error){authError("Google sign-in failed: "+error.message);return;}}catch(e){authError("Google sign-in failed. Ensure the site is served over HTTPS and Google is enabled in your Supabase project.");}}
@@ -2213,6 +2324,7 @@ function init(){
   if(!state.conversations.length){state.currentConversationId=null}else if(!getConv(state.currentConversationId))state.currentConversationId=state.conversations[0]?.id||null;
   wireEvents();renderSidebar();renderProvider();renderModelList();renderChat();renderAttach();updateOffline();updateProviderStatus();
   updateUsageBadge();
+  loadProStatus();proReturnCheck();
   autoLoadModels();
   // keep the chat-search box empty on load (prevents browser autofill from injecting the saved email)
   const _clearSearch=()=>{const s=$("#sbSearch");if(s)s.value="";};
