@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>dotcomAI — Free AI Service Platform with 400+ AI Models | Made in Sri Lanka</title>
+<title>dotcomAI — Free AI Service Platform with 50+ AI Models | Made in Sri Lanka</title>
 <meta name="description" content="dotcomAI is a Sri Lankan AI platform providing accessible AI-powered services with 50+ AI Models through modern LLM technology. Built by Manuja Damsara under DotcomOne">
 <meta name="keywords" content="dotcomAI, dotcom AI, AI Sri Lanka, artificial intelligence Sri Lanka, free AI, free AI tools, AI assistant, AI platform, LLM platform, AI chatbot, Sri Lankan AI platform, AI tools Sri Lanka, AI software Sri Lanka, Manuja Damsara, DotcomOne, UniPOS">
 <link rel="icon" type="image/png" href="favicon.png">
@@ -645,9 +645,9 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
     </form>
     <div class="sb-list" id="convList"></div>
     <div class="sb-links">
-      <button onclick="showLegal('terms')">Terms</button><span class="sep">·</span>
+      <button onclick="showLegal('terms')">Terms of Use</button><span class="sep">·</span>
       <button onclick="showLegal('privacy')">Privacy Policy</button><span class="sep">·</span>
-      <button onclick="showLegal('about')">About</button><span class="sep">·</span>
+      <button onclick="showLegal('about')">About Us</button><span class="sep">·</span>
       <button onclick="showLegal('refund')">Refund Policy</button>
     </div>
 <a class="sb-help" href="https://edi-harness.dotcomai.site/" target="_blank" rel="noopener noreferrer">Get EDI Harness</a>
@@ -726,7 +726,7 @@ body{text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
             <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
         </div>
-        <div class="composer-hint" id="composerHint">Models can make mistakes. Check important info<span class="usage-badge" id="usageBadge"></span></div>
+        <div class="composer-hint" id="composerHint">All Rights Reserved. Proudly made in Sri Lanka 🇱🇰<span class="usage-badge" id="usageBadge"></span></div>
       </div>
     </div>
   </main>
@@ -763,7 +763,10 @@ const STORAGE_KEY="my_ai_platform_v1", STORAGE_VERSION=1;
 // No API keys exist in this file. Set WORKER_URL to your deployed Worker.
 const WORKER_URL="https://dotcomai-proxy.manujadamsara11.workers.dev";
 const DEFAULT_SETTINGS={theme:"dark",streaming:true,enterToSend:true,showTimestamps:true,temperature:0.7,maxTokens:2048,topP:1,systemPrompt:"You are my personal AI assistant. Be clear, concise, and helpful.",maxFileSizeMB:5,debugMode:false,demoMode:false,usageEnabled:true,usageLimit:20,usageWindowMs:21600000,hideGetStarted:false,webSearch:true};
-const FILE_EXTENSIONS=["txt","md","json","csv","js","ts","jsx","tsx","py","html","css"];
+const TEXT_EXT=["txt","text","md","markdown","json","jsonl","ndjson","csv","tsv","xml","yaml","yml","toml","ini","conf","cfg","env","log","sql","sh","bash","zsh","bat","cmd","ps1","js","mjs","cjs","ts","jsx","tsx","py","rb","go","rs","java","kt","kts","swift","c","h","cpp","cc","cxx","hpp","cs","php","pl","lua","r","scala","dart","html","htm","css","scss","sass","less","styl","vue","svelte","astro","graphql","gql","proto","diff","patch"];
+const IMAGE_EXT=["png","jpg","jpeg","gif","webp","bmp","svg","avif","tif","tiff","heic","heif","ico"];
+const ARCHIVE_EXT=["zip","docx","xlsx","pptx","odt","ods","odp","epub"];
+const FILE_EXTENSIONS=TEXT_EXT.concat(IMAGE_EXT,ARCHIVE_EXT,["pdf"]);
 const QUICK_PROMPTS=["Explain something","Write code","Analyze text","Brainstorm ideas"];
 const START_PROMPTS=[
  {svg:'<svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',title:'Edit an image',desc:'Upload an image and edit it with AI',p:'Help me edit an image with AI.'},
@@ -1862,7 +1865,7 @@ function toggleGetStarted(){state.settings.hideGetStarted=!state.settings.hideGe
 function fillPrompt(btn){const i=$("#composerInput");i.value=btn.getAttribute("data-p");i.focus();autoResize();}
 
 /* ============ SEND / STREAM ============ */
-function currentMessages(){const conv=currentConv();return conv?conv.messages.filter(m=>m.role!=="error").map(m=>({role:m.role,content:m.content})):[]}
+function currentMessages(){const conv=currentConv();return conv?conv.messages.filter(m=>m.role!=="error").map(m=>{if(m.images&&m.images.length){const parts=[{type:"text",text:String(m.content||"")}];m.images.forEach(function(u){parts.push({type:"image_url",image_url:{url:u}})});return {role:m.role,content:parts}}return {role:m.role,content:m.content}}):[]}
 function getUsage(){if(!state.usage){state.usage={windowStart:Date.now(),count:0}}const s=state.settings;if(s.usageEnabled&&state.usage.windowStart+s.usageWindowMs<=Date.now()){state.usage.windowStart=Date.now();state.usage.count=0}return state.usage;}
 const DEV_KEY="dc_dev_usage";
 function deviceId(){let id=localStorage.getItem("dc_device_id");if(!id){id="d-"+Date.now().toString(36)+Math.random().toString(36).slice(2,10);localStorage.setItem("dc_device_id",id)}return id}
@@ -1905,7 +1908,22 @@ async function sendMessage(){
   if(c.title==="Untitled Chat")c.title=makeTitle(text);
   const userMsg={role:"user",content:text,timestamp:new Date().toISOString(),model:state.selectedModel};
   // attach file content
-  if(state.attachments.length){const parts=state.attachments.map(a=>"### Attached file: "+a.name+"\n```"+a.suffix+"\n"+a.content+"\n```");userMsg.content=text+"\n\n"+parts.join("\n\n");}
+  if(state.attachments.length){
+    const textAtts=state.attachments.filter(a=>a.kind!=="image");
+    const imgAtts=state.attachments.filter(a=>a.kind==="image");
+    const parts=textAtts.map(a=>"### Attached file: "+a.name+"\n```"+a.suffix+"\n"+a.content+"\n```");
+    let body=text;
+    if(parts.length)body+=(body?"\n\n":"")+parts.join("\n\n");
+    if(imgAtts.length){
+      if(modelSupportsVision(state.selectedModel)){
+        userMsg.images=imgAtts.map(a=>a.dataUrl);
+        body+=(body?"\n\n":"")+imgAtts.map(a=>"### Attached image: "+a.name).join("\n");
+      }else{
+        body+=(body?"\n\n":"")+imgAtts.map(a=>"[Image attached: "+a.name+" ("+a.suffix+", "+a.size+" KB). The selected model may not support images, so it cannot be viewed.]").join("\n");
+      }
+    }
+    userMsg.content=body;
+  }
   c.messages.push(userMsg);c.updatedAt=new Date().toISOString();
   state.attachments=[];renderAttach();input.value="";
   renderChat();renderSidebar();saveAll();
@@ -2090,19 +2108,124 @@ let settingsTab="providers";
 function openSettings(tab){settingsTab=tab||"providers";renderSettingsModal();}
 
 /* ============ ATTACHMENTS ============ */
-function renderAttach(){const box=$("#attachList");box.innerHTML=state.attachments.map((a,i)=>'<span class="attach-chip">'+I.paperclip+' '+esc(a.name)+' ('+a.size+' KB)<button class="x" onclick="removeAttach('+i+')">×</button></span>').join("")}
+function renderAttach(){const box=$("#attachList");box.innerHTML=state.attachments.map((a,i)=>'<span class="attach-chip">'+((a.kind==="image"&&a.dataUrl)?'<img src="'+a.dataUrl+'" alt="" style="width:18px;height:18px;object-fit:cover;border-radius:3px">':I.paperclip)+' '+esc(a.name)+' ('+a.size+' KB)<button class="x" onclick="removeAttach('+i+')">×</button></span>').join("")}
 function removeAttach(i){state.attachments.splice(i,1);renderAttach();}
-function handleFiles(files){
+/* ---------- broad file support (text, PDF, Office, ZIP, images) ---------- */
+var _fileLibs={};
+function loadScriptOnce(src){
+  if(_fileLibs[src])return _fileLibs[src];
+  _fileLibs[src]=new Promise(function(resolve,reject){
+    var s=document.createElement("script");s.src=src;s.async=true;
+    s.onload=function(){resolve(true)};s.onerror=function(){reject(new Error("Could not load required engine"))};
+    document.head.appendChild(s);
+  });
+  return _fileLibs[src];
+}
+function fileExt(name){var i=String(name||"").lastIndexOf(".");return i>=0?String(name).slice(i+1).toLowerCase():""}
+function looksBinary(str){if(!str)return false;var n=Math.min(str.length,4000),bad=0;for(var i=0;i<n;i++){var c=str.charCodeAt(i);if(c===0||c===0xfffd)bad++;}return n>0&&bad/n>0.02;}
+function fileToDataURL(f){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(String(r.result))};r.onerror=function(){rej(new Error("could not read file"))};r.readAsDataURL(f);})}
+async function imageToDataURL(f){
+  var raw=await fileToDataURL(f);
+  if(/^data:image\/(svg|gif)/i.test(raw))return raw;
+  try{
+    var img=await new Promise(function(res,rej){var im=new Image();im.onload=function(){res(im)};im.onerror=function(){rej(new Error("bad image"))};im.src=raw;});
+    var max=1024,w=img.naturalWidth||img.width,h=img.naturalHeight||img.height;
+    if(w>max||h>max){var k=Math.min(max/w,max/h);w=Math.round(w*k);h=Math.round(h*k);}
+    var c=document.createElement("canvas");c.width=w;c.height=h;
+    c.getContext("2d").drawImage(img,0,0,w,h);
+    return c.toDataURL("image/jpeg",0.8);
+  }catch(e){return raw}
+}
+async function extractPdfText(file){
+  await loadScriptOnce("https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js");
+  var lib=window.pdfjsLib;if(!lib)throw new Error("PDF engine unavailable");
+  try{lib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";}catch(e){}
+  var pdf=await lib.getDocument({data:await file.arrayBuffer()}).promise;
+  var pages=Math.min(pdf.numPages,60),out=[];
+  for(var i=1;i<=pages;i++){
+    var pg=await pdf.getPage(i);var tc=await pg.getTextContent();
+    out.push((tc.items||[]).map(function(x){return x.str||""}).join(" ").replace(/\s+/g," ").trim());
+  }
+  if(pdf.numPages>pages)out.push("[Truncated: "+(pdf.numPages-pages)+" more pages not included]");
+  return out.join("\n\n");
+}
+function xmlToText(xml){
+  return String(xml||"")
+    .replace(/<\/(w:p|a:p|text:p|p|tr|si|li)>/gi,"\n")
+    .replace(/<w:tab[^>]*\/>/gi,"\t")
+    .replace(/<w:br[^>]*\/>/gi,"\n")
+    .replace(/<[^>]+>/g," ")
+    .replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&").replace(/&quot;/g,'"').replace(/&#39;|&apos;/g,"'")
+    .replace(/[ \t]+/g," ").replace(/\n{3,}/g,"\n\n").trim();
+}
+async function extractArchiveText(file,ext){
+  await loadScriptOnce("https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js");
+  var JSZip=window.JSZip;if(!JSZip)throw new Error("Archive engine unavailable");
+  var zip=await JSZip.loadAsync(await file.arrayBuffer());
+  var names=Object.keys(zip.files).filter(function(n){return !zip.files[n].dir});
+  var grab=async function(n){try{return await zip.file(n).async("string")}catch(e){return""}};
+  var out=[];
+  if(ext==="docx"){out.push(xmlToText(await grab("word/document.xml")))}
+  else if(ext==="xlsx"){
+    var shared=xmlToText(await grab("xl/sharedStrings.xml"));
+    if(shared)out.push("Shared strings:\n"+shared);
+    var sheets=names.filter(function(n){return /^xl\/worksheets\/.*\.xml$/.test(n)}).sort();
+    for(var i=0;i<sheets.length;i++)out.push("### "+sheets[i]+"\n"+xmlToText(await grab(sheets[i])));
+  }
+  else if(ext==="pptx"){
+    var slides=names.filter(function(n){return /^ppt\/slides\/slide\d+\.xml$/.test(n)}).sort();
+    for(var j=0;j<slides.length;j++)out.push("### "+slides[j]+"\n"+xmlToText(await grab(slides[j])));
+  }
+  else if(ext==="odt"||ext==="ods"||ext==="odp"){out.push(xmlToText(await grab("content.xml")))}
+  else if(ext==="epub"){
+    var docs=names.filter(function(n){return /\.(xhtml|html|htm)$/i.test(n)}).sort();
+    for(var k=0;k<Math.min(docs.length,40);k++)out.push("### "+docs[k]+"\n"+xmlToText(await grab(docs[k])));
+  }
+  else{
+    out.push("Archive contents ("+names.length+" files):\n"+names.slice(0,200).join("\n"));
+    var textish=names.filter(function(n){return TEXT_EXT.indexOf(fileExt(n))>=0}).slice(0,30);
+    for(var m=0;m<textish.length;m++){var s=await grab(textish[m]);if(s)out.push("### "+textish[m]+"\n"+s.slice(0,6000));}
+  }
+  var text=out.filter(Boolean).join("\n\n").trim();
+  if(text.length>60000)text=text.slice(0,60000)+"\n\n[Truncated]";
+  return text;
+}
+async function readAttachment(f){
+  var ext=fileExt(f.name),size=Math.round(f.size/1024);
+  if(IMAGE_EXT.indexOf(ext)>=0){
+    var dataUrl=await imageToDataURL(f);
+    return {name:f.name,suffix:ext||"img",size:size,kind:"image",dataUrl:dataUrl,content:"[image attached]"};
+  }
+  if(ext==="pdf"){
+    var t=await extractPdfText(f);
+    return {name:f.name,suffix:ext,size:size,kind:"text",content:t||"(No extractable text found in this PDF.)"};
+  }
+  if(ARCHIVE_EXT.indexOf(ext)>=0){
+    var a=await extractArchiveText(f,ext);
+    return {name:f.name,suffix:ext,size:size,kind:"text",content:a||"(No extractable text found in this file.)"};
+  }
+  if(["doc","xls","ppt","rar","7z","tar","gz","tgz","bz2","xz"].indexOf(ext)>=0){
+    throw new Error("."+ext+" is a legacy/compressed format that can't be read here — please save it as .docx/.xlsx/.pptx or .zip");
+  }
+  var text=await f.text();
+  if(looksBinary(text))throw new Error("this looks like a binary file and can't be read as text");
+  return {name:f.name,suffix:ext||"txt",size:size,kind:"text",content:text};
+}
+async function handleFiles(files){
   const maxMB=state.settings.maxFileSizeMB||5;
   for(const f of files){
     if(f.size>maxMB*1024*1024){notify(f.name+" is larger than "+maxMB+" MB and was rejected.","error");continue}
-    const dot=f.name.lastIndexOf(".");const suffix=dot>=0?f.name.slice(dot+1).toLowerCase():"";
-    if(!FILE_EXTENSIONS.includes(suffix)){notify("Unsupported file type: ."+(suffix||"?")+" Supported: "+FILE_EXTENSIONS.join(", "),"error");continue}
-    const reader=new FileReader();
-    reader.onload=()=>{state.attachments.push({name:f.name,suffix:suffix||"txt",size:Math.round(f.size/1024),content:String(reader.result)});renderAttach()};
-    reader.onerror=()=>notify("Could not read "+f.name+".","error");
-    reader.readAsText(f);
+    try{
+      const att=await readAttachment(f);
+      state.attachments.push(att);renderAttach();
+    }catch(e){
+      notify(f.name+": "+((e&&e.message)||"could not be read")+".","error");
+    }
   }
+}
+function modelSupportsVision(mid){
+  const s=String(mid||"").toLowerCase();
+  return /(gpt-4o|gpt-4\.1|gpt-4-turbo|gpt-5|o3|o4|claude|gemini|vision|llava|pixtral|qwen.*vl|llama-3\.2.*vision|llama-4|internvl|minicpm-v|molmo|idefics|gemma-4)/.test(s);
 }
 
 /* ============ SIDEBAR MOBILE ============ */
